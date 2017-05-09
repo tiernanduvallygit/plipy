@@ -1,0 +1,46 @@
+\begin{minipage}{4.8in}
+\begin{lstlisting}[frame=single,language=java]
+import org.antlr.runtime.*;
+import java.util.*;
+
+public class Interpreter {
+
+    // The IR is public
+    public static Program program;
+    public static HashMap<String,Integer> symbolTable;
+    public static HashMap<String,Instr> labelTable;
+
+    // the parser is private
+    private static ANTLRFileStream input;
+    private static exp1bytecodeLexer lexer;
+    private static CommonTokenStream tokens;
+    private static exp1bytecodeParser parser;
+
+    public static void main(String[] args) {
+
+        try {
+            // instantiate IR structures
+            program = new Program();
+            symbolTable = new HashMap<String,Integer>();
+            labelTable = new HashMap<String,Instr>();
+        
+            // instantiate parser
+            input = new ANTLRFileStream(args[0]);
+            lexer = new exp1bytecodeLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            exp1bytecodeParser parser = new exp1bytecodeParser(tokens);
+            
+            // syntax analysis: build the IR
+            parser.prog();
+
+            // semantic analysis: execute the IR
+            program.run();
+        }
+        catch (Exception e) {
+            System.err.println("Error: " + e);
+            System.exit(0);
+        }
+    }
+}
+\end{lstlisting}
+\end{minipage}

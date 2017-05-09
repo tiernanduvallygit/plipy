@@ -1,0 +1,47 @@
+\begin{minipage}{4.8in}
+\begin{lstlisting}[frame=single,language=antlr]
+grammar exp1bytecode;
+
+options{k=1;}
+
+//*******************************************************************
+// grammar rules
+
+prog 	:	(labelDef? stmt)+ ;
+
+labelDef:	label ':' ;
+
+stmt:	'print' exp ';'			// print value to screen
+	|	'store' lhsvar exp ';'	// store value to variable
+	|	'jumpT' exp label ';'	// jump to label if value is true
+	|	'jumpF' exp label ';'	// jump to label if value is false
+	|	'jump' label ';'		// unconditional jump
+	|	'stop' ';'				// stop execution
+	|	'noop' ';'				// nothing to do
+	;
+
+exp	:	'+' exp exp
+	|	'-' exp exp
+	|	'*' exp exp
+	|	'/' exp exp
+	|	'=' exp exp
+	|	'=<' exp exp
+	|	'(' exp ')'
+	|	rhsvar
+	|	NUM
+	;
+	
+label	:	NAME ;
+lhsvar	:	NAME ;
+rhsvar	:	NAME ;
+
+//*******************************************************************
+// lexical rules
+
+NAME	:	('a'..'z'|'A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9')* ;
+NUM		:	'0' | '-'?('1'..'9')('0'..'9')* ;
+COMMENT :   '/''/' ~('\n'|'\r')* '\r'? '\n'	{ $channel=HIDDEN; };
+WS  	:   ( ' ' | '\t' | '\r' | '\n' ) 	{ $channel=HIDDEN; };
+
+\end{lstlisting}
+\end{minipage}

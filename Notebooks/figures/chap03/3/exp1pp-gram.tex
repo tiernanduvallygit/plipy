@@ -1,0 +1,38 @@
+\begin{minipage}{4.8in}
+\begin{lstlisting}[frame=single,language=antlr]
+grammar exp1pp;
+
+options{k=1;}
+
+@members {
+void emit(String s) {
+   System.out.print(s);
+}
+}
+
+//**********************************************************************
+// grammar rules
+
+prog 	:	( stmt ';' { emit(";\n"); } )+ 
+		;
+
+stmt	:	'print' { emit("print "); } exp
+		|	'store' VAR { emit("store " + $VAR.text + " "); } exp
+		;
+
+exp	   	:   '+' { emit("(+ "); } exp { emit(" "); } exp { emit(")"); }
+   		|   '-' { emit("(- "); } exp { emit(" "); } exp { emit(")"); }
+		|	'(' exp ')'
+		|	VAR 	{ emit($VAR.text); }
+		|	INTVAL 	{ emit($INTVAL.text); }
+		;
+	
+//**********************************************************************
+// lexical rules
+
+VAR		:	('a'..'z'|'A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9')* ;
+INTVAL	:	('0'..'9')+ ;
+COMMENT :   '/''/' ~('\n'|'\r')* '\r'? '\n'	{ $channel=HIDDEN; };
+WS  	:   ( ' ' | '\t' | '\r' | '\n' ) 	{ $channel=HIDDEN; };
+\end{lstlisting}
+\end{minipage}

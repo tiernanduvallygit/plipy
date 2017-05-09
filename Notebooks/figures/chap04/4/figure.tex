@@ -1,0 +1,25 @@
+\begin{minipage}{5in}
+\begin{lstlisting}[frame=single,language=antlr]
+stmt returns [Instr i]
+ : 'print' e=exp ';'           { $i = new PrintInstr($e.expr); }
+ | 'store' v=lhsvar e=exp ';'  { $i = new StoreInstr($v.name,$e.expr); }
+ | 'jumpT' e=exp l=label ';'   { $i = new JumpTInstr($e.expr,$l.name); }
+ | 'jumpF' e=exp l=label ';'   { $i = new JumpFInstr($e.expr,$l.name); }
+ | 'jump' l=label ';'          { $i = new JumpInstr($l.name); }
+ | 'stop' ';'                  { $i = new StopInstr(); }
+ | 'noop' ';'                  { $i = new NoOpInstr(); }
+ ;
+
+exp returns [Expr e]
+ : '+' e1=exp e2=exp  { $e = new BopExpr(BopExpr.OP.ADD,$e1.e,$e2.e); }
+ | '-' e1=exp e2=exp  { $e = new BopExpr(BopExpr.OP.MINUS,$e1.e,$e2.e); }
+ | '*' e1=exp e2=exp  { $e = new BopExpr(BopExpr.OP.MULT,$e1.e,$e2.e); }
+ | '/' e1=exp e2=exp  { $e = new BopExpr(BopExpr.OP.DIV,$e1.e,$e2.); }
+ | '=' e1=exp e2=exp  { $e = new BopExpr(BopExpr.OP.EQ,$e1.e,$e2.); }
+ | '=<' e1=exp e2=exp { $e = new BopExpr(BopExpr.OP.LESSEQ,$e1.e,$e2.e); }
+ | '(' e=exp ')'      { $e = $e.e; }
+ | rhsvar             { $e = new VarExpr($rhsvar.name); }
+ | NUM                { $e = new NumExpr($NUM.text); }
+ ;
+\end{lstlisting}
+\end{minipage}
