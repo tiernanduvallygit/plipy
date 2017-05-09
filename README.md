@@ -1,6 +1,8 @@
 
 ## plipy
 
+![cover image](cover-image.gif)
+
 ## Programming Language Implementation with Python
 Lutz Hamel, University of Rhode Island
 
