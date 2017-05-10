@@ -29,7 +29,7 @@ The text is released under the [CC-BY-NC-ND license](https://creativecommons.org
 - Bibliographic Notes
 - Exercises
 
-### [02 - A Crash Course in Parsing and Lexing](https://nbviewer.jupyter.org/github/lutzhamel/plipy/blob/master/Notebooks/chap02.ipynb)
+### [02 - A Crash Course in Parsing and Lexing](https://nbviewer.jupyter.org/github/lutzhamel/plipy/blob/master/Notebooks/chap02a.ipynb)
 - Grammars
   - The Basics
   - Derivations
