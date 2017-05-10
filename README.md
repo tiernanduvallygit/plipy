@@ -31,6 +31,25 @@ The text is released under the [CC-BY-NC-ND license](https://creativecommons.org
 
 ### [02 - A Crash Course in Parsing and Lexing](http://nbviewer.jupyter.org/github/lutzhamel/plipy/blob/master/Notebooks/chap02.ipynb)
 - Grammars
+  - The Basics
+  - Derivations
+  - Parse Trees
+  - An Example: The Exp0 Language
 - Parsers
+  - Top-Down Parsing
+    - Lookahead Sets
+    - Left-Recursive Grammars are not LL(1)
+    - Other Grammars that are not LL(1)
+    - A Top-Down Parsing Algorithm
+  - Bottom-Up Parsing
+    - A Closer Look at LR(0)
+  - Building Parsers by Hand
+    - Recursive Descent is LL(1)
 - Parser Generators
+  - An Example: Our First Language Processor
+- Lexical Analysis
+  - An Example: The Exp1 Language
+- Summary
+- Bibliographic Notes
+- Exercises
 
