@@ -42,6 +42,7 @@ The text is released under the [CC-BY-NC-ND license](https://creativecommons.org
     - Other Grammars that are not LL(1)
     - A Top-Down Parsing Algorithm
   - Bottom-Up Parsing
+    - A Bottom-Up Parsing Algorithm
     - A Closer Look at LR(0)
   - Building Parsers by Hand
     - Recursive Descent is LL(1)
