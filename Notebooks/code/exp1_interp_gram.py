@@ -1,0 +1,61 @@
+from ply import yacc
+from exp1_lex import tokens, lexer
+
+symbol_table = dict()
+
+def p_prog(_):
+    "prog : stmt_list"
+    pass
+
+def p_stmt_list(_):
+    """
+    stmt_list : stmt stmt_list
+              | empty
+    """
+    pass
+
+def p_print_stmt(p):
+    "stmt : PRINT exp ';'"
+    print("> {}".format(p[2]))
+    
+def p_store_stmt(p):
+    "stmt : STORE NAME exp ';'"
+    symbol_table[p[2]] = p[3]
+
+def p_arith_exp(p):
+    """
+    exp : '+' exp exp
+        | '-' exp exp
+        | '(' exp ')'
+    """
+    if p[1] == '+':
+        p[0] = p[2] + p[3]
+    elif p[1] == '-':
+        p[0] = p[2] - p[3]
+    else: # case p[1] == '('
+        p[0] = p[2]
+
+def p_var_exp(p):
+    "exp : var"
+    p[0] = p[1]
+    
+def p_num_exp(p):
+    "exp : num"
+    p[0] = p[1]
+
+def p_var(p):
+    "var : NAME"
+    p[0] = symbol_table.get(p[1], 0)
+
+def p_num(p):
+    "num : NUMBER"
+    p[0] = p[1]
+
+def p_empty(p):
+    "empty :"
+    pass
+
+def p_error(t):
+    print("Syntax error at '%s'" % t.value)
+
+parser = yacc.yacc()
