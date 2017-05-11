@@ -17,3 +17,4 @@ To read this book:
 - start the Jupyter notebook server with
   $ jupyter notebook
 - navigate to the directory where you installed the plipy repository using the notebook dashboard
+- select the 'chap00.ipynb' notebook to get started
