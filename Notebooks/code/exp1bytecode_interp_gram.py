@@ -69,6 +69,12 @@ def p_stmt(p):
     else:
         raise ValueError("Unexpected stmt value: {}".format(p[1]))
 
+def p_label_or_var(p):
+    '''
+        label : NAME
+        '''
+    p[0] = p[1]
+
 def p_bin_exp(p):
     '''
     exp : '+' exp exp
@@ -95,22 +101,15 @@ def p_paren_exp(p):
     
 def p_var_exp(p):
     '''
-    exp : var
+    exp : NAME
     '''
-    p[0] = (p[1],)
+    p[0] = ('NAME', p[1])
 
 def p_number_exp(p):
     '''
     exp : NUMBER
     '''
-    p[0] = (int(p[1]),)
-
-def p_label_or_var(p):
-    '''
-    label : NAME
-    var : NAME
-    '''
-    p[0] = p[1]
+    p[0] = ('NUMBER', int(p[1]))
 
 def p_empty(p):
     '''
