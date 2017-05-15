@@ -9,7 +9,7 @@ reserved = {
 
 literals = [';','+','-','(',')']
 
-tokens = ['NAME','NUMBER','NEWLINE'] + list(reserved.values())
+tokens = ['NAME','NUMBER'] + list(reserved.values())
 
 t_ignore = ' \t'
 
@@ -23,13 +23,12 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
-def t_NEWLINE(t):
+def t_newline(t):
     r'\n'
-    t.lexer.lineno += 1
+    pass
 
 def t_error(t):
-    print("Illegal character %s" % t.value[0])
-    t.lexer.skip(1)
+    raise SyntaxError("Illegal character {}".format(t.value[0]))
 
 # build the lexer
 lexer = lex.lex()

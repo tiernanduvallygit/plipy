@@ -15,11 +15,11 @@ def p_stmt_list_empty(p):
 
 def p_print_stmt(p):
     "stmt : PRINT exp ';'"
-    p[0] = p[1] + p[2] +';\n'
+    p[0] = 'print' + p[2] +';\n'
 
 def p_store_stmt(p):
     "stmt : STORE NAME exp ';'"
-    p[0] = p[1] + ' ' + p[2] + p[3] +';\n'
+    p[0] = 'store ' + p[2] + p[3] +';\n'
 
 def p_arith_exp(p):
     """
