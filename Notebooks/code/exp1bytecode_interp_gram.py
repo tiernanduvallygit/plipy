@@ -9,20 +9,20 @@ label_table = dict()
 
 def p_prog(_):
     '''
-    prog : stmt_list
+    prog : instr_list
     '''
     pass
 
-def p_stmt_list(_):
+def p_instr_list(_):
     '''
-    stmt_list : labeled_stmt stmt_list
+    instr_list : labeled_instr instr_list
               | empty
     '''
     pass
 
-def p_labeled_stmt(p):
+def p_labeled_instr(p):
     '''
-    labeled_stmt : label_def stmt
+    labeled_instr : label_def instr
     '''
     global label_table
     global program
@@ -30,7 +30,7 @@ def p_labeled_stmt(p):
     # if label exists record it in the label table
     if p[1]:
         label_table[p[1]] = addr_ix
-    # append stmt to program
+    # append instr to program
     program.append(p[2])
     addr_ix += 1
 
@@ -41,9 +41,9 @@ def p_label_def(p):
     '''
     p[0] = p[1]
 
-def p_stmt(p):
+def p_instr(p):
     '''
-    stmt : PRINT exp ';'
+    instr : PRINT exp ';'
          | STORE NAME exp ';'
          | JUMPT exp label ';'
          | JUMPF exp label ';'
@@ -51,7 +51,7 @@ def p_stmt(p):
          | STOP ';'
          | NOOP ';'
     '''
-    # for each stmt assemble the appropriate tuple
+    # for each instr assemble the appropriate tuple
     if p[1] == 'print':
         p[0] = ('print', p[2])
     elif p[1] == 'store':
@@ -67,9 +67,9 @@ def p_stmt(p):
     elif p[1] == 'noop':
         p[0] = ('noop',)
     else:
-        raise ValueError("Unexpected stmt value: {}".format(p[1]))
+        raise ValueError("Unexpected instr value: %s" % p[1])
 
-def p_label_or_var(p):
+def p_label(p):
     '''
         label : NAME
         '''

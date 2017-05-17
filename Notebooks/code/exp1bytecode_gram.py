@@ -3,23 +3,23 @@ from exp1bytecode_lex import tokens, lexer
 
 def p_grammar(_):
     '''
-    prog : stmt_list
+    prog : instr_list
 
-    stmt_list : labeled_stmt stmt_list
-              | empty
+    instr_list : labeled_instr instr_list
+               | empty
 
-    labeled_stmt : label_def stmt
+    labeled_instr : label_def instr
 
     label_def : NAME ':' 
               | empty
 
-    stmt : PRINT exp ';'
-         | STORE NAME exp ';'
-         | JUMPT exp label ';'
-         | JUMPF exp label ';'
-         | JUMP label ';'
-         | STOP ';'
-         | NOOP ';'
+    instr : PRINT exp ';'
+          | STORE NAME exp ';'
+          | JUMPT exp label ';'
+          | JUMPF exp label ';'
+          | JUMP label ';'
+          | STOP ';'
+          | NOOP ';'
 
     exp : '+' exp exp
         | '-' exp exp
