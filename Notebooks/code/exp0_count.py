@@ -1,5 +1,5 @@
 from ply import yacc
-from exp0_stuff import tokens, lexer
+from exp0_lex import tokens, lexer
 
 count = 0
 

@@ -26,7 +26,7 @@ def t_NUMBER(t):
     return t
 
 # Define a rule so we can track line numbers
-def t_newline(t):
+def t_NEWLINE(t):
     r'\n+'
     pass
 

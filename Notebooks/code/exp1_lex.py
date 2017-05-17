@@ -23,7 +23,7 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
-def t_newline(t):
+def t_NEWLINE(t):
     r'\n'
     pass
 

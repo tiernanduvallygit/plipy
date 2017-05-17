@@ -1,27 +1,24 @@
-from exp1bytecode_interp_gram import parser, program, symbol_table, label_table
+from exp1bytecode_interp_gram import parser
+from exp1bytecode_interp_state import state
 
 def interp_program():
     'execute abstract bytecode machine'
-
-    global program
-    global symbol_table
-    global label_table
     
     # We cannot use the list iterator here because we
     # need to be able to interpret jump instructions
     
     # start at the first instruction in program
-    instr_ix = 0
+    state.instr_ix = 0
     
     # keep interpreting until we run out of instructions
     # or we hit a 'stop'
     while True:
-        if instr_ix == len(program):
+        if state.instr_ix == len(state.program):
             # no more instructions
             break
         else:
             # get instruction from program
-            instr = program[instr_ix]
+            instr = state.program[state.instr_ix]
         
         # instruction format: (type, [arg1, arg2, ...])
         type = instr[0]
@@ -32,34 +29,34 @@ def interp_program():
             exp_tree = instr[1]
             val = eval_exp_tree(exp_tree)
             print("> {}".format(val))
-            instr_ix += 1
+            state.instr_ix += 1
         
         elif type == 'store':
             # STORE type exp
             var_name = instr[1]
             val = eval_exp_tree(instr[2])
-            symbol_table[var_name] = val
-            instr_ix += 1
+            state.symbol_table[var_name] = val
+            state.instr_ix += 1
 
         elif type == 'jumpT':
             # JUMPT exp label
             val = eval_exp_tree(instr[1])
             if val:
-                instr_ix = label_table.get(instr[2], None)
+                state.instr_ix = state.label_table.get(instr[2], None)
             else:
-                instr_ix += 1
+                state.instr_ix += 1
 
         elif type == 'jumpF':
             # JUMPF exp label
             val = eval_exp_tree(instr[1])
             if not val:
-                instr_ix = label_table.get(instr[2], None)
+                state.instr_ix = state.label_table.get(instr[2], None)
             else:
-                instr_ix += 1
+                state.instr_ix += 1
 
         elif type == 'jump':
             # JUMP label
-            instr_ix = label_table.get(instr[1], None)
+            state.instr_ix = state.label_table.get(instr[1], None)
         
         elif type == 'stop':
             # STOP
@@ -67,7 +64,7 @@ def interp_program():
 
         elif type == 'noop':
             # NOOP
-            instr_ix += 1
+            state.instr_ix += 1
         
         else:
             raise ValueError("Unexpected instruction type: {}".format(p[1]))
@@ -76,8 +73,6 @@ def interp_program():
 def eval_exp_tree(node):
     'walk expression tree and evaluate to an integer value'
 
-    global symbol_table
-    
     # tree nodes are tuples (TYPE, [arg1, arg2,...])
     
     type = node[0]
@@ -125,7 +120,7 @@ def eval_exp_tree(node):
     
     elif type == 'NAME':
         # 'NAME' var_name
-        return symbol_table.get(node[1],0)
+        return state.symbol_table.get(node[1],0)
 
     elif type == 'NUMBER':
         # NUMBER val
@@ -133,8 +128,12 @@ def eval_exp_tree(node):
 
 def exp1bytecode_interp(input_stream):
     'driver for our Exp1bytecode interpreter.'
+
+    # initialize our abstract machine
+    state.initialize()
     
     # build the IR
     parser.parse(input_stream)
+    
     # interpret the IR
     interp_program()

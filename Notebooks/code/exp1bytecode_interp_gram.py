@@ -1,11 +1,6 @@
 from ply import yacc
 from exp1bytecode_lex import tokens, lexer
-
-# define the structures of our abstract machine
-addr_ix = 0
-program = []
-symbol_table = dict()
-label_table = dict()
+from exp1bytecode_interp_state import state
 
 def p_prog(_):
     '''
@@ -24,15 +19,12 @@ def p_labeled_instr(p):
     '''
     labeled_instr : label_def instr
     '''
-    global label_table
-    global program
-    global addr_ix
     # if label exists record it in the label table
     if p[1]:
-        label_table[p[1]] = addr_ix
+        state.label_table[p[1]] = state.instr_ix
     # append instr to program
-    program.append(p[2])
-    addr_ix += 1
+    state.program.append(p[2])
+    state.instr_ix += 1
 
 def p_label_def(p):
     '''
@@ -121,3 +113,4 @@ def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
 parser = yacc.yacc()
+
