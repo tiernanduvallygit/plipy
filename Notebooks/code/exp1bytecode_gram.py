@@ -14,6 +14,7 @@ def p_grammar(_):
               | empty
 
     instr : PRINT exp ';'
+          | INPUT NAME ';'
           | STORE NAME exp ';'
           | JUMPT exp label ';'
           | JUMPF exp label ';'

@@ -5,6 +5,7 @@ from ply import lex
 reserved = {
     'store' : 'STORE',
     'print' : 'PRINT',
+    'input' : 'INPUT',
     'jumpT' : 'JUMPT',
     'jumpF' : 'JUMPF',
     'jump'  : 'JUMP',

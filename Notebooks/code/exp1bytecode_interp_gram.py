@@ -36,16 +36,19 @@ def p_label_def(p):
 def p_instr(p):
     '''
     instr : PRINT exp ';'
-         | STORE NAME exp ';'
-         | JUMPT exp label ';'
-         | JUMPF exp label ';'
-         | JUMP label ';'
-         | STOP ';'
-         | NOOP ';'
+          | INPUT NAME ';'
+          | STORE NAME exp ';'
+          | JUMPT exp label ';'
+          | JUMPF exp label ';'
+          | JUMP label ';'
+          | STOP ';'
+          | NOOP ';'
     '''
     # for each instr assemble the appropriate tuple
     if p[1] == 'print':
         p[0] = ('print', p[2])
+    elif p[1] == 'input':
+        p[0] = ('input', p[2])
     elif p[1] == 'store':
         p[0] = ('store', p[2], p[3])
     elif p[1] == 'jumpT':

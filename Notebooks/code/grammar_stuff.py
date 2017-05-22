@@ -1,3 +1,32 @@
+##################################################################
+'''
+support functions for grammars.  grammars are lists of tuples.
+
+for example, the grammar,
+
+exp : + exp exp
+    | - exp exp
+    | x
+    | y
+    | z
+
+is represented as,
+
+[('exp',['+','exp','exp']),
+ ('exp',['-','exp','exp']), 
+ ('exp',['x']), 
+ ('exp',['y']), 
+ ('exp',['z'])]
+ 
+ and with lookahead sets it becomes,
+ 
+ [('exp', {'+'}, ['+', 'exp', 'exp']),
+  ('exp', {'-'}, ['-', 'exp', 'exp']),
+  ('exp', {'x'}, ['x']),
+  ('exp', {'y'}, ['y']),
+  ('exp', {'z'}, ['z'])]
+
+'''
 
 def start_symbol(G):
     first_rule = G[0]
@@ -42,6 +71,7 @@ def find_matching_rule(GL, N, P):
             return r
     return None
 
+
 def right_side_match(G, S):
     for r in G:
         if len(r) == 2:
@@ -52,6 +82,7 @@ def right_side_match(G, S):
             return r
     return None
 
+##################################################################
 
 class Stack:
     def __init__(self):
@@ -87,6 +118,8 @@ class Stack:
     def empty(self):
         return len(self.items) == 0
 
+##################################################################
+
 class InputStream:
     def __init__(self, stream):
         self.stream = stream # has to be a non-empty list of symbols
@@ -106,6 +139,7 @@ class InputStream:
         else:
             return False
 
+##################################################################
 
 class TokenStream:
     def __init__(self, lexer, stream):
@@ -127,5 +161,49 @@ class TokenStream:
         else:
             return False
 
+##################################################################
+# this function will print any AST that follows the
+#
+#      (TYPE [, child1, child2,...])
+#
+# tuple format for tree nodes.
+
+def dump_AST(node):
+    _dump_AST(node)
+    print('')
+
+def _dump_AST(node, level=0):
+    
+    if isinstance(node, tuple):
+        indent(level)
+        nchildren = len(node) - 1
+
+        print("(%s" % node[0], end='')
+        
+        if nchildren > 0:
+            print(" ", end='')
+        
+        for c in range(nchildren):
+            _dump_AST(node[c+1], level+1)
+            if c != nchildren-1:
+                print(' ', end='')
+        
+        print(")", end='')
+    else:
+        print("%s" % str(node), end='')
+
+def indent(level):
+    print('')
+    for i in range(level):
+        print('  |',end='')
+
+
+##################################################################
+
+def assert_match(input, expected):
+    if input != expected:
+        raise ValueError("Pattern match failed: expected {} but got {}".format(expected, input))
+
+##################################################################
 
 

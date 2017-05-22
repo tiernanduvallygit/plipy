@@ -31,13 +31,20 @@ def interp_program():
             print("> {}".format(val))
             state.instr_ix += 1
         
+        elif type == 'input':
+            # INPUT NAME
+            var_name = instr[1]
+            val = input("Please enter a value: ")
+            state.symbol_table[var_name] = int(val)
+            state.instr_ix += 1
+        
         elif type == 'store':
             # STORE type exp
             var_name = instr[1]
             val = eval_exp_tree(instr[2])
             state.symbol_table[var_name] = val
             state.instr_ix += 1
-
+        
         elif type == 'jumpT':
             # JUMPT exp label
             val = eval_exp_tree(instr[1])

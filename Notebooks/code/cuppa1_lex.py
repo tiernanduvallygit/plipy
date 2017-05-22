@@ -1,6 +1,6 @@
-# Lexer for Simple1
+# Lexer for Cuppa1
 
-from ply import *
+from ply import lex
 
 reserved = {
     'get' : 'GET',
@@ -10,14 +10,20 @@ reserved = {
     'while' : 'WHILE'
 }
 
-literals = [':',';','+','-','*','/','(',')','{','}']
-tokens = ['EQ', 'LE', 'INTEGER', 'ID'] + list(reserved.values())
+literals = [';','=','(',')','{','}']
 
-t_EQ      = r'=='
-t_LE      = r'<='
+tokens = [
+          'PLUS','MINUS','TIMES','DIVIDE',
+          'EQ','LE',
+          'INTEGER','ID',
+          ] + list(reserved.values())
+
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
-t_MULT    = r'\*'
+t_TIMES   = r'\*'
+t_DIVIDE  = r'/'
+t_EQ      = r'=='
+t_LE      = r'<='
 
 t_ignore = ' \t'
 
@@ -28,7 +34,6 @@ def t_ID(t):
 
 def t_INTEGER(t):
     r'[0-9]+'
-    t.value = int(t.value)
     return t
 
 def t_COMMENT(t):

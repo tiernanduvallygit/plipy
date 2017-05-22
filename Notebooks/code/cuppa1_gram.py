@@ -1,45 +1,58 @@
-### a parser for Simple1 builds abstract syntax trees based
-### on the Python builtin tuples.  a tree node is of the format
-### (<node type>, <children>,...)
+# grammar for Cuppa1
 
 from ply import yacc
 from cuppa1_lex import tokens, lexer
 
 # set precedence and associativity
+# NOTE: all arithmetic operator need to have tokens
+#       so that we can put them into the precedence table
 precedence = (
-               ('left', 'EQ','LE'),
-               ('left', '+','-'),
-               ('left', '*','/'),
-               ('right','UMINUS')
-)
+              ('left', 'EQ', 'LE'),
+              ('left', 'PLUS', 'MINUS'),
+              ('left', 'TIMES', 'DIVIDE'),
+              ('right', 'UMINUS')
+             )
 
-########## grammar #############
 
 def p_grammar(_):
     '''
     program : stmt_list
+
     stmt_list : stmt stmt_list
-              | stmt
-    stmt : ID EQUALS exp
-         | GET ID
-         | PUT exp
-         | WHILE LPAREN exp RPAREN stmt
-         | IF LPAREN exp RPAREN stmt else_part
-         | LBRACE stmt_list RBRACE
-    else_part : ELSE stmt
-              |
+              | empty
+
+    stmt : ID '=' exp opt_semi
+         | GET ID opt_semi
+         | PUT exp opt_semi
+         | WHILE '(' exp ')' stmt
+         | IF '(' exp ')' stmt opt_else
+         | '{' stmt_list '}'
+
+    opt_else : ELSE stmt
+             | empty
+             
+    opt_semi : ';'
+             | empty
+
     exp : exp PLUS exp
-           | exp MINUS exp
-           | exp TIMES exp
-           | exp DIVIDE exp
-           | exp EQ exp
-           | exp LE exp
-           | INTEGER
-           | ID
-           | LPAREN exp RPAREN
-           | MINUS exp %prec UMINUS
+        | exp MINUS exp
+        | exp TIMES exp
+        | exp DIVIDE exp
+        | exp EQ exp
+        | exp LE exp
+        | INTEGER
+        | ID
+        | '(' exp ')'
+        | MINUS exp %prec UMINUS
     '''
     pass
+
+def p_empty(p):
+    'empty :'
+    pass
+
+def p_error(t):
+    print("Syntax error at '%s'" % t.value)
 
 ### build the parser
 parser = yacc.yacc()
