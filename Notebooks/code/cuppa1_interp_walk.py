@@ -104,39 +104,70 @@ def block_stmt(t):
     walk(s)
 
 #########################################################################
-def binop_exp(t):
-
-    (BINOP,op,c1,c2) = t
-    assert_match(BINOP, 'binop')
+def plus_exp(t):
+    
+    (PLUS,c1,c2) = t
+    assert_match(PLUS, '+')
     
     v1 = walk(c1)
     v2 = walk(c2)
+    
+    return v1 + v2
 
-    if op == '+':
-        return v1 + v2
+#########################################################################
+def minus_exp(t):
+    
+    (MINUS,c1,c2) = t
+    assert_match(MINUS, '-')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 - v2
 
-    elif op == '-':
-        return v1 - v2
+#########################################################################
+def times_exp(t):
+    
+    (TIMES,c1,c2) = t
+    assert_match(TIMES, '*')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 * v2
 
-    elif op == '*':
-        return v1 * v2
+#########################################################################
+def divide_exp(t):
+    
+    (DIVIDE,c1,c2) = t
+    assert_match(DIVIDE, '/')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 / v2
 
-    elif op == '/':
-        return v1 / v2
+#########################################################################
+def eq_exp(t):
+    
+    (EQ,c1,c2) = t
+    assert_match(EQ, '==')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 == v2
 
-    elif op == '==':
-        if v1 == v2:
-            return 1
-        else:
-            return 0
-
-    elif op == '<=':
-        if v1 <= v2:
-            return 1
-        else:
-            return 0
-    else:
-        raise ValueError("binop: unknown operator:" + op)
+#########################################################################
+def le_exp(t):
+    
+    (LE,c1,c2) = t
+    assert_match(LE, '<=')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 <= v2
 
 #########################################################################
 def integer_exp(t):
@@ -171,7 +202,7 @@ def walk(t):
         f = walk_dict[t[0]]
         return f(t)
     else:
-        raise ValueError("walk: unknown tree node " + t[0])
+        raise ValueError("walk: unknown tree node type" + t[0])
 
 # a dictionary to associate tree nodes with node functions
 walk_dict = {
@@ -183,9 +214,14 @@ walk_dict = {
     'while'   : while_stmt,
     'if'      : if_stmt,
     'block'   : block_stmt,
-    'binop'   : binop_exp,
     'integer' : integer_exp,
     'id'      : id_exp,
+    '+'       : plus_exp,
+    '-'       : minus_exp,
+    '*'       : times_exp,
+    '/'       : divide_exp,
+    '=='      : eq_exp,
+    '<='      : le_exp,
     'uminus'  : uminus_exp
 }
 

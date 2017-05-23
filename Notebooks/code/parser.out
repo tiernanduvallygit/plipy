@@ -14,38 +14,38 @@ Rule 8     stmt -> IF ( exp ) stmt opt_else
 Rule 9     stmt -> { stmt_list }
 Rule 10    opt_else -> ELSE stmt
 Rule 11    opt_else -> empty
-Rule 12    opt_semi -> ;
-Rule 13    opt_semi -> empty
-Rule 14    exp -> exp PLUS exp
-Rule 15    exp -> exp MINUS exp
-Rule 16    exp -> exp TIMES exp
-Rule 17    exp -> exp DIVIDE exp
-Rule 18    exp -> exp EQ exp
-Rule 19    exp -> exp LE exp
-Rule 20    exp -> INTEGER
-Rule 21    exp -> ID
-Rule 22    exp -> ( exp )
-Rule 23    exp -> MINUS exp
+Rule 12    exp -> exp PLUS exp
+Rule 13    exp -> exp MINUS exp
+Rule 14    exp -> exp TIMES exp
+Rule 15    exp -> exp DIVIDE exp
+Rule 16    exp -> exp EQ exp
+Rule 17    exp -> exp LE exp
+Rule 18    exp -> INTEGER
+Rule 19    exp -> ID
+Rule 20    exp -> ( exp )
+Rule 21    exp -> MINUS exp
+Rule 22    opt_semi -> ;
+Rule 23    opt_semi -> empty
 Rule 24    empty -> <empty>
 
 Terminals, with rules where they appear
 
-(                    : 7 8 22
-)                    : 7 8 22
-;                    : 12
+(                    : 7 8 20
+)                    : 7 8 20
+;                    : 22
 =                    : 4
-DIVIDE               : 17
+DIVIDE               : 15
 ELSE                 : 10
-EQ                   : 18
+EQ                   : 16
 GET                  : 5
-ID                   : 4 5 21
+ID                   : 4 5 19
 IF                   : 8
-INTEGER              : 20
-LE                   : 19
-MINUS                : 15 23
-PLUS                 : 14
+INTEGER              : 18
+LE                   : 17
+MINUS                : 13 21
+PLUS                 : 12
 PUT                  : 6
-TIMES                : 16
+TIMES                : 14
 WHILE                : 7
 error                : 
 {                    : 9
@@ -53,8 +53,8 @@ error                :
 
 Nonterminals, with rules where they appear
 
-empty                : 3 11 13
-exp                  : 4 6 7 8 14 14 15 15 16 16 17 17 18 18 19 19 22 23
+empty                : 3 11 23
+exp                  : 4 6 7 8 12 12 13 13 14 14 15 15 16 16 17 17 20 21
 opt_else             : 8
 opt_semi             : 4 5 6
 program              : 0
@@ -154,16 +154,16 @@ state 6
 state 7
 
     (6) stmt -> PUT . exp opt_semi
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -222,16 +222,16 @@ state 11
 state 12
 
     (4) stmt -> ID = . exp opt_semi
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -243,8 +243,8 @@ state 12
 state 13
 
     (5) stmt -> GET ID . opt_semi
-    (12) opt_semi -> . ;
-    (13) opt_semi -> . empty
+    (22) opt_semi -> . ;
+    (23) opt_semi -> . empty
     (24) empty -> .
 
     ;               shift and go to state 24
@@ -264,14 +264,14 @@ state 13
 state 14
 
     (6) stmt -> PUT exp . opt_semi
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
-    (12) opt_semi -> . ;
-    (13) opt_semi -> . empty
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
+    (22) opt_semi -> . ;
+    (23) opt_semi -> . empty
     (24) empty -> .
 
     PLUS            shift and go to state 27
@@ -296,17 +296,17 @@ state 14
 
 state 15
 
-    (23) exp -> MINUS . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (21) exp -> MINUS . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -317,63 +317,63 @@ state 15
 
 state 16
 
-    (20) exp -> INTEGER .
+    (18) exp -> INTEGER .
 
-    PLUS            reduce using rule 20 (exp -> INTEGER .)
-    MINUS           reduce using rule 20 (exp -> INTEGER .)
-    TIMES           reduce using rule 20 (exp -> INTEGER .)
-    DIVIDE          reduce using rule 20 (exp -> INTEGER .)
-    EQ              reduce using rule 20 (exp -> INTEGER .)
-    LE              reduce using rule 20 (exp -> INTEGER .)
-    ;               reduce using rule 20 (exp -> INTEGER .)
-    ID              reduce using rule 20 (exp -> INTEGER .)
-    GET             reduce using rule 20 (exp -> INTEGER .)
-    PUT             reduce using rule 20 (exp -> INTEGER .)
-    WHILE           reduce using rule 20 (exp -> INTEGER .)
-    IF              reduce using rule 20 (exp -> INTEGER .)
-    {               reduce using rule 20 (exp -> INTEGER .)
-    $end            reduce using rule 20 (exp -> INTEGER .)
-    }               reduce using rule 20 (exp -> INTEGER .)
-    ELSE            reduce using rule 20 (exp -> INTEGER .)
-    )               reduce using rule 20 (exp -> INTEGER .)
+    PLUS            reduce using rule 18 (exp -> INTEGER .)
+    MINUS           reduce using rule 18 (exp -> INTEGER .)
+    TIMES           reduce using rule 18 (exp -> INTEGER .)
+    DIVIDE          reduce using rule 18 (exp -> INTEGER .)
+    EQ              reduce using rule 18 (exp -> INTEGER .)
+    LE              reduce using rule 18 (exp -> INTEGER .)
+    ;               reduce using rule 18 (exp -> INTEGER .)
+    ID              reduce using rule 18 (exp -> INTEGER .)
+    GET             reduce using rule 18 (exp -> INTEGER .)
+    PUT             reduce using rule 18 (exp -> INTEGER .)
+    WHILE           reduce using rule 18 (exp -> INTEGER .)
+    IF              reduce using rule 18 (exp -> INTEGER .)
+    {               reduce using rule 18 (exp -> INTEGER .)
+    $end            reduce using rule 18 (exp -> INTEGER .)
+    }               reduce using rule 18 (exp -> INTEGER .)
+    ELSE            reduce using rule 18 (exp -> INTEGER .)
+    )               reduce using rule 18 (exp -> INTEGER .)
 
 
 state 17
 
-    (21) exp -> ID .
+    (19) exp -> ID .
 
-    PLUS            reduce using rule 21 (exp -> ID .)
-    MINUS           reduce using rule 21 (exp -> ID .)
-    TIMES           reduce using rule 21 (exp -> ID .)
-    DIVIDE          reduce using rule 21 (exp -> ID .)
-    EQ              reduce using rule 21 (exp -> ID .)
-    LE              reduce using rule 21 (exp -> ID .)
-    ;               reduce using rule 21 (exp -> ID .)
-    ID              reduce using rule 21 (exp -> ID .)
-    GET             reduce using rule 21 (exp -> ID .)
-    PUT             reduce using rule 21 (exp -> ID .)
-    WHILE           reduce using rule 21 (exp -> ID .)
-    IF              reduce using rule 21 (exp -> ID .)
-    {               reduce using rule 21 (exp -> ID .)
-    $end            reduce using rule 21 (exp -> ID .)
-    }               reduce using rule 21 (exp -> ID .)
-    ELSE            reduce using rule 21 (exp -> ID .)
-    )               reduce using rule 21 (exp -> ID .)
+    PLUS            reduce using rule 19 (exp -> ID .)
+    MINUS           reduce using rule 19 (exp -> ID .)
+    TIMES           reduce using rule 19 (exp -> ID .)
+    DIVIDE          reduce using rule 19 (exp -> ID .)
+    EQ              reduce using rule 19 (exp -> ID .)
+    LE              reduce using rule 19 (exp -> ID .)
+    ;               reduce using rule 19 (exp -> ID .)
+    ID              reduce using rule 19 (exp -> ID .)
+    GET             reduce using rule 19 (exp -> ID .)
+    PUT             reduce using rule 19 (exp -> ID .)
+    WHILE           reduce using rule 19 (exp -> ID .)
+    IF              reduce using rule 19 (exp -> ID .)
+    {               reduce using rule 19 (exp -> ID .)
+    $end            reduce using rule 19 (exp -> ID .)
+    }               reduce using rule 19 (exp -> ID .)
+    ELSE            reduce using rule 19 (exp -> ID .)
+    )               reduce using rule 19 (exp -> ID .)
 
 
 state 18
 
-    (22) exp -> ( . exp )
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (20) exp -> ( . exp )
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -385,16 +385,16 @@ state 18
 state 19
 
     (7) stmt -> WHILE ( . exp ) stmt
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -406,16 +406,16 @@ state 19
 state 20
 
     (8) stmt -> IF ( . exp ) stmt opt_else
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -434,14 +434,14 @@ state 21
 state 22
 
     (4) stmt -> ID = exp . opt_semi
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
-    (12) opt_semi -> . ;
-    (13) opt_semi -> . empty
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
+    (22) opt_semi -> . ;
+    (23) opt_semi -> . empty
     (24) empty -> .
 
     PLUS            shift and go to state 27
@@ -481,32 +481,32 @@ state 23
 
 state 24
 
-    (12) opt_semi -> ; .
+    (22) opt_semi -> ; .
 
-    ID              reduce using rule 12 (opt_semi -> ; .)
-    GET             reduce using rule 12 (opt_semi -> ; .)
-    PUT             reduce using rule 12 (opt_semi -> ; .)
-    WHILE           reduce using rule 12 (opt_semi -> ; .)
-    IF              reduce using rule 12 (opt_semi -> ; .)
-    {               reduce using rule 12 (opt_semi -> ; .)
-    $end            reduce using rule 12 (opt_semi -> ; .)
-    }               reduce using rule 12 (opt_semi -> ; .)
-    ELSE            reduce using rule 12 (opt_semi -> ; .)
+    ID              reduce using rule 22 (opt_semi -> ; .)
+    GET             reduce using rule 22 (opt_semi -> ; .)
+    PUT             reduce using rule 22 (opt_semi -> ; .)
+    WHILE           reduce using rule 22 (opt_semi -> ; .)
+    IF              reduce using rule 22 (opt_semi -> ; .)
+    {               reduce using rule 22 (opt_semi -> ; .)
+    $end            reduce using rule 22 (opt_semi -> ; .)
+    }               reduce using rule 22 (opt_semi -> ; .)
+    ELSE            reduce using rule 22 (opt_semi -> ; .)
 
 
 state 25
 
-    (13) opt_semi -> empty .
+    (23) opt_semi -> empty .
 
-    ID              reduce using rule 13 (opt_semi -> empty .)
-    GET             reduce using rule 13 (opt_semi -> empty .)
-    PUT             reduce using rule 13 (opt_semi -> empty .)
-    WHILE           reduce using rule 13 (opt_semi -> empty .)
-    IF              reduce using rule 13 (opt_semi -> empty .)
-    {               reduce using rule 13 (opt_semi -> empty .)
-    $end            reduce using rule 13 (opt_semi -> empty .)
-    }               reduce using rule 13 (opt_semi -> empty .)
-    ELSE            reduce using rule 13 (opt_semi -> empty .)
+    ID              reduce using rule 23 (opt_semi -> empty .)
+    GET             reduce using rule 23 (opt_semi -> empty .)
+    PUT             reduce using rule 23 (opt_semi -> empty .)
+    WHILE           reduce using rule 23 (opt_semi -> empty .)
+    IF              reduce using rule 23 (opt_semi -> empty .)
+    {               reduce using rule 23 (opt_semi -> empty .)
+    $end            reduce using rule 23 (opt_semi -> empty .)
+    }               reduce using rule 23 (opt_semi -> empty .)
+    ELSE            reduce using rule 23 (opt_semi -> empty .)
 
 
 state 26
@@ -526,17 +526,17 @@ state 26
 
 state 27
 
-    (14) exp -> exp PLUS . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (12) exp -> exp PLUS . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -547,17 +547,17 @@ state 27
 
 state 28
 
-    (15) exp -> exp MINUS . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (13) exp -> exp MINUS . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -568,17 +568,17 @@ state 28
 
 state 29
 
-    (16) exp -> exp TIMES . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (14) exp -> exp TIMES . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -589,17 +589,17 @@ state 29
 
 state 30
 
-    (17) exp -> exp DIVIDE . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (15) exp -> exp DIVIDE . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -610,17 +610,17 @@ state 30
 
 state 31
 
-    (18) exp -> exp EQ . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (16) exp -> exp EQ . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -631,17 +631,17 @@ state 31
 
 state 32
 
-    (19) exp -> exp LE . exp
-    (14) exp -> . exp PLUS exp
-    (15) exp -> . exp MINUS exp
-    (16) exp -> . exp TIMES exp
-    (17) exp -> . exp DIVIDE exp
-    (18) exp -> . exp EQ exp
-    (19) exp -> . exp LE exp
-    (20) exp -> . INTEGER
-    (21) exp -> . ID
-    (22) exp -> . ( exp )
-    (23) exp -> . MINUS exp
+    (17) exp -> exp LE . exp
+    (12) exp -> . exp PLUS exp
+    (13) exp -> . exp MINUS exp
+    (14) exp -> . exp TIMES exp
+    (15) exp -> . exp DIVIDE exp
+    (16) exp -> . exp EQ exp
+    (17) exp -> . exp LE exp
+    (18) exp -> . INTEGER
+    (19) exp -> . ID
+    (20) exp -> . ( exp )
+    (21) exp -> . MINUS exp
 
     INTEGER         shift and go to state 16
     ID              shift and go to state 17
@@ -652,31 +652,31 @@ state 32
 
 state 33
 
-    (23) exp -> MINUS exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (21) exp -> MINUS exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    PLUS            reduce using rule 23 (exp -> MINUS exp .)
-    MINUS           reduce using rule 23 (exp -> MINUS exp .)
-    TIMES           reduce using rule 23 (exp -> MINUS exp .)
-    DIVIDE          reduce using rule 23 (exp -> MINUS exp .)
-    EQ              reduce using rule 23 (exp -> MINUS exp .)
-    LE              reduce using rule 23 (exp -> MINUS exp .)
-    ;               reduce using rule 23 (exp -> MINUS exp .)
-    ID              reduce using rule 23 (exp -> MINUS exp .)
-    GET             reduce using rule 23 (exp -> MINUS exp .)
-    PUT             reduce using rule 23 (exp -> MINUS exp .)
-    WHILE           reduce using rule 23 (exp -> MINUS exp .)
-    IF              reduce using rule 23 (exp -> MINUS exp .)
-    {               reduce using rule 23 (exp -> MINUS exp .)
-    $end            reduce using rule 23 (exp -> MINUS exp .)
-    }               reduce using rule 23 (exp -> MINUS exp .)
-    ELSE            reduce using rule 23 (exp -> MINUS exp .)
-    )               reduce using rule 23 (exp -> MINUS exp .)
+    PLUS            reduce using rule 21 (exp -> MINUS exp .)
+    MINUS           reduce using rule 21 (exp -> MINUS exp .)
+    TIMES           reduce using rule 21 (exp -> MINUS exp .)
+    DIVIDE          reduce using rule 21 (exp -> MINUS exp .)
+    EQ              reduce using rule 21 (exp -> MINUS exp .)
+    LE              reduce using rule 21 (exp -> MINUS exp .)
+    ;               reduce using rule 21 (exp -> MINUS exp .)
+    ID              reduce using rule 21 (exp -> MINUS exp .)
+    GET             reduce using rule 21 (exp -> MINUS exp .)
+    PUT             reduce using rule 21 (exp -> MINUS exp .)
+    WHILE           reduce using rule 21 (exp -> MINUS exp .)
+    IF              reduce using rule 21 (exp -> MINUS exp .)
+    {               reduce using rule 21 (exp -> MINUS exp .)
+    $end            reduce using rule 21 (exp -> MINUS exp .)
+    }               reduce using rule 21 (exp -> MINUS exp .)
+    ELSE            reduce using rule 21 (exp -> MINUS exp .)
+    )               reduce using rule 21 (exp -> MINUS exp .)
 
   ! PLUS            [ shift and go to state 27 ]
   ! MINUS           [ shift and go to state 28 ]
@@ -688,13 +688,13 @@ state 33
 
 state 34
 
-    (22) exp -> ( exp . )
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (20) exp -> ( exp . )
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
     )               shift and go to state 45
     PLUS            shift and go to state 27
@@ -708,12 +708,12 @@ state 34
 state 35
 
     (7) stmt -> WHILE ( exp . ) stmt
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
     )               shift and go to state 46
     PLUS            shift and go to state 27
@@ -727,12 +727,12 @@ state 35
 state 36
 
     (8) stmt -> IF ( exp . ) stmt opt_else
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
     )               shift and go to state 47
     PLUS            shift and go to state 27
@@ -775,34 +775,34 @@ state 38
 
 state 39
 
-    (14) exp -> exp PLUS exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (12) exp -> exp PLUS exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    PLUS            reduce using rule 14 (exp -> exp PLUS exp .)
-    MINUS           reduce using rule 14 (exp -> exp PLUS exp .)
-    EQ              reduce using rule 14 (exp -> exp PLUS exp .)
-    LE              reduce using rule 14 (exp -> exp PLUS exp .)
-    ;               reduce using rule 14 (exp -> exp PLUS exp .)
-    ID              reduce using rule 14 (exp -> exp PLUS exp .)
-    GET             reduce using rule 14 (exp -> exp PLUS exp .)
-    PUT             reduce using rule 14 (exp -> exp PLUS exp .)
-    WHILE           reduce using rule 14 (exp -> exp PLUS exp .)
-    IF              reduce using rule 14 (exp -> exp PLUS exp .)
-    {               reduce using rule 14 (exp -> exp PLUS exp .)
-    $end            reduce using rule 14 (exp -> exp PLUS exp .)
-    }               reduce using rule 14 (exp -> exp PLUS exp .)
-    ELSE            reduce using rule 14 (exp -> exp PLUS exp .)
-    )               reduce using rule 14 (exp -> exp PLUS exp .)
+    PLUS            reduce using rule 12 (exp -> exp PLUS exp .)
+    MINUS           reduce using rule 12 (exp -> exp PLUS exp .)
+    EQ              reduce using rule 12 (exp -> exp PLUS exp .)
+    LE              reduce using rule 12 (exp -> exp PLUS exp .)
+    ;               reduce using rule 12 (exp -> exp PLUS exp .)
+    ID              reduce using rule 12 (exp -> exp PLUS exp .)
+    GET             reduce using rule 12 (exp -> exp PLUS exp .)
+    PUT             reduce using rule 12 (exp -> exp PLUS exp .)
+    WHILE           reduce using rule 12 (exp -> exp PLUS exp .)
+    IF              reduce using rule 12 (exp -> exp PLUS exp .)
+    {               reduce using rule 12 (exp -> exp PLUS exp .)
+    $end            reduce using rule 12 (exp -> exp PLUS exp .)
+    }               reduce using rule 12 (exp -> exp PLUS exp .)
+    ELSE            reduce using rule 12 (exp -> exp PLUS exp .)
+    )               reduce using rule 12 (exp -> exp PLUS exp .)
     TIMES           shift and go to state 29
     DIVIDE          shift and go to state 30
 
-  ! TIMES           [ reduce using rule 14 (exp -> exp PLUS exp .) ]
-  ! DIVIDE          [ reduce using rule 14 (exp -> exp PLUS exp .) ]
+  ! TIMES           [ reduce using rule 12 (exp -> exp PLUS exp .) ]
+  ! DIVIDE          [ reduce using rule 12 (exp -> exp PLUS exp .) ]
   ! PLUS            [ shift and go to state 27 ]
   ! MINUS           [ shift and go to state 28 ]
   ! EQ              [ shift and go to state 31 ]
@@ -811,34 +811,34 @@ state 39
 
 state 40
 
-    (15) exp -> exp MINUS exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (13) exp -> exp MINUS exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    PLUS            reduce using rule 15 (exp -> exp MINUS exp .)
-    MINUS           reduce using rule 15 (exp -> exp MINUS exp .)
-    EQ              reduce using rule 15 (exp -> exp MINUS exp .)
-    LE              reduce using rule 15 (exp -> exp MINUS exp .)
-    ;               reduce using rule 15 (exp -> exp MINUS exp .)
-    ID              reduce using rule 15 (exp -> exp MINUS exp .)
-    GET             reduce using rule 15 (exp -> exp MINUS exp .)
-    PUT             reduce using rule 15 (exp -> exp MINUS exp .)
-    WHILE           reduce using rule 15 (exp -> exp MINUS exp .)
-    IF              reduce using rule 15 (exp -> exp MINUS exp .)
-    {               reduce using rule 15 (exp -> exp MINUS exp .)
-    $end            reduce using rule 15 (exp -> exp MINUS exp .)
-    }               reduce using rule 15 (exp -> exp MINUS exp .)
-    ELSE            reduce using rule 15 (exp -> exp MINUS exp .)
-    )               reduce using rule 15 (exp -> exp MINUS exp .)
+    PLUS            reduce using rule 13 (exp -> exp MINUS exp .)
+    MINUS           reduce using rule 13 (exp -> exp MINUS exp .)
+    EQ              reduce using rule 13 (exp -> exp MINUS exp .)
+    LE              reduce using rule 13 (exp -> exp MINUS exp .)
+    ;               reduce using rule 13 (exp -> exp MINUS exp .)
+    ID              reduce using rule 13 (exp -> exp MINUS exp .)
+    GET             reduce using rule 13 (exp -> exp MINUS exp .)
+    PUT             reduce using rule 13 (exp -> exp MINUS exp .)
+    WHILE           reduce using rule 13 (exp -> exp MINUS exp .)
+    IF              reduce using rule 13 (exp -> exp MINUS exp .)
+    {               reduce using rule 13 (exp -> exp MINUS exp .)
+    $end            reduce using rule 13 (exp -> exp MINUS exp .)
+    }               reduce using rule 13 (exp -> exp MINUS exp .)
+    ELSE            reduce using rule 13 (exp -> exp MINUS exp .)
+    )               reduce using rule 13 (exp -> exp MINUS exp .)
     TIMES           shift and go to state 29
     DIVIDE          shift and go to state 30
 
-  ! TIMES           [ reduce using rule 15 (exp -> exp MINUS exp .) ]
-  ! DIVIDE          [ reduce using rule 15 (exp -> exp MINUS exp .) ]
+  ! TIMES           [ reduce using rule 13 (exp -> exp MINUS exp .) ]
+  ! DIVIDE          [ reduce using rule 13 (exp -> exp MINUS exp .) ]
   ! PLUS            [ shift and go to state 27 ]
   ! MINUS           [ shift and go to state 28 ]
   ! EQ              [ shift and go to state 31 ]
@@ -847,31 +847,31 @@ state 40
 
 state 41
 
-    (16) exp -> exp TIMES exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (14) exp -> exp TIMES exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    PLUS            reduce using rule 16 (exp -> exp TIMES exp .)
-    MINUS           reduce using rule 16 (exp -> exp TIMES exp .)
-    TIMES           reduce using rule 16 (exp -> exp TIMES exp .)
-    DIVIDE          reduce using rule 16 (exp -> exp TIMES exp .)
-    EQ              reduce using rule 16 (exp -> exp TIMES exp .)
-    LE              reduce using rule 16 (exp -> exp TIMES exp .)
-    ;               reduce using rule 16 (exp -> exp TIMES exp .)
-    ID              reduce using rule 16 (exp -> exp TIMES exp .)
-    GET             reduce using rule 16 (exp -> exp TIMES exp .)
-    PUT             reduce using rule 16 (exp -> exp TIMES exp .)
-    WHILE           reduce using rule 16 (exp -> exp TIMES exp .)
-    IF              reduce using rule 16 (exp -> exp TIMES exp .)
-    {               reduce using rule 16 (exp -> exp TIMES exp .)
-    $end            reduce using rule 16 (exp -> exp TIMES exp .)
-    }               reduce using rule 16 (exp -> exp TIMES exp .)
-    ELSE            reduce using rule 16 (exp -> exp TIMES exp .)
-    )               reduce using rule 16 (exp -> exp TIMES exp .)
+    PLUS            reduce using rule 14 (exp -> exp TIMES exp .)
+    MINUS           reduce using rule 14 (exp -> exp TIMES exp .)
+    TIMES           reduce using rule 14 (exp -> exp TIMES exp .)
+    DIVIDE          reduce using rule 14 (exp -> exp TIMES exp .)
+    EQ              reduce using rule 14 (exp -> exp TIMES exp .)
+    LE              reduce using rule 14 (exp -> exp TIMES exp .)
+    ;               reduce using rule 14 (exp -> exp TIMES exp .)
+    ID              reduce using rule 14 (exp -> exp TIMES exp .)
+    GET             reduce using rule 14 (exp -> exp TIMES exp .)
+    PUT             reduce using rule 14 (exp -> exp TIMES exp .)
+    WHILE           reduce using rule 14 (exp -> exp TIMES exp .)
+    IF              reduce using rule 14 (exp -> exp TIMES exp .)
+    {               reduce using rule 14 (exp -> exp TIMES exp .)
+    $end            reduce using rule 14 (exp -> exp TIMES exp .)
+    }               reduce using rule 14 (exp -> exp TIMES exp .)
+    ELSE            reduce using rule 14 (exp -> exp TIMES exp .)
+    )               reduce using rule 14 (exp -> exp TIMES exp .)
 
   ! PLUS            [ shift and go to state 27 ]
   ! MINUS           [ shift and go to state 28 ]
@@ -883,31 +883,31 @@ state 41
 
 state 42
 
-    (17) exp -> exp DIVIDE exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (15) exp -> exp DIVIDE exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    PLUS            reduce using rule 17 (exp -> exp DIVIDE exp .)
-    MINUS           reduce using rule 17 (exp -> exp DIVIDE exp .)
-    TIMES           reduce using rule 17 (exp -> exp DIVIDE exp .)
-    DIVIDE          reduce using rule 17 (exp -> exp DIVIDE exp .)
-    EQ              reduce using rule 17 (exp -> exp DIVIDE exp .)
-    LE              reduce using rule 17 (exp -> exp DIVIDE exp .)
-    ;               reduce using rule 17 (exp -> exp DIVIDE exp .)
-    ID              reduce using rule 17 (exp -> exp DIVIDE exp .)
-    GET             reduce using rule 17 (exp -> exp DIVIDE exp .)
-    PUT             reduce using rule 17 (exp -> exp DIVIDE exp .)
-    WHILE           reduce using rule 17 (exp -> exp DIVIDE exp .)
-    IF              reduce using rule 17 (exp -> exp DIVIDE exp .)
-    {               reduce using rule 17 (exp -> exp DIVIDE exp .)
-    $end            reduce using rule 17 (exp -> exp DIVIDE exp .)
-    }               reduce using rule 17 (exp -> exp DIVIDE exp .)
-    ELSE            reduce using rule 17 (exp -> exp DIVIDE exp .)
-    )               reduce using rule 17 (exp -> exp DIVIDE exp .)
+    PLUS            reduce using rule 15 (exp -> exp DIVIDE exp .)
+    MINUS           reduce using rule 15 (exp -> exp DIVIDE exp .)
+    TIMES           reduce using rule 15 (exp -> exp DIVIDE exp .)
+    DIVIDE          reduce using rule 15 (exp -> exp DIVIDE exp .)
+    EQ              reduce using rule 15 (exp -> exp DIVIDE exp .)
+    LE              reduce using rule 15 (exp -> exp DIVIDE exp .)
+    ;               reduce using rule 15 (exp -> exp DIVIDE exp .)
+    ID              reduce using rule 15 (exp -> exp DIVIDE exp .)
+    GET             reduce using rule 15 (exp -> exp DIVIDE exp .)
+    PUT             reduce using rule 15 (exp -> exp DIVIDE exp .)
+    WHILE           reduce using rule 15 (exp -> exp DIVIDE exp .)
+    IF              reduce using rule 15 (exp -> exp DIVIDE exp .)
+    {               reduce using rule 15 (exp -> exp DIVIDE exp .)
+    $end            reduce using rule 15 (exp -> exp DIVIDE exp .)
+    }               reduce using rule 15 (exp -> exp DIVIDE exp .)
+    ELSE            reduce using rule 15 (exp -> exp DIVIDE exp .)
+    )               reduce using rule 15 (exp -> exp DIVIDE exp .)
 
   ! PLUS            [ shift and go to state 27 ]
   ! MINUS           [ shift and go to state 28 ]
@@ -919,97 +919,97 @@ state 42
 
 state 43
 
-    (18) exp -> exp EQ exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (16) exp -> exp EQ exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    EQ              reduce using rule 18 (exp -> exp EQ exp .)
-    LE              reduce using rule 18 (exp -> exp EQ exp .)
-    ;               reduce using rule 18 (exp -> exp EQ exp .)
-    ID              reduce using rule 18 (exp -> exp EQ exp .)
-    GET             reduce using rule 18 (exp -> exp EQ exp .)
-    PUT             reduce using rule 18 (exp -> exp EQ exp .)
-    WHILE           reduce using rule 18 (exp -> exp EQ exp .)
-    IF              reduce using rule 18 (exp -> exp EQ exp .)
-    {               reduce using rule 18 (exp -> exp EQ exp .)
-    $end            reduce using rule 18 (exp -> exp EQ exp .)
-    }               reduce using rule 18 (exp -> exp EQ exp .)
-    ELSE            reduce using rule 18 (exp -> exp EQ exp .)
-    )               reduce using rule 18 (exp -> exp EQ exp .)
+    EQ              reduce using rule 16 (exp -> exp EQ exp .)
+    LE              reduce using rule 16 (exp -> exp EQ exp .)
+    ;               reduce using rule 16 (exp -> exp EQ exp .)
+    ID              reduce using rule 16 (exp -> exp EQ exp .)
+    GET             reduce using rule 16 (exp -> exp EQ exp .)
+    PUT             reduce using rule 16 (exp -> exp EQ exp .)
+    WHILE           reduce using rule 16 (exp -> exp EQ exp .)
+    IF              reduce using rule 16 (exp -> exp EQ exp .)
+    {               reduce using rule 16 (exp -> exp EQ exp .)
+    $end            reduce using rule 16 (exp -> exp EQ exp .)
+    }               reduce using rule 16 (exp -> exp EQ exp .)
+    ELSE            reduce using rule 16 (exp -> exp EQ exp .)
+    )               reduce using rule 16 (exp -> exp EQ exp .)
     PLUS            shift and go to state 27
     MINUS           shift and go to state 28
     TIMES           shift and go to state 29
     DIVIDE          shift and go to state 30
 
-  ! PLUS            [ reduce using rule 18 (exp -> exp EQ exp .) ]
-  ! MINUS           [ reduce using rule 18 (exp -> exp EQ exp .) ]
-  ! TIMES           [ reduce using rule 18 (exp -> exp EQ exp .) ]
-  ! DIVIDE          [ reduce using rule 18 (exp -> exp EQ exp .) ]
+  ! PLUS            [ reduce using rule 16 (exp -> exp EQ exp .) ]
+  ! MINUS           [ reduce using rule 16 (exp -> exp EQ exp .) ]
+  ! TIMES           [ reduce using rule 16 (exp -> exp EQ exp .) ]
+  ! DIVIDE          [ reduce using rule 16 (exp -> exp EQ exp .) ]
   ! EQ              [ shift and go to state 31 ]
   ! LE              [ shift and go to state 32 ]
 
 
 state 44
 
-    (19) exp -> exp LE exp .
-    (14) exp -> exp . PLUS exp
-    (15) exp -> exp . MINUS exp
-    (16) exp -> exp . TIMES exp
-    (17) exp -> exp . DIVIDE exp
-    (18) exp -> exp . EQ exp
-    (19) exp -> exp . LE exp
+    (17) exp -> exp LE exp .
+    (12) exp -> exp . PLUS exp
+    (13) exp -> exp . MINUS exp
+    (14) exp -> exp . TIMES exp
+    (15) exp -> exp . DIVIDE exp
+    (16) exp -> exp . EQ exp
+    (17) exp -> exp . LE exp
 
-    EQ              reduce using rule 19 (exp -> exp LE exp .)
-    LE              reduce using rule 19 (exp -> exp LE exp .)
-    ;               reduce using rule 19 (exp -> exp LE exp .)
-    ID              reduce using rule 19 (exp -> exp LE exp .)
-    GET             reduce using rule 19 (exp -> exp LE exp .)
-    PUT             reduce using rule 19 (exp -> exp LE exp .)
-    WHILE           reduce using rule 19 (exp -> exp LE exp .)
-    IF              reduce using rule 19 (exp -> exp LE exp .)
-    {               reduce using rule 19 (exp -> exp LE exp .)
-    $end            reduce using rule 19 (exp -> exp LE exp .)
-    }               reduce using rule 19 (exp -> exp LE exp .)
-    ELSE            reduce using rule 19 (exp -> exp LE exp .)
-    )               reduce using rule 19 (exp -> exp LE exp .)
+    EQ              reduce using rule 17 (exp -> exp LE exp .)
+    LE              reduce using rule 17 (exp -> exp LE exp .)
+    ;               reduce using rule 17 (exp -> exp LE exp .)
+    ID              reduce using rule 17 (exp -> exp LE exp .)
+    GET             reduce using rule 17 (exp -> exp LE exp .)
+    PUT             reduce using rule 17 (exp -> exp LE exp .)
+    WHILE           reduce using rule 17 (exp -> exp LE exp .)
+    IF              reduce using rule 17 (exp -> exp LE exp .)
+    {               reduce using rule 17 (exp -> exp LE exp .)
+    $end            reduce using rule 17 (exp -> exp LE exp .)
+    }               reduce using rule 17 (exp -> exp LE exp .)
+    ELSE            reduce using rule 17 (exp -> exp LE exp .)
+    )               reduce using rule 17 (exp -> exp LE exp .)
     PLUS            shift and go to state 27
     MINUS           shift and go to state 28
     TIMES           shift and go to state 29
     DIVIDE          shift and go to state 30
 
-  ! PLUS            [ reduce using rule 19 (exp -> exp LE exp .) ]
-  ! MINUS           [ reduce using rule 19 (exp -> exp LE exp .) ]
-  ! TIMES           [ reduce using rule 19 (exp -> exp LE exp .) ]
-  ! DIVIDE          [ reduce using rule 19 (exp -> exp LE exp .) ]
+  ! PLUS            [ reduce using rule 17 (exp -> exp LE exp .) ]
+  ! MINUS           [ reduce using rule 17 (exp -> exp LE exp .) ]
+  ! TIMES           [ reduce using rule 17 (exp -> exp LE exp .) ]
+  ! DIVIDE          [ reduce using rule 17 (exp -> exp LE exp .) ]
   ! EQ              [ shift and go to state 31 ]
   ! LE              [ shift and go to state 32 ]
 
 
 state 45
 
-    (22) exp -> ( exp ) .
+    (20) exp -> ( exp ) .
 
-    PLUS            reduce using rule 22 (exp -> ( exp ) .)
-    MINUS           reduce using rule 22 (exp -> ( exp ) .)
-    TIMES           reduce using rule 22 (exp -> ( exp ) .)
-    DIVIDE          reduce using rule 22 (exp -> ( exp ) .)
-    EQ              reduce using rule 22 (exp -> ( exp ) .)
-    LE              reduce using rule 22 (exp -> ( exp ) .)
-    ;               reduce using rule 22 (exp -> ( exp ) .)
-    ID              reduce using rule 22 (exp -> ( exp ) .)
-    GET             reduce using rule 22 (exp -> ( exp ) .)
-    PUT             reduce using rule 22 (exp -> ( exp ) .)
-    WHILE           reduce using rule 22 (exp -> ( exp ) .)
-    IF              reduce using rule 22 (exp -> ( exp ) .)
-    {               reduce using rule 22 (exp -> ( exp ) .)
-    $end            reduce using rule 22 (exp -> ( exp ) .)
-    }               reduce using rule 22 (exp -> ( exp ) .)
-    ELSE            reduce using rule 22 (exp -> ( exp ) .)
-    )               reduce using rule 22 (exp -> ( exp ) .)
+    PLUS            reduce using rule 20 (exp -> ( exp ) .)
+    MINUS           reduce using rule 20 (exp -> ( exp ) .)
+    TIMES           reduce using rule 20 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 20 (exp -> ( exp ) .)
+    EQ              reduce using rule 20 (exp -> ( exp ) .)
+    LE              reduce using rule 20 (exp -> ( exp ) .)
+    ;               reduce using rule 20 (exp -> ( exp ) .)
+    ID              reduce using rule 20 (exp -> ( exp ) .)
+    GET             reduce using rule 20 (exp -> ( exp ) .)
+    PUT             reduce using rule 20 (exp -> ( exp ) .)
+    WHILE           reduce using rule 20 (exp -> ( exp ) .)
+    IF              reduce using rule 20 (exp -> ( exp ) .)
+    {               reduce using rule 20 (exp -> ( exp ) .)
+    $end            reduce using rule 20 (exp -> ( exp ) .)
+    }               reduce using rule 20 (exp -> ( exp ) .)
+    ELSE            reduce using rule 20 (exp -> ( exp ) .)
+    )               reduce using rule 20 (exp -> ( exp ) .)
 
 
 state 46
