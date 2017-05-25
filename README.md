@@ -10,7 +10,9 @@ DRAFT - May 2017
 
 The text is released under the [CC-BY-NC-ND license](https://creativecommons.org/licenses/by-nc-nd/3.0/us/legalcode), and code is released under the [MIT license](https://opensource.org/licenses/MIT).
 
-To read this book:
+To read this book online: [start here](Notebooks/chap00.ipynb)
+
+To read this book interactively:
 - download and install [Anaconda3](https://www.continuum.io/downloads)
 - make sure that anaconda/bin is in your path
 - download or clone this repository
