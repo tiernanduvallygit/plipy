@@ -112,18 +112,23 @@ def eval_exp_tree(node):
         # '=' exp exp
         v_left = eval_exp_tree(node[1])
         v_right = eval_exp_tree(node[2])
-        return v_left == v_right
+        return 1 if v_left == v_right else 0
     
     elif type == '=<':
         # '=<' exp exp
         v_left = eval_exp_tree(node[1])
         v_right = eval_exp_tree(node[2])
-        return v_left <= v_right
+        return 1 if v_left <= v_right else 0
     
     elif type == 'UMINUS':
         # 'UMINUS' exp
         val = eval_exp_tree(node[1])
         return - val
+    
+    elif type == '!':
+        # '!' exp
+        val = eval_exp_tree(node[1])
+        return 0 if val != 0 else 1
     
     elif type == 'NAME':
         # 'NAME' var_name

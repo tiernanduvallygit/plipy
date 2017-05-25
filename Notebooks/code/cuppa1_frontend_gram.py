@@ -6,15 +6,17 @@ from cuppa1_state import state
 
 #########################################################################
 # set precedence and associativity
-# NOTE: all arithmetic operator need to have tokens
+# NOTE: all operators need to have tokens
 #       so that we can put them into the precedence table
 precedence = (
               ('left', 'EQ', 'LE'),
               ('left', 'PLUS', 'MINUS'),
               ('left', 'TIMES', 'DIVIDE'),
-              ('right', 'UMINUS')
+              ('right', 'UMINUS', 'NOT')
              )
 
+#########################################################################
+# grammar rules with embedded actions
 #########################################################################
 def p_prog(p):
     '''
@@ -112,6 +114,13 @@ def p_uminus_exp(p):
     p[0] = ('uminus', p[2])
 
 #########################################################################
+def p_not_exp(p):
+    '''
+    exp : NOT exp
+    '''
+    p[0] = ('not', p[2])
+
+#########################################################################
 def p_opt_semi(p):
     '''
     opt_semi : ';'
@@ -129,7 +138,7 @@ def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
 #########################################################################
-### build the parser
+# build the parser
 #########################################################################
 parser = yacc.yacc()
 

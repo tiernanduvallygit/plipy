@@ -29,6 +29,7 @@ def p_grammar(_):
         | '/' exp exp
         | EQ exp exp
         | LE exp exp
+        | '!' exp
         | '(' exp ')'
         | var
         | NUMBER

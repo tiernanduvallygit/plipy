@@ -1,7 +1,7 @@
 from cuppa1_state import state
 from grammar_stuff import assert_match
 
-# this is the second pass of the pretty printer that that
+# pp2: this is the second pass of the Cuppa1 pretty printer that
 # generates the output together with the warning
 
 indent_level = 0
@@ -9,9 +9,9 @@ indent_level = 0
 #########################################################################
 # node functions
 #########################################################################
-def seq(t):
+def seq(node):
 
-    (SEQ, s1, s2) = t
+    (SEQ, s1, s2) = node
     assert_match(SEQ, 'seq')
     
     stmt = walk(s1)
@@ -20,23 +20,22 @@ def seq(t):
     return stmt + list
 
 #########################################################################
-def nil(t):
+def nil(node):
     
-    (NIL,) = t
+    (NIL,) = node
     assert_match(NIL, 'nil')
     
-    # do nothing!
-    pass
-
+    return ''
+    
 #########################################################################
-def assign_stmt(t):
+def assign_stmt(node):
 
-    (ASSIGN, name, exp) = t
+    (ASSIGN, name, exp) = node
     assert_match(ASSIGN, 'assign')
     
-    e = walk(exp)
+    exp_code = walk(exp)
 
-    code = indent() + name + ' = ' + e
+    code = indent() + name + ' = ' + exp_code
     
     if not state.symbol_table[name]:
         code += ' // *** '+ name + ' is not used ***'
@@ -45,9 +44,9 @@ def assign_stmt(t):
     return code
 
 #########################################################################
-def get_stmt(t):
+def get_stmt(node):
 
-    (GET, name) = t
+    (GET, name) = node
     assert_match(GET, 'get')
 
     code = indent() + 'get ' + name
@@ -59,80 +58,76 @@ def get_stmt(t):
     return code
 
 #########################################################################
-def put_stmt(t):
+def put_stmt(node):
 
-    (PUT, exp) = t
+    (PUT, exp) = node
     assert_match(PUT, 'put')
     
-    e = walk(exp)
+    exp_code = walk(exp)
 
-    code = indent() + 'put ' + e + '\n'
+    code = indent() + 'put ' + exp_code + '\n'
     return code
 
 #########################################################################
-def while_stmt(t):
+def while_stmt(node):
     global indent_level
     
-    (WHILE, cond, body) = t
+    (WHILE, cond, body) = node
     assert_match(WHILE, 'while')
     
-    c = walk(cond)
+    cond_code = walk(cond)
 
     indent_level += 1
-    b = walk(body)
+    body_code = walk(body)
     indent_level -= 1
 
-    code = indent() + 'while (' + c + ')\n' + b
+    code = indent() + 'while (' + cond_code + ')\n' + body_code
 
     return code
 
 #########################################################################
-def if_stmt(t):
+def if_stmt(node):
     global indent_level
 
     try: # try the if-then pattern
-        (IF, cond, s1, (NIL,)) = t
+        (IF, cond, s1, (NIL,)) = node
         assert_match(IF, 'if')
         assert_match(NIL, 'nil')
     
     except ValueError: # pattern didn't match
-        try: # try if-then-else pattern
-        (IF, cond, s1, s2) = t
+        # try the if-then-else pattern
+        (IF, cond, s1, s2) = node
         assert_match(IF, 'if')
         
-        except ValueError:
-            raise ValueError("walk: pattern match failed in 'if'")
-        
-        else:
-            c = walk(cond)
-
-            indent_level += 1
-            stmt1 = walk(s1)
-            stmt2 = walk(s2)
-            indent_level -= 1
-
-            code = indent() + 'if (' + c + ')\n' + stmt1
-            code += indent() + 'else\n' + stmt2
-            return code
-
-    else:
-        c = walk(cond)
+        cond_code = walk(cond)
 
         indent_level += 1
-        stmt1 = walk(s1)
+        stmt1_code = walk(s1)
+        stmt2_code = walk(s2)
         indent_level -= 1
 
-        code = indent() + 'if (' + c + ')\n' + stmt1
+        code = indent() + 'if (' + cond_code + ')\n' + stmt1_code
+        code += indent() + 'else\n' + stmt2_code
+        return code
+
+    else:
+        cond_code = walk(cond)
+
+        indent_level += 1
+        stmt1_code = walk(s1)
+        indent_level -= 1
+
+        code = indent() + 'if (' + cond_code + ')\n' + stmt1_code
         return code
     
 
 
 #########################################################################
-def block_stmt(t):
+def block_stmt(node):
     global indent_level
     adjust_level = False
 
-    (BLOCK, s) = t
+    (BLOCK, s) = node
     assert_match(BLOCK, 'block')
 
     if indent_level > 0:
@@ -140,10 +135,10 @@ def block_stmt(t):
         adjust_level = True
 
     indent_level += 1
-    block = walk(s)
+    code = walk(s)
     indent_level -= 1
     
-    code = indent() + '{\n' + block + indent() + '}\n'
+    code = indent() + '{\n' + code + indent() + '}\n'
 
     if adjust_level:
         indent_level += 1
@@ -151,57 +146,82 @@ def block_stmt(t):
     return code
 
 #########################################################################
-def binop_exp(t):
+def binop_exp(node):
 
-    (BINOP,op,c1,c2) = t
-    assert_match(BINOP, 'binop')
+    (OP, c1, c2) = node
+    if OP not in ['+', '-', '*', '/', '==', '<=']:
+        raise ValueError("pattern match failed on " + OP)
     
-    l = walk(c1)
-    r = walk(c2)
+    lcode = walk(c1)
+    rcode = walk(c2)
 
-    code = l + ' ' + op + ' ' + r
+    code = lcode + ' ' + OP + ' ' + rcode
 
     return code
 
 #########################################################################
-def integer_exp(t):
+def integer_exp(node):
 
-    (INTEGER, value) = t
+    (INTEGER, value) = node
     assert_match(INTEGER, 'integer')
 
     return str(value)
 
 #########################################################################
-def id_exp(t):
+def id_exp(node):
     
-    (ID, name) = t
+    (ID, name) = node
     assert_match(ID, 'id')
     
     return name
 
 #########################################################################
-def uminus_exp(t):
+def uminus_exp(node):
     
-    (UMINUS, e) = t
+    (UMINUS, e) = node
     assert_match(UMINUS, 'uminus')
     
-    c = walk(e)
+    code = walk(e)
 
-    return '-' + c
+    return '-' + code
 
 #########################################################################
-# visitor walker
+def not_exp(node):
+    
+    (NOT, e) = node
+    assert_match(NOT, 'not')
+    
+    code = walk(e)
+
+    return 'not ' + code
+
 #########################################################################
-def walk(t):
-    if t[0] in walk_dict:
-        f = walk_dict[t[0]]
-        return f(t)
+def paren_exp(node):
+    
+    (PAREN, exp) = node
+    assert_match(PAREN, 'paren')
+    
+    exp_code = walk(exp)
+
+    return '(' + exp_code + ')'
+
+#########################################################################
+# walk
+#########################################################################
+def walk(node):
+    node_type = node[0]
+    
+    if node_type in dispatch_dict:
+        node_function = dispatch_dict[node_type]
+        return node_function(node)
+    
     else:
-        raise ValueError("walk: unknown tree node " + t[0])
+        raise ValueError("walk: unknown tree node type: " + node_type)
 
 # a dictionary to associate tree nodes with node functions
-walk_dict = {
+dispatch_dict = {
     'seq'     : seq,
+    'nil'     : nil,
     'assign'  : assign_stmt,
     'get'     : get_stmt,
     'put'     : put_stmt,
@@ -211,13 +231,29 @@ walk_dict = {
     'binop'   : binop_exp,
     'integer' : integer_exp,
     'id'      : id_exp,
-    'uminus'  : uminus_exp
+    'uminus'  : uminus_exp,
+    'not'     : not_exp,
+    'paren'   : paren_exp,
+    '+'       : binop_exp,
+    '-'       : binop_exp,
+    '*'       : binop_exp,
+    '/'       : binop_exp,
+    '=='      : binop_exp,
+    '<='      : binop_exp
+
 }
 
 
+#########################################################################
 def indent():
     s = ''
     for i in range(indent_level):
         s += '   '
     return s
+
+#########################################################################
+def init_indent_level():
+    global indent_level
+    indent_level = 0
+
 

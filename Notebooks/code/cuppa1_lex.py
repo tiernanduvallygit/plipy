@@ -3,18 +3,19 @@
 from ply import lex
 
 reserved = {
-    'get' : 'GET',
-    'put' : 'PUT',
-    'if' : 'IF',
-    'else' : 'ELSE',
-    'while' : 'WHILE'
+    'get'   : 'GET',
+    'put'   : 'PUT',
+    'if'    : 'IF',
+    'else'  : 'ELSE',
+    'while' : 'WHILE',
+    'not'   : 'NOT'
 }
 
 literals = [';','=','(',')','{','}']
 
 tokens = [
           'PLUS','MINUS','TIMES','DIVIDE',
-          'EQ','LE',
+          'EQ','LE', 
           'INTEGER','ID',
           ] + list(reserved.values())
 

@@ -13,7 +13,7 @@ reserved = {
     'noop'  : 'NOOP'
 }
 
-literals = [':',';','+','-','*','/','(',')']
+literals = ['!',':',';','+','-','*','/','(',')']
 
 tokens = ['NAME','NUMBER','EQ','LE'] + list(reserved.values())
 

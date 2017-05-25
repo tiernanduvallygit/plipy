@@ -87,6 +87,12 @@ def p_uminus_exp(p):
     '''
     p[0] = ('UMINUS', p[2])
     
+def p_not_exp(p):
+    '''
+    exp : '!' exp
+    '''
+    p[0] = ('!', p[2])
+    
 def p_paren_exp(p):
     '''
     exp : '(' exp ')'

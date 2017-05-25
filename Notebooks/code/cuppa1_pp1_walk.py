@@ -1,71 +1,64 @@
 from cuppa1_state import state
 from grammar_stuff import assert_match
 
-# this is the first pass of the pretty printer that looks at
-# variable declarations
+# pp1: this is the first pass of the Cuppa1 pretty printer that marks
+# any defined variable as used if it appears in an expression
 
 #########################################################################
 # node functions
 #########################################################################
-def seq(t):
+def seq(node):
 
-    (SEQ, s1, s2) = t
+    (SEQ, stmt, stmt_list) = node
     assert_match(SEQ, 'seq')
     
-    walk(s1)
-    walk(s2)
+    walk(stmt)
+    walk(stmt_list)
 
 #########################################################################
-def nil(t):
+def nil(node):
     
-    (NIL,) = t
+    (NIL,) = node
     assert_match(NIL, 'nil')
     
     # do nothing!
     pass
 
 #########################################################################
-def assign_stmt(t):
+def assign_stmt(node):
 
-    (ASSIGN, name, exp) = t
+    (ASSIGN, name, exp) = node
     assert_match(ASSIGN, 'assign')
     
     walk(exp)
 
-    if name not in state.symbol_table:
-        state.symbol_table[name] = False
-
 #########################################################################
-def get_stmt(t):
+def get_stmt(node):
 
-    (GET, name) = t
+    (GET, name) = node
     assert_match(GET, 'get')
 
-    if name not in state.symbol_table:
-        state.symbol_table[name] = False
-
 #########################################################################
-def put_stmt(t):
+def put_stmt(node):
 
-    (PUT, exp) = t
+    (PUT, exp) = node
     assert_match(PUT, 'put')
     
     walk(exp)
 
 #########################################################################
-def while_stmt(t):
+def while_stmt(node):
 
-    (WHILE, cond, body) = t
+    (WHILE, cond, body) = node
     assert_match(WHILE, 'while')
     
     walk(cond)
     walk(body)
 
 #########################################################################
-def if_stmt(t):
+def if_stmt(node):
 
-try: # try the if-then pattern
-    (IF, cond, s1, s2) = t
+    (IF, cond, s1, s2) = node
     assert_match(IF, 'if')
     
     walk(cond)
@@ -73,56 +66,78 @@ try: # try the if-then pattern
     walk(s2)
 
 #########################################################################
-def block_stmt(t):
+def block_stmt(node):
 
-    (BLOCK, s) = t
+    (BLOCK, stmt_list) = node
     assert_match(BLOCK, 'block')
 
-    walk(s)
+    walk(stmt_list)
 
 #########################################################################
-def binop_exp(t):
+def binop_exp(node):
 
-    (BINOP,op,c1,c2) = t
-    assert_match(BINOP, 'binop')
+    (OP, c1, c2) = node
+    if OP not in ['+', '-', '*', '/', '==', '<=']:
+        raise ValueError("pattern match failed on " + OP)
     
     walk(c1)
     walk(c2)
 
 #########################################################################
-def integer_exp(t):
+def integer_exp(node):
 
-    (INTEGER, value) = t
+    (INTEGER, value) = node
     assert_match(INTEGER, 'integer')
 
 #########################################################################
-def id_exp(t):
+def id_exp(node):
     
-    (ID, name) = t
+    (ID, name) = node
     assert_match(ID, 'id')
     
-    state.symbol_table[name] = True
+    # we found a use scenario of a variable, if the variable is defined
+    # set it to true
+    if name in state.symbol_table:
+        state.symbol_table[name] = True
 
 #########################################################################
-def uminus_exp(t):
+def uminus_exp(node):
     
-    (UMINUS, e) = t
+    (UMINUS, e) = node
     assert_match(UMINUS, 'uminus')
     
     walk(e)
 
 #########################################################################
+def not_exp(node):
+    
+    (NOT, e) = node
+    assert_match(NOT, 'not')
+    
+    walk(e)
+
+#########################################################################
+def paren_exp(node):
+    
+    (PAREN, exp) = node
+    assert_match(PAREN, 'paren')
+    
+    walk(exp)
+#########################################################################
 # walk
 #########################################################################
-def walk(t):
-    if t[0] in walk_dict:
-        f = walk_dict[t[0]]
-        return f(t)
+def walk(node):
+    node_type = node[0]
+    
+    if node_type in dispatch_dict:
+        node_function = dispatch_dict[node_type]
+        return node_function(node)
+    
     else:
-        raise ValueError("walk: unknown tree node " + t[0])
+        raise ValueError("walk: unknown tree node type: " + node_type)
 
 # a dictionary to associate tree nodes with node functions
-walk_dict = {
+dispatch_dict = {
     'seq'     : seq,
     'nil'     : nil,
     'assign'  : assign_stmt,
@@ -134,7 +149,16 @@ walk_dict = {
     'binop'   : binop_exp,
     'integer' : integer_exp,
     'id'      : id_exp,
-    'uminus'  : uminus_exp
+    'uminus'  : uminus_exp,
+    'not'     : not_exp,
+    'paren'   : paren_exp,
+    '+'       : binop_exp,
+    '-'       : binop_exp,
+    '*'       : binop_exp,
+    '/'       : binop_exp,
+    '=='      : binop_exp,
+    '<='      : binop_exp
+
 }
 
 

@@ -1,39 +1,41 @@
+# A tree walker to interpret Cuppa1 programs
+
 from cuppa1_state import state
 from grammar_stuff import assert_match
 
 #########################################################################
 # node functions
 #########################################################################
-def seq(t):
+def seq(node):
     
-    (SEQ, s1, s2) = t
+    (SEQ, stmt, stmt_list) = node
     assert_match(SEQ, 'seq')
     
-    walk(s1)
-    walk(s2)
+    walk(stmt)
+    walk(stmt_list)
 
 #########################################################################
-def nil(t):
+def nil(node):
     
-    (NIL,) = t
+    (NIL,) = node
     assert_match(NIL, 'nil')
     
     # do nothing!
     pass
 
 #########################################################################
-def assign_stmt(t):
+def assign_stmt(node):
 
-    (ASSIGN, name, exp) = t
+    (ASSIGN, name, exp) = node
     assert_match(ASSIGN, 'assign')
     
     value = walk(exp)
     state.symbol_table[name] = value
 
 #########################################################################
-def get_stmt(t):
+def get_stmt(node):
 
-    (GET, name) = t
+    (GET, name) = node
     assert_match(GET, 'get')
 
     s = input("Value for " + name + '? ')
@@ -46,18 +48,18 @@ def get_stmt(t):
     state.symbol_table[name] = value
 
 #########################################################################
-def put_stmt(t):
+def put_stmt(node):
 
-    (PUT, exp) = t
+    (PUT, exp) = node
     assert_match(PUT, 'put')
     
     value = walk(exp)
     print("> {}".format(value))
 
 #########################################################################
-def while_stmt(t):
+def while_stmt(node):
 
-    (WHILE, cond, body) = t
+    (WHILE, cond, body) = node
     assert_match(WHILE, 'while')
     
     value = walk(cond)
@@ -66,47 +68,42 @@ def while_stmt(t):
         value = walk(cond)
 
 #########################################################################
-def if_stmt(t):
+def if_stmt(node):
     
     try: # try the if-then pattern
-        (IF, cond, s1, (NIL,)) = t
+        (IF, cond, then_stmt, (NIL,)) = node
         assert_match(IF, 'if')
         assert_match(NIL, 'nil')
 
-    except ValueError: # pattern didn't match
-        try: # try if-then-else pattern
-            (IF, cond, s1, s2) = t
-            assert_match(IF, 'if')
+    except ValueError: # if-then pattern didn't match
+        (IF, cond, then_stmt, else_stmt) = node
+        assert_match(IF, 'if')
 
-        except ValueError:
-            raise ValueError("walk: pattern match failed in 'if'")
-
-        else:
-            value = walk(cond)
-            if value != 0:
-                walk(s1)
-            else:
-                walk(s2)
-            return
- 
-    else:
         value = walk(cond)
         if value != 0:
-            walk(s1)
+            walk(then_stmt)
+        else:
+            walk(else_stmt)
+        return
+ 
+    else: # if-then pattern matched
+        value = walk(cond)
+        if value != 0:
+            walk(then_stmt)
         return
 
 #########################################################################
-def block_stmt(t):
+def block_stmt(node):
     
-    (BLOCK, s) = t
+    (BLOCK, stmt_list) = node
     assert_match(BLOCK, 'block')
     
-    walk(s)
+    walk(stmt_list)
 
 #########################################################################
-def plus_exp(t):
+def plus_exp(node):
     
-    (PLUS,c1,c2) = t
+    (PLUS,c1,c2) = node
     assert_match(PLUS, '+')
     
     v1 = walk(c1)
@@ -115,9 +112,9 @@ def plus_exp(t):
     return v1 + v2
 
 #########################################################################
-def minus_exp(t):
+def minus_exp(node):
     
-    (MINUS,c1,c2) = t
+    (MINUS,c1,c2) = node
     assert_match(MINUS, '-')
     
     v1 = walk(c1)
@@ -126,9 +123,9 @@ def minus_exp(t):
     return v1 - v2
 
 #########################################################################
-def times_exp(t):
+def times_exp(node):
     
-    (TIMES,c1,c2) = t
+    (TIMES,c1,c2) = node
     assert_match(TIMES, '*')
     
     v1 = walk(c1)
@@ -137,9 +134,9 @@ def times_exp(t):
     return v1 * v2
 
 #########################################################################
-def divide_exp(t):
+def divide_exp(node):
     
-    (DIVIDE,c1,c2) = t
+    (DIVIDE,c1,c2) = node
     assert_match(DIVIDE, '/')
     
     v1 = walk(c1)
@@ -148,64 +145,85 @@ def divide_exp(t):
     return v1 / v2
 
 #########################################################################
-def eq_exp(t):
+def eq_exp(node):
     
-    (EQ,c1,c2) = t
+    (EQ,c1,c2) = node
     assert_match(EQ, '==')
     
     v1 = walk(c1)
     v2 = walk(c2)
     
-    return v1 == v2
+    return 1 if v1 == v2 else 0
 
 #########################################################################
-def le_exp(t):
+def le_exp(node):
     
-    (LE,c1,c2) = t
+    (LE,c1,c2) = node
     assert_match(LE, '<=')
     
     v1 = walk(c1)
     v2 = walk(c2)
     
-    return v1 <= v2
+    return 1 if v1 <= v2 else 0
 
 #########################################################################
-def integer_exp(t):
+def integer_exp(node):
 
-    (INTEGER, value) = t
+    (INTEGER, value) = node
     assert_match(INTEGER, 'integer')
     
     return value
 
 #########################################################################
-def id_exp(t):
+def id_exp(node):
     
-    (ID, name) = t
+    (ID, name) = node
     assert_match(ID, 'id')
     
     return state.symbol_table.get(name, 0)
 
 #########################################################################
-def uminus_exp(t):
+def uminus_exp(node):
     
-    (UMINUS, e) = t
+    (UMINUS, exp) = node
     assert_match(UMINUS, 'uminus')
     
-    val = walk(e)
+    val = walk(exp)
     return - val
+
+#########################################################################
+def not_exp(node):
+    
+    (NOT, exp) = node
+    assert_match(NOT, 'not')
+    
+    val = walk(exp)
+    return 0 if val != 0 else 1
+
+#########################################################################
+def paren_exp(node):
+    
+    (PAREN, exp) = node
+    assert_match(PAREN, 'paren')
+    
+    # return the value of the parenthesized expression
+    return walk(exp)
 
 #########################################################################
 # walk
 #########################################################################
-def walk(t):
-    if t[0] in walk_dict:
-        f = walk_dict[t[0]]
-        return f(t)
+def walk(node):
+    # node format: (TYPE, [child1[, child2[, ...]]])
+    type = node[0]
+    
+    if type in dispatch_dict:
+        node_function = dispatch_dict[type]
+        return node_function(node)
     else:
-        raise ValueError("walk: unknown tree node type" + t[0])
+        raise ValueError("walk: unknown tree node type: " + type)
 
 # a dictionary to associate tree nodes with node functions
-walk_dict = {
+dispatch_dict = {
     'seq'     : seq,
     'nil'     : nil,
     'assign'  : assign_stmt,
@@ -216,13 +234,15 @@ walk_dict = {
     'block'   : block_stmt,
     'integer' : integer_exp,
     'id'      : id_exp,
+    'paren'   : paren_exp,
     '+'       : plus_exp,
     '-'       : minus_exp,
     '*'       : times_exp,
     '/'       : divide_exp,
     '=='      : eq_exp,
     '<='      : le_exp,
-    'uminus'  : uminus_exp
+    'uminus'  : uminus_exp,
+    'not'     : not_exp
 }
 
 

@@ -10,7 +10,7 @@ precedence = (
               ('left', 'EQ', 'LE'),
               ('left', 'PLUS', 'MINUS'),
               ('left', 'TIMES', 'DIVIDE'),
-              ('right', 'UMINUS')
+              ('right', 'UMINUS', 'NOT')
              )
 
 
@@ -44,6 +44,7 @@ def p_grammar(_):
         | ID
         | '(' exp ')'
         | MINUS exp %prec UMINUS
+        | NOT exp
     '''
     pass
 
