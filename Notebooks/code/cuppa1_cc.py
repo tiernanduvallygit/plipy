@@ -1,33 +1,29 @@
 #!/usr/bin/env python
-# Cuppa1 pretty printer
+# Cuppa1 compiler
 
 from sys import stdin
 from cuppa1_frontend_gram import parser
 from cuppa1_state import state
-from cuppa1_pp1_walk import walk as pp1_walk
-from cuppa1_pp2_walk import walk as pp2_walk
-from cuppa1_pp2_walk import init_indent_level
+from cuppa1_codegen_walk import walk as codegen
 
-def pp(input_stream = None):
+def cc(input_stream = None):
 
     # if no input stream was given read from stdin
     if not input_stream:
         input_stream = stdin.read()
 
-    # initialize the state object and indent level
+    # initialize the state object
     state.initialize()
-    init_indent_level()
 
     # build the AST
     parser.parse(input_stream)
 
     # walk the AST
-    pp1_walk(state.AST)
-    code = pp2_walk(state.AST)
+    code = codegen(state.AST)
 
     # output the pretty printed code
     print(code)
 
 if __name__ == "__main__":
     # execute only if run as a script
-    pp()
+    cc()
