@@ -32,6 +32,15 @@ else
   put 0
 '''
 
+nested = \
+'''
+if(x)
+  if (y)
+    put 1
+  else
+    put 2
+'''
+
 logical_and = \
 '''
 // logical and in Cuppa1 can be simulated with multiplication

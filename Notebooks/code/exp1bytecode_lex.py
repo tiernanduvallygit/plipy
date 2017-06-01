@@ -17,8 +17,8 @@ literals = ['!',':',';','+','-','*','/','(',')']
 
 tokens = ['NAME','NUMBER','EQ','LE'] + list(reserved.values())
 
-t_EQ = '='
-t_LE = '=<'
+t_EQ = '=='
+t_LE = '<='
 t_ignore = ' \t'
 
 def t_NAME(t):
@@ -44,4 +44,4 @@ def t_error(t):
     t.lexer.skip(1)
 
 # build the lexer
-lexer = lex.lex()
+lexer = lex.lex(debug=0)

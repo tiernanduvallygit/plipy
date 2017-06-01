@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+from argparse import ArgumentParser
+from exp1bytecode_lex import lexer
 from exp1bytecode_interp_gram import parser
 from exp1bytecode_interp_state import state
 
@@ -34,7 +38,7 @@ def interp_program():
         elif type == 'input':
             # INPUT NAME
             var_name = instr[1]
-            val = input("Please enter a value: ")
+            val = input("Please enter a value for {}: ".format(var_name))
             state.symbol_table[var_name] = int(val)
             state.instr_ix += 1
         
@@ -108,14 +112,14 @@ def eval_exp_tree(node):
         v_right = eval_exp_tree(node[2])
         return v_left // v_right
     
-    elif type == '=':
+    elif type == '==':
         # '=' exp exp
         v_left = eval_exp_tree(node[1])
         v_right = eval_exp_tree(node[2])
         return 1 if v_left == v_right else 0
     
-    elif type == '=<':
-        # '=<' exp exp
+    elif type == '<=':
+        # '<=' exp exp
         v_left = eval_exp_tree(node[1])
         v_right = eval_exp_tree(node[2])
         return 1 if v_left <= v_right else 0
@@ -138,14 +142,28 @@ def eval_exp_tree(node):
         # NUMBER val
         return node[1]
 
-def exp1bytecode_interp(input_stream):
+def interp(input_stream):
     'driver for our Exp1bytecode interpreter.'
 
     # initialize our abstract machine
     state.initialize()
     
     # build the IR
-    parser.parse(input_stream)
+    parser.parse(input_stream, lexer=lexer)
     
     # interpret the IR
     interp_program()
+
+if __name__ == '__main__':
+    # parse command line args
+    aparser = ArgumentParser()
+    aparser.add_argument('input')
+    
+    args = vars(aparser.parse_args())
+    
+    f = open(args['input'], 'r')
+    input_stream = f.read()
+    f.close()
+    
+    interp(input_stream=input_stream)
+
