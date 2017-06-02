@@ -15,9 +15,9 @@ def seq(node):
     assert_match(SEQ, 'seq')
     
     stmt = walk(s1)
-    list = walk(s2)
+    lst = walk(s2)
 
-    return stmt + list
+    return stmt + lst
 
 #########################################################################
 def nil(node):
@@ -228,12 +228,6 @@ dispatch_dict = {
     '<='      : binop_exp
 
 }
-
-
-#########################################################################
-def indent():
-    s = '    '
-    return s
 
 #########################################################################
 label_id = 0

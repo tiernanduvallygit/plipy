@@ -58,4 +58,4 @@ def p_empty(p):
 def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False, tabmodule='exp1parsetab')

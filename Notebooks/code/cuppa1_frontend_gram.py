@@ -140,5 +140,5 @@ def p_error(t):
 #########################################################################
 # build the parser
 #########################################################################
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False,tabmodule='cuppa1parsetab')
 

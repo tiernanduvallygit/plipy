@@ -11,10 +11,10 @@ def output(instr_stream):
     
     for instr in instr_stream:
 
-        if label_def(instr):    # label def - print without preceeding '\t' or trailing ';'
+        if label_def(instr):  # label def - print without preceeding '\t' or trailing ';'
             output_stream += instr[0] + '\n'
 
-        else:                    # regular instruction - indent and put a ';' at the end
+        else:                 # regular instruction - indent and put a ';' at the end
             output_stream += '\t'
                 
             for component in instr:
