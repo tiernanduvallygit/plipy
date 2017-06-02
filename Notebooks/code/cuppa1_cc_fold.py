@@ -3,9 +3,9 @@ from grammar_stuff import assert_match
 
 # fold: this is simple constant folder for our Cuppa1 compiler
 
-# The generated code is a list of Exp1bytecode tuples, that means
-# the codegen walker generates lists of tuples for statements but
-# strings for expressions.
+# it is a tree rewriter so at every node function we have to construct
+# a new node because we are not allowed to update tuples in Python
+# and we are not sure if the tree below us has changed.
 
 #########################################################################
 # node functions
@@ -25,7 +25,7 @@ def nil(node):
     (NIL,) = node
     assert_match(NIL, 'nil')
     
-    return ('nil',)
+    return node # nil nodes are immutable
     
 #########################################################################
 def assign_stmt(node):
@@ -43,7 +43,7 @@ def get_stmt(node):
     (GET, name) = node
     assert_match(GET, 'get')
 
-    return ('get', name)
+    return node # nothing to be rewritten in get nodes
 
 #########################################################################
 def put_stmt(node):
@@ -209,7 +209,7 @@ def integer_exp(node):
     (INTEGER, value) = node
     assert_match(INTEGER, 'integer')
 
-    return ('integer', value)
+    return node # integer nodes are immutable
 
 #########################################################################
 def id_exp(node):
@@ -217,7 +217,7 @@ def id_exp(node):
     (ID, name) = node
     assert_match(ID, 'id')
     
-    return ('id', name)
+    return node # id nodes are immutable
 
 #########################################################################
 def uminus_exp(node):

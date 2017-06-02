@@ -1,3 +1,5 @@
+# a suite of example programs for the Cuppa1 programming language
+
 fact = \
 '''
 get x;
@@ -34,6 +36,8 @@ else
 
 nested = \
 '''
+x = 1
+y = 0
 if(x)
   if (y)
     put 1
