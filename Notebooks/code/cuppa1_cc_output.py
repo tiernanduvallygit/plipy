@@ -48,13 +48,13 @@ def peephole_opt(instr_stream):
         is_last_instr = ix+1 == len(instr_stream)
         has_label = True if not is_first_instr and label_def(instr_stream[ix-1]) else False
 
-        ### our peephole pattern matcher
+        ### our peephole rewrite rules
         
-        # pattern:
+        # rewrite rule:
         # *L:
         #      noop
         #      <some other instr>
-        # becomes;
+        # =>
         # *L:
         #      <some other instr>
         if pattern_fits(3, ix, instr_stream) and \
@@ -65,24 +65,26 @@ def peephole_opt(instr_stream):
              instr_stream.pop(ix+1)
              change = True
              # uncomment the following to see the pattern matcher in action
-             #print("fire pattern 1")
+             #print("fire rule 1")
 
-        # pattern:
-        #   noop
-        # becomes
-        #   <empty>
-        elif curr_instr[0] == 'noop' and not has_label:
+        # rewrite rule:
+        # * noop
+        # =>
+        # * <whatever followed the noop>
+        elif pattern_fits(1, ix, instr_stream) and \
+             curr_instr[0] == 'noop' and \
+             not has_label:
             instr_stream.pop(ix)
             change = True
              # uncomment the following to see the pattern matcher in action
-             #print("fire pattern 2")
+             #print("fire rule 2")
             
-        # pattern:
+        # rewrite rule:
         # *L1:
         #    noop
         #  L2:
-        # becomes:
-        #  L2:  -- with L1 backpatched to L2 in instr_stream
+        # =>
+        # *L2:  -- with L1 backpatched to L2 in instr_stream
         elif pattern_fits(3, ix, instr_stream) and \
              label_def(curr_instr) and \
              relative_instr(1, ix, instr_stream)[0] == 'noop' and \
@@ -94,7 +96,7 @@ def peephole_opt(instr_stream):
             instr_stream.pop(ix)
             change = True
             # uncomment the following to see the pattern matcher in action
-            #print("fire pattern 3")
+            #print("fire rule 3")
 
         ###  advance ix
         if is_last_instr and not change:
@@ -156,7 +158,7 @@ def backpatch_label(orig_label, repl_label, instr_stream):
 
         elif instr_stream[ix][0] == 'jumpF' and instr_stream[ix][2] == orig_label:
             old_instr = instr_stream.pop(ix)
-            new_instr = (jumpF, old_instr[1], repl_label)
+            new_instr = ('jumpF', old_instr[1], repl_label)
             instr_stream.insert(ix, new_instr)
 
         elif instr_stream[ix][0] == 'jump' and instr_stream[ix][1] == orig_label:
