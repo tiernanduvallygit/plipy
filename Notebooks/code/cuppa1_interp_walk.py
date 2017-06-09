@@ -142,7 +142,7 @@ def divide_exp(node):
     v1 = walk(c1)
     v2 = walk(c2)
     
-    return v1 / v2
+    return v1 // v2
 
 #########################################################################
 def eq_exp(node):
