@@ -22,7 +22,7 @@ def cc(input_stream, opt = False):
     if opt:
         state.AST = fold(state.AST)
 
-    # walk the AST
+    # generate the list of instruction tuples
     instr_stream = codegen(state.AST) + [('stop',)]
 
     # run the peephole optimizer
@@ -30,9 +30,9 @@ def cc(input_stream, opt = False):
         peephole_opt(instr_stream)
 
     # output the instruction stream
-    code = output(instr_stream)
+    bytecode = output(instr_stream)
 
-    return code
+    return bytecode
 
 if __name__ == "__main__":
     # parse command line args
@@ -48,11 +48,12 @@ if __name__ == "__main__":
     f.close()
     
     # run the compiler
-    code = cc(input_stream=input_stream, opt=args['O'])
+    bytecode = cc(input_stream=input_stream, opt=args['O'])
 
     if not args['o']:
-        print(code)
+        print(bytecode)
+
     else:
         f = open(args['o'], 'w')
-        f.write(code)
+        f.write(bytecode)
         f.close()

@@ -91,7 +91,7 @@ def if_stmt(node):
         cond_tree = walk(cond)
         stmt1_tree = walk(s1)
 
-        return ('if', cond_tree, stmt1_tree, (nil,))
+        return ('if', cond_tree, stmt1_tree, ('nil',))
 
 #########################################################################
 def block_stmt(node):
@@ -247,7 +247,7 @@ def paren_exp(node):
     
     exp_tree = walk(exp)
 
-    return ('paren', exp_code)
+    return ('paren', exp_tree)
 
 #########################################################################
 # walk
