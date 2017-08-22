@@ -6,7 +6,9 @@
 ## Programming Language Implementation with Python
 Lutz Hamel, University of Rhode Island
 
+** Warning: This is a rough draft. **
 To read this book online: [start here](Notebooks/chap00.ipynb)
+** Did I mention that this book is a rough draft. **
 
 To read this book interactively:
 - download and install [Anaconda3](https://www.continuum.io/downloads)
