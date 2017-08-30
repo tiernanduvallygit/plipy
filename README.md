@@ -8,7 +8,7 @@ Lutz Hamel, University of Rhode Island
 
 **Warning: This is a rough draft.**
 
-To read this book online: [start here](Notebooks/chap00.ipynb)
+To read this book online: [start here](https://nbviewer.jupyter.org/github/lutzhamel/plipy/blob/master/Notebooks/chap00.ipynb)
 
 **Did I mention that this book is a rough draft.**
 
