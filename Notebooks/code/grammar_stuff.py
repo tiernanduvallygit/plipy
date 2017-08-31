@@ -27,7 +27,7 @@ is represented as,
   ('exp', {'z'}, ['z'])]
 
 '''
-
+##################################################################
 def start_symbol(G):
     first_rule = G[0]
     if len(first_rule) == 2:
@@ -37,9 +37,11 @@ def start_symbol(G):
         (A,L,B) = first_rule
         return A
 
+##################################################################
 def first_symbol(rule_body):
     return rule_body[0]
 
+##################################################################
 def non_terminal_set(G):
     nt = set()
     for r in G:
@@ -50,6 +52,7 @@ def non_terminal_set(G):
         nt.add(A)
     return nt
 
+##################################################################
 def terminal_set(G):
     nt = non_terminal_set(G)
     symbols = []
@@ -62,6 +65,7 @@ def terminal_set(G):
     t = set(symbols) - nt
     return t
 
+##################################################################
 def find_matching_rule(GL, N, P):
     for r in GL:
         (A, L, B) = r
@@ -72,6 +76,7 @@ def find_matching_rule(GL, N, P):
     return None
 
 
+##################################################################
 def right_side_match(G, S):
     for r in G:
         if len(r) == 2:
@@ -83,7 +88,6 @@ def right_side_match(G, S):
     return None
 
 ##################################################################
-
 class Stack:
     def __init__(self):
         self.items = []
@@ -119,7 +123,6 @@ class Stack:
         return len(self.items) == 0
 
 ##################################################################
-
 class InputStream:
     def __init__(self, stream):
         self.stream = stream # has to be a non-empty list of symbols
@@ -140,11 +143,10 @@ class InputStream:
             return False
 
 ##################################################################
-
 class TokenStream:
     def __init__(self, lexer, stream):
         self.lexer = lexer
-        self.lexer.input(stream)
+        self.lexer.input(stream) # stream is a string
         self.lookahead = self.lexer.token()
     
     def pointer(self):
@@ -199,7 +201,6 @@ def indent(level):
 
 
 ##################################################################
-
 def assert_match(input, expected):
     if input != expected:
         raise ValueError("Pattern match failed: expected {} but got {}".format(expected, input))
