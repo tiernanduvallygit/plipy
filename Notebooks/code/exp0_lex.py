@@ -4,7 +4,7 @@ from ply import lex
 
 # variables that we need to define for the lexical analysis
 
-tokens = ['NEWLINE']
+tokens = ['NEWLINE'] # we have to define at least one token!
 
 literals = [
     ';',

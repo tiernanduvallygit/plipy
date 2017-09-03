@@ -3,10 +3,8 @@ from exp0_lex import tokens, lexer
 
 def p_grammar(_):
     """
-    prog : stmt_list
-    
-    stmt_list : stmt stmt_list
-              | empty
+    prog : stmt prog
+         | empty
               
     stmt : 'p' exp ';'
          | 's' var exp ';'
@@ -41,4 +39,4 @@ def p_empty(p):
 def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False,tabmodule='exp0parsetab')

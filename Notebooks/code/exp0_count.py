@@ -5,16 +5,15 @@ count = 0
 
 def p_prog(_):
     '''
-    prog : stmt_list
-    '''
-    print("count = {}".format(count))
-    
-def p_stmt_list(_):
-    '''
-    stmt_list : stmt stmt_list
-              | empty
+    prog : stmt prog
     '''
     pass
+
+def p_prog_empty(_):
+    '''
+    prog : empty
+    '''
+    print("count = {}".format(count))
 
 def p_stmt(_):
     '''
@@ -73,4 +72,4 @@ def init_count():
     global count
     count = 0
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False, tabmodule='exp0countparsetab')
