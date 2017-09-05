@@ -31,6 +31,12 @@ Recursive descent grammar for Exp0:
 
 from grammar_stuff import InputStream
 
+I = None
+
+def set_stream(input_stream):
+    global I
+    I = input_stream
+
 def prog():
     while not I.end_of_file():
         stmt()
@@ -86,5 +92,5 @@ def num():
     
 # example test case
 
-I = InputStream(['s', 'x', '1', ';','p', '+', 'x', '1',';'])
-prog()
+#I = InputStream(['s', 'x', '1', ';','p', '+', 'x', '1',';'])
+#prog()

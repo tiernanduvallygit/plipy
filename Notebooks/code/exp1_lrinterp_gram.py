@@ -22,18 +22,23 @@ def p_store_stmt(p):
     "stmt : STORE NAME exp ';'"
     symbol_table[p[2]] = p[3]
 
-def p_arith_exp(p):
+def p_plus_exp(p):
     """
     exp : '+' exp exp
-        | '-' exp exp
-        | '(' exp ')'
     """
-    if p[1] == '+':
-        p[0] = p[2] + p[3]
-    elif p[1] == '-':
-        p[0] = p[2] - p[3]
-    else: # case p[1] == '('
-        p[0] = p[2]
+    p[0] = p[2] + p[3]
+
+def p_minus_exp(p):
+    """
+    exp : '-' exp exp
+    """
+    p[0] = p[2] - p[3]
+
+def p_paren_exp(p):
+    """
+    exp : '(' exp ')'
+    """
+    p[0] = p[2]
 
 def p_var_exp(p):
     "exp : var"
