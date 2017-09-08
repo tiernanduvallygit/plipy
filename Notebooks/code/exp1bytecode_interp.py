@@ -5,6 +5,7 @@ from exp1bytecode_lex import lexer
 from exp1bytecode_interp_gram import parser
 from exp1bytecode_interp_state import state
 
+#####################################################################################
 def interp_program():
     'execute abstract bytecode machine'
     
@@ -81,6 +82,7 @@ def interp_program():
             raise ValueError("Unexpected instruction type: {}".format(p[1]))
 
 
+#####################################################################################
 def eval_exp_tree(node):
     'walk expression tree and evaluate to an integer value'
 
@@ -142,6 +144,7 @@ def eval_exp_tree(node):
         # NUMBER val
         return node[1]
 
+#####################################################################################
 def interp(input_stream):
     'driver for our Exp1bytecode interpreter.'
 
@@ -154,6 +157,7 @@ def interp(input_stream):
     # interpret the IR
     interp_program()
 
+#####################################################################################
 if __name__ == '__main__':
     # parse command line args
     aparser = ArgumentParser()
