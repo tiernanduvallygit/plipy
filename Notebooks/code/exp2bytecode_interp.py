@@ -1,9 +1,41 @@
 #!/usr/bin/env python
 
 from argparse import ArgumentParser
-from exp1bytecode_lex import lexer
-from exp1bytecode_interp_gram import parser
-from exp1bytecode_interp_state import state
+from exp2bytecode_lex import lexer
+from exp2bytecode_interp_gram import parser
+from exp2bytecode_interp_state import state
+from pprint import pprint
+
+#####################################################################################
+def get_tsx():
+    # compute the 'top of stack' index
+    
+    return len(state.runtime_stack) - 1
+
+#####################################################################################
+def do_storable(storable, val):
+    # store the value in the appropriate storable
+    
+    tsx = get_tsx()
+    
+    if storable[0] == 'id':
+        # ('id', name)
+        name = storable[1]
+        state.symbol_table[name] = val
+    elif storable[0] == '%rvx':
+        # ('%rvx',)
+        state.rvx = val
+
+    elif storable[0] == '%tsx':
+        # ('%tsx', opt_offset_exp)
+        if storable[1]:
+            offset = eval_exp_tree(storable[1])
+            state.runtime_stack[tsx+offset] = val
+        else:
+            state.runtime_stack[tsx] = val
+
+    else:
+        raise ValueError("Unknown storable {}".format(storable[0]))
 
 #####################################################################################
 def interp_program():
@@ -28,28 +60,93 @@ def interp_program():
         # instruction format: (type, [arg1, arg2, ...])
         type = instr[0]
         
+        # print("decoding instruction {}".format(type))
+        
         # interpret instruction
         if type == 'print':
-            # PRINT exp
-            exp_tree = instr[1]
+            # PRINT opt_string exp
+            exp_tree = instr[2]
             val = eval_exp_tree(exp_tree)
-            print("> {}".format(val))
+            str = instr[1] if instr[1] else "> "
+            print("{}{}".format(str, val))
             state.instr_ix += 1
         
         elif type == 'input':
             # INPUT NAME
-            var_name = instr[1]
-            val = input("Please enter a value for {}: ".format(var_name))
+            var_name = instr[2]
+            str = instr[1] if instr[1] else "Please enter a value for {}: ".format(var_name)
+            val = input(str)
             state.symbol_table[var_name] = int(val)
             state.instr_ix += 1
         
         elif type == 'store':
-            # STORE type exp
-            var_name = instr[1]
+            # STORE storable exp
+
+            storable = instr[1] # storable itself is a tuple (type, children...)
             val = eval_exp_tree(instr[2])
-            state.symbol_table[var_name] = val
+
+            do_storable(storable, val)
+            
             state.instr_ix += 1
         
+        elif type == 'call':
+            # call label
+            # push the current instruction pointer
+            state.runtime_stack.append(state.instr_ix)
+            # get the target address from the label table
+            label = instr[1]
+            state.instr_ix = state.label_table.get(label, None)
+            
+            # print("jumping to instruction {}".format(state.instr_ix))
+
+        elif type == 'return':
+            # return
+            # pop the return address off the stack and jump to it
+            state.instr_ix = state.runtime_stack.pop()
+            state.instr_ix += 1
+            
+            # print("returning to instruction {}".format(state.instr_ix))
+
+        elif type == 'pushv':
+            # pushv exp
+            exp_tree = instr[1]
+            val = eval_exp_tree(exp_tree)
+            # push value onto stack
+            state.runtime_stack.append(val)
+
+            state.instr_ix += 1
+
+        elif type == 'popv':
+            # popv opt_storable
+            storable = instr[1]
+            val = state.runtime_stack.pop()
+
+            if storable:
+                do_storable(storable, val)
+
+            state.instr_ix += 1
+
+        elif type == 'pushf':
+            # pushf size_exp
+            size_val = eval_exp_tree(instr[1])
+        
+            # pushing a stack frame onto the stack
+            # zeroing out each stack location in the frame
+            for i in range(size_val):
+                state.runtime_stack.append(0)
+
+            state.instr_ix += 1
+
+        elif type == 'popf':
+            # popf size_exp
+            size_val = eval_exp_tree(instr[1])
+        
+            # popping a stack frame off the stack
+            for i in range(size_val):
+                state.runtime_stack.pop()
+
+            state.instr_ix += 1
+
         elif type == 'jumpT':
             # JUMPT exp label
             val = eval_exp_tree(instr[1])
@@ -136,16 +233,31 @@ def eval_exp_tree(node):
         val = eval_exp_tree(node[1])
         return 0 if val != 0 else 1
     
-    elif type == 'NAME':
-        # 'NAME' var_name
+    elif type == 'id':
+        # 'id' var_name
         return state.symbol_table.get(node[1],0)
 
-    elif type == 'NUMBER':
+    elif type == '%rvx':
+        # '%rvx'
+        return state.rvx
+
+    elif type == '%tsx':
+        # %tsx opt_offset
+        tsx = get_tsx()
+        offset_exp = node[1]
+        
+        if offset_exp:
+            val = eval_exp_tree(offset_exp)
+            return state.runtime_stack[tsx+val]
+        else:
+            return state.runtime_stack[tsx]
+
+    elif type == 'number':
         # NUMBER val
         return node[1]
 
     else:
-        raise ValueError("Unexpected instruction type: {}".format(type))
+        raise ValueError("Unexpected expression type: {}".format(type))
 
 #####################################################################################
 def interp(input_stream):
@@ -156,6 +268,8 @@ def interp(input_stream):
     
     # build the IR
     parser.parse(input_stream, lexer=lexer)
+    
+    # pprint(state.program)
     
     # interpret the IR
     interp_program()

@@ -1,0 +1,2121 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> prog
+Rule 1     prog -> instr_list
+Rule 2     instr_list -> labeled_instr instr_list
+Rule 3     instr_list -> empty
+Rule 4     labeled_instr -> label_def instr
+Rule 5     label_def -> NAME :
+Rule 6     label_def -> empty
+Rule 7     instr -> PRINT opt_string exp ;
+Rule 8     instr -> INPUT opt_string storable ;
+Rule 9     instr -> STORE storable exp ;
+Rule 10    instr -> JUMPT exp label ;
+Rule 11    instr -> JUMPF exp label ;
+Rule 12    instr -> JUMP label ;
+Rule 13    instr -> CALL label ;
+Rule 14    instr -> RETURN ;
+Rule 15    instr -> PUSHV exp ;
+Rule 16    instr -> POPV opt_storable ;
+Rule 17    instr -> PUSHF size ;
+Rule 18    instr -> POPF size ;
+Rule 19    instr -> STOP ;
+Rule 20    instr -> NOOP ;
+Rule 21    opt_string -> STRING
+Rule 22    opt_string -> empty
+Rule 23    opt_storable -> storable
+Rule 24    opt_storable -> empty
+Rule 25    size -> exp
+Rule 26    label -> NAME
+Rule 27    exp -> + exp exp
+Rule 28    exp -> - exp exp
+Rule 29    exp -> - exp
+Rule 30    exp -> * exp exp
+Rule 31    exp -> / exp exp
+Rule 32    exp -> EQ exp exp
+Rule 33    exp -> LE exp exp
+Rule 34    exp -> ! exp
+Rule 35    exp -> ( exp )
+Rule 36    exp -> storable
+Rule 37    exp -> NUMBER
+Rule 38    storable -> var
+Rule 39    storable -> RVX
+Rule 40    storable -> TSX opt_offset
+Rule 41    opt_offset -> [ offset ]
+Rule 42    opt_offset -> empty
+Rule 43    offset -> exp
+Rule 44    var -> NAME
+Rule 45    empty -> <empty>
+
+Terminals, with rules where they appear
+
+!                    : 34
+(                    : 35
+)                    : 35
+*                    : 30
++                    : 27
+-                    : 28 29
+/                    : 31
+:                    : 5
+;                    : 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+CALL                 : 13
+EQ                   : 32
+INPUT                : 8
+JUMP                 : 12
+JUMPF                : 11
+JUMPT                : 10
+LE                   : 33
+NAME                 : 5 26 44
+NOOP                 : 20
+NUMBER               : 37
+POPF                 : 18
+POPV                 : 16
+PRINT                : 7
+PUSHF                : 17
+PUSHV                : 15
+RETURN               : 14
+RVX                  : 39
+STOP                 : 19
+STORE                : 9
+STRING               : 21
+TSX                  : 40
+[                    : 41
+]                    : 41
+error                : 
+
+Nonterminals, with rules where they appear
+
+empty                : 3 6 22 24 42
+exp                  : 7 9 10 11 15 25 27 27 28 28 29 30 30 31 31 32 32 33 33 34 35 43
+instr                : 4
+instr_list           : 1 2
+label                : 10 11 12 13
+label_def            : 4
+labeled_instr        : 2
+offset               : 41
+opt_offset           : 40
+opt_storable         : 16
+opt_string           : 7 8
+prog                 : 0
+size                 : 17 18
+storable             : 8 9 23 36
+var                  : 38
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . prog
+    (1) prog -> . instr_list
+    (2) instr_list -> . labeled_instr instr_list
+    (3) instr_list -> . empty
+    (4) labeled_instr -> . label_def instr
+    (45) empty -> .
+    (5) label_def -> . NAME :
+    (6) label_def -> . empty
+
+    $end            reduce using rule 45 (empty -> .)
+    PRINT           reduce using rule 45 (empty -> .)
+    INPUT           reduce using rule 45 (empty -> .)
+    STORE           reduce using rule 45 (empty -> .)
+    JUMPT           reduce using rule 45 (empty -> .)
+    JUMPF           reduce using rule 45 (empty -> .)
+    JUMP            reduce using rule 45 (empty -> .)
+    CALL            reduce using rule 45 (empty -> .)
+    RETURN          reduce using rule 45 (empty -> .)
+    PUSHV           reduce using rule 45 (empty -> .)
+    POPV            reduce using rule 45 (empty -> .)
+    PUSHF           reduce using rule 45 (empty -> .)
+    POPF            reduce using rule 45 (empty -> .)
+    STOP            reduce using rule 45 (empty -> .)
+    NOOP            reduce using rule 45 (empty -> .)
+    NAME            shift and go to state 6
+
+    prog                           shift and go to state 1
+    instr_list                     shift and go to state 2
+    labeled_instr                  shift and go to state 3
+    empty                          shift and go to state 4
+    label_def                      shift and go to state 5
+
+state 1
+
+    (0) S' -> prog .
+
+
+
+state 2
+
+    (1) prog -> instr_list .
+
+    $end            reduce using rule 1 (prog -> instr_list .)
+
+
+state 3
+
+    (2) instr_list -> labeled_instr . instr_list
+    (2) instr_list -> . labeled_instr instr_list
+    (3) instr_list -> . empty
+    (4) labeled_instr -> . label_def instr
+    (45) empty -> .
+    (5) label_def -> . NAME :
+    (6) label_def -> . empty
+
+    $end            reduce using rule 45 (empty -> .)
+    PRINT           reduce using rule 45 (empty -> .)
+    INPUT           reduce using rule 45 (empty -> .)
+    STORE           reduce using rule 45 (empty -> .)
+    JUMPT           reduce using rule 45 (empty -> .)
+    JUMPF           reduce using rule 45 (empty -> .)
+    JUMP            reduce using rule 45 (empty -> .)
+    CALL            reduce using rule 45 (empty -> .)
+    RETURN          reduce using rule 45 (empty -> .)
+    PUSHV           reduce using rule 45 (empty -> .)
+    POPV            reduce using rule 45 (empty -> .)
+    PUSHF           reduce using rule 45 (empty -> .)
+    POPF            reduce using rule 45 (empty -> .)
+    STOP            reduce using rule 45 (empty -> .)
+    NOOP            reduce using rule 45 (empty -> .)
+    NAME            shift and go to state 6
+
+    labeled_instr                  shift and go to state 3
+    instr_list                     shift and go to state 7
+    empty                          shift and go to state 4
+    label_def                      shift and go to state 5
+
+state 4
+
+    (3) instr_list -> empty .
+    (6) label_def -> empty .
+
+    $end            reduce using rule 3 (instr_list -> empty .)
+    PRINT           reduce using rule 6 (label_def -> empty .)
+    INPUT           reduce using rule 6 (label_def -> empty .)
+    STORE           reduce using rule 6 (label_def -> empty .)
+    JUMPT           reduce using rule 6 (label_def -> empty .)
+    JUMPF           reduce using rule 6 (label_def -> empty .)
+    JUMP            reduce using rule 6 (label_def -> empty .)
+    CALL            reduce using rule 6 (label_def -> empty .)
+    RETURN          reduce using rule 6 (label_def -> empty .)
+    PUSHV           reduce using rule 6 (label_def -> empty .)
+    POPV            reduce using rule 6 (label_def -> empty .)
+    PUSHF           reduce using rule 6 (label_def -> empty .)
+    POPF            reduce using rule 6 (label_def -> empty .)
+    STOP            reduce using rule 6 (label_def -> empty .)
+    NOOP            reduce using rule 6 (label_def -> empty .)
+
+
+state 5
+
+    (4) labeled_instr -> label_def . instr
+    (7) instr -> . PRINT opt_string exp ;
+    (8) instr -> . INPUT opt_string storable ;
+    (9) instr -> . STORE storable exp ;
+    (10) instr -> . JUMPT exp label ;
+    (11) instr -> . JUMPF exp label ;
+    (12) instr -> . JUMP label ;
+    (13) instr -> . CALL label ;
+    (14) instr -> . RETURN ;
+    (15) instr -> . PUSHV exp ;
+    (16) instr -> . POPV opt_storable ;
+    (17) instr -> . PUSHF size ;
+    (18) instr -> . POPF size ;
+    (19) instr -> . STOP ;
+    (20) instr -> . NOOP ;
+
+    PRINT           shift and go to state 9
+    INPUT           shift and go to state 10
+    STORE           shift and go to state 11
+    JUMPT           shift and go to state 12
+    JUMPF           shift and go to state 13
+    JUMP            shift and go to state 14
+    CALL            shift and go to state 15
+    RETURN          shift and go to state 16
+    PUSHV           shift and go to state 17
+    POPV            shift and go to state 18
+    PUSHF           shift and go to state 19
+    POPF            shift and go to state 20
+    STOP            shift and go to state 21
+    NOOP            shift and go to state 22
+
+    instr                          shift and go to state 8
+
+state 6
+
+    (5) label_def -> NAME . :
+
+    :               shift and go to state 23
+
+
+state 7
+
+    (2) instr_list -> labeled_instr instr_list .
+
+    $end            reduce using rule 2 (instr_list -> labeled_instr instr_list .)
+
+
+state 8
+
+    (4) labeled_instr -> label_def instr .
+
+    NAME            reduce using rule 4 (labeled_instr -> label_def instr .)
+    PRINT           reduce using rule 4 (labeled_instr -> label_def instr .)
+    INPUT           reduce using rule 4 (labeled_instr -> label_def instr .)
+    STORE           reduce using rule 4 (labeled_instr -> label_def instr .)
+    JUMPT           reduce using rule 4 (labeled_instr -> label_def instr .)
+    JUMPF           reduce using rule 4 (labeled_instr -> label_def instr .)
+    JUMP            reduce using rule 4 (labeled_instr -> label_def instr .)
+    CALL            reduce using rule 4 (labeled_instr -> label_def instr .)
+    RETURN          reduce using rule 4 (labeled_instr -> label_def instr .)
+    PUSHV           reduce using rule 4 (labeled_instr -> label_def instr .)
+    POPV            reduce using rule 4 (labeled_instr -> label_def instr .)
+    PUSHF           reduce using rule 4 (labeled_instr -> label_def instr .)
+    POPF            reduce using rule 4 (labeled_instr -> label_def instr .)
+    STOP            reduce using rule 4 (labeled_instr -> label_def instr .)
+    NOOP            reduce using rule 4 (labeled_instr -> label_def instr .)
+    $end            reduce using rule 4 (labeled_instr -> label_def instr .)
+
+
+state 9
+
+    (7) instr -> PRINT . opt_string exp ;
+    (21) opt_string -> . STRING
+    (22) opt_string -> . empty
+    (45) empty -> .
+
+    STRING          shift and go to state 25
+    +               reduce using rule 45 (empty -> .)
+    -               reduce using rule 45 (empty -> .)
+    *               reduce using rule 45 (empty -> .)
+    /               reduce using rule 45 (empty -> .)
+    EQ              reduce using rule 45 (empty -> .)
+    LE              reduce using rule 45 (empty -> .)
+    !               reduce using rule 45 (empty -> .)
+    (               reduce using rule 45 (empty -> .)
+    NUMBER          reduce using rule 45 (empty -> .)
+    RVX             reduce using rule 45 (empty -> .)
+    TSX             reduce using rule 45 (empty -> .)
+    NAME            reduce using rule 45 (empty -> .)
+
+    opt_string                     shift and go to state 24
+    empty                          shift and go to state 26
+
+state 10
+
+    (8) instr -> INPUT . opt_string storable ;
+    (21) opt_string -> . STRING
+    (22) opt_string -> . empty
+    (45) empty -> .
+
+    STRING          shift and go to state 25
+    RVX             reduce using rule 45 (empty -> .)
+    TSX             reduce using rule 45 (empty -> .)
+    NAME            reduce using rule 45 (empty -> .)
+
+    opt_string                     shift and go to state 27
+    empty                          shift and go to state 26
+
+state 11
+
+    (9) instr -> STORE . storable exp ;
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    storable                       shift and go to state 28
+    var                            shift and go to state 29
+
+state 12
+
+    (10) instr -> JUMPT . exp label ;
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 33
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 13
+
+    (11) instr -> JUMPF . exp label ;
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 44
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 14
+
+    (12) instr -> JUMP . label ;
+    (26) label -> . NAME
+
+    NAME            shift and go to state 46
+
+    label                          shift and go to state 45
+
+state 15
+
+    (13) instr -> CALL . label ;
+    (26) label -> . NAME
+
+    NAME            shift and go to state 46
+
+    label                          shift and go to state 47
+
+state 16
+
+    (14) instr -> RETURN . ;
+
+    ;               shift and go to state 48
+
+
+state 17
+
+    (15) instr -> PUSHV . exp ;
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 49
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 18
+
+    (16) instr -> POPV . opt_storable ;
+    (23) opt_storable -> . storable
+    (24) opt_storable -> . empty
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (45) empty -> .
+    (44) var -> . NAME
+
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    ;               reduce using rule 45 (empty -> .)
+    NAME            shift and go to state 32
+
+    opt_storable                   shift and go to state 50
+    storable                       shift and go to state 51
+    empty                          shift and go to state 52
+    var                            shift and go to state 29
+
+state 19
+
+    (17) instr -> PUSHF . size ;
+    (25) size -> . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    size                           shift and go to state 53
+    exp                            shift and go to state 54
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 20
+
+    (18) instr -> POPF . size ;
+    (25) size -> . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    size                           shift and go to state 55
+    exp                            shift and go to state 54
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 21
+
+    (19) instr -> STOP . ;
+
+    ;               shift and go to state 56
+
+
+state 22
+
+    (20) instr -> NOOP . ;
+
+    ;               shift and go to state 57
+
+
+state 23
+
+    (5) label_def -> NAME : .
+
+    PRINT           reduce using rule 5 (label_def -> NAME : .)
+    INPUT           reduce using rule 5 (label_def -> NAME : .)
+    STORE           reduce using rule 5 (label_def -> NAME : .)
+    JUMPT           reduce using rule 5 (label_def -> NAME : .)
+    JUMPF           reduce using rule 5 (label_def -> NAME : .)
+    JUMP            reduce using rule 5 (label_def -> NAME : .)
+    CALL            reduce using rule 5 (label_def -> NAME : .)
+    RETURN          reduce using rule 5 (label_def -> NAME : .)
+    PUSHV           reduce using rule 5 (label_def -> NAME : .)
+    POPV            reduce using rule 5 (label_def -> NAME : .)
+    PUSHF           reduce using rule 5 (label_def -> NAME : .)
+    POPF            reduce using rule 5 (label_def -> NAME : .)
+    STOP            reduce using rule 5 (label_def -> NAME : .)
+    NOOP            reduce using rule 5 (label_def -> NAME : .)
+
+
+state 24
+
+    (7) instr -> PRINT opt_string . exp ;
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 58
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 25
+
+    (21) opt_string -> STRING .
+
+    +               reduce using rule 21 (opt_string -> STRING .)
+    -               reduce using rule 21 (opt_string -> STRING .)
+    *               reduce using rule 21 (opt_string -> STRING .)
+    /               reduce using rule 21 (opt_string -> STRING .)
+    EQ              reduce using rule 21 (opt_string -> STRING .)
+    LE              reduce using rule 21 (opt_string -> STRING .)
+    !               reduce using rule 21 (opt_string -> STRING .)
+    (               reduce using rule 21 (opt_string -> STRING .)
+    NUMBER          reduce using rule 21 (opt_string -> STRING .)
+    RVX             reduce using rule 21 (opt_string -> STRING .)
+    TSX             reduce using rule 21 (opt_string -> STRING .)
+    NAME            reduce using rule 21 (opt_string -> STRING .)
+
+
+state 26
+
+    (22) opt_string -> empty .
+
+    +               reduce using rule 22 (opt_string -> empty .)
+    -               reduce using rule 22 (opt_string -> empty .)
+    *               reduce using rule 22 (opt_string -> empty .)
+    /               reduce using rule 22 (opt_string -> empty .)
+    EQ              reduce using rule 22 (opt_string -> empty .)
+    LE              reduce using rule 22 (opt_string -> empty .)
+    !               reduce using rule 22 (opt_string -> empty .)
+    (               reduce using rule 22 (opt_string -> empty .)
+    NUMBER          reduce using rule 22 (opt_string -> empty .)
+    RVX             reduce using rule 22 (opt_string -> empty .)
+    TSX             reduce using rule 22 (opt_string -> empty .)
+    NAME            reduce using rule 22 (opt_string -> empty .)
+
+
+state 27
+
+    (8) instr -> INPUT opt_string . storable ;
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    storable                       shift and go to state 59
+    var                            shift and go to state 29
+
+state 28
+
+    (9) instr -> STORE storable . exp ;
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    storable                       shift and go to state 42
+    exp                            shift and go to state 60
+    var                            shift and go to state 29
+
+state 29
+
+    (38) storable -> var .
+
+    +               reduce using rule 38 (storable -> var .)
+    -               reduce using rule 38 (storable -> var .)
+    *               reduce using rule 38 (storable -> var .)
+    /               reduce using rule 38 (storable -> var .)
+    EQ              reduce using rule 38 (storable -> var .)
+    LE              reduce using rule 38 (storable -> var .)
+    !               reduce using rule 38 (storable -> var .)
+    (               reduce using rule 38 (storable -> var .)
+    NUMBER          reduce using rule 38 (storable -> var .)
+    RVX             reduce using rule 38 (storable -> var .)
+    TSX             reduce using rule 38 (storable -> var .)
+    NAME            reduce using rule 38 (storable -> var .)
+    ;               reduce using rule 38 (storable -> var .)
+    )               reduce using rule 38 (storable -> var .)
+    ]               reduce using rule 38 (storable -> var .)
+
+
+state 30
+
+    (39) storable -> RVX .
+
+    +               reduce using rule 39 (storable -> RVX .)
+    -               reduce using rule 39 (storable -> RVX .)
+    *               reduce using rule 39 (storable -> RVX .)
+    /               reduce using rule 39 (storable -> RVX .)
+    EQ              reduce using rule 39 (storable -> RVX .)
+    LE              reduce using rule 39 (storable -> RVX .)
+    !               reduce using rule 39 (storable -> RVX .)
+    (               reduce using rule 39 (storable -> RVX .)
+    NUMBER          reduce using rule 39 (storable -> RVX .)
+    RVX             reduce using rule 39 (storable -> RVX .)
+    TSX             reduce using rule 39 (storable -> RVX .)
+    NAME            reduce using rule 39 (storable -> RVX .)
+    ;               reduce using rule 39 (storable -> RVX .)
+    )               reduce using rule 39 (storable -> RVX .)
+    ]               reduce using rule 39 (storable -> RVX .)
+
+
+state 31
+
+    (40) storable -> TSX . opt_offset
+    (41) opt_offset -> . [ offset ]
+    (42) opt_offset -> . empty
+    (45) empty -> .
+
+    [               shift and go to state 62
+    +               reduce using rule 45 (empty -> .)
+    -               reduce using rule 45 (empty -> .)
+    *               reduce using rule 45 (empty -> .)
+    /               reduce using rule 45 (empty -> .)
+    EQ              reduce using rule 45 (empty -> .)
+    LE              reduce using rule 45 (empty -> .)
+    !               reduce using rule 45 (empty -> .)
+    (               reduce using rule 45 (empty -> .)
+    NUMBER          reduce using rule 45 (empty -> .)
+    RVX             reduce using rule 45 (empty -> .)
+    TSX             reduce using rule 45 (empty -> .)
+    NAME            reduce using rule 45 (empty -> .)
+    ;               reduce using rule 45 (empty -> .)
+    )               reduce using rule 45 (empty -> .)
+    ]               reduce using rule 45 (empty -> .)
+
+    opt_offset                     shift and go to state 61
+    empty                          shift and go to state 63
+
+state 32
+
+    (44) var -> NAME .
+
+    +               reduce using rule 44 (var -> NAME .)
+    -               reduce using rule 44 (var -> NAME .)
+    *               reduce using rule 44 (var -> NAME .)
+    /               reduce using rule 44 (var -> NAME .)
+    EQ              reduce using rule 44 (var -> NAME .)
+    LE              reduce using rule 44 (var -> NAME .)
+    !               reduce using rule 44 (var -> NAME .)
+    (               reduce using rule 44 (var -> NAME .)
+    NUMBER          reduce using rule 44 (var -> NAME .)
+    RVX             reduce using rule 44 (var -> NAME .)
+    TSX             reduce using rule 44 (var -> NAME .)
+    NAME            reduce using rule 44 (var -> NAME .)
+    ;               reduce using rule 44 (var -> NAME .)
+    )               reduce using rule 44 (var -> NAME .)
+    ]               reduce using rule 44 (var -> NAME .)
+
+
+state 33
+
+    (10) instr -> JUMPT exp . label ;
+    (26) label -> . NAME
+
+    NAME            shift and go to state 46
+
+    label                          shift and go to state 64
+
+state 34
+
+    (27) exp -> + . exp exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 65
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 35
+
+    (28) exp -> - . exp exp
+    (29) exp -> - . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 66
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 36
+
+    (30) exp -> * . exp exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 67
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 37
+
+    (31) exp -> / . exp exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 68
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 38
+
+    (32) exp -> EQ . exp exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 69
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 39
+
+    (33) exp -> LE . exp exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 70
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 40
+
+    (34) exp -> ! . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 71
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 41
+
+    (35) exp -> ( . exp )
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 72
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 42
+
+    (36) exp -> storable .
+
+    NAME            reduce using rule 36 (exp -> storable .)
+    ;               reduce using rule 36 (exp -> storable .)
+    +               reduce using rule 36 (exp -> storable .)
+    -               reduce using rule 36 (exp -> storable .)
+    *               reduce using rule 36 (exp -> storable .)
+    /               reduce using rule 36 (exp -> storable .)
+    EQ              reduce using rule 36 (exp -> storable .)
+    LE              reduce using rule 36 (exp -> storable .)
+    !               reduce using rule 36 (exp -> storable .)
+    (               reduce using rule 36 (exp -> storable .)
+    NUMBER          reduce using rule 36 (exp -> storable .)
+    RVX             reduce using rule 36 (exp -> storable .)
+    TSX             reduce using rule 36 (exp -> storable .)
+    )               reduce using rule 36 (exp -> storable .)
+    ]               reduce using rule 36 (exp -> storable .)
+
+
+state 43
+
+    (37) exp -> NUMBER .
+
+    NAME            reduce using rule 37 (exp -> NUMBER .)
+    ;               reduce using rule 37 (exp -> NUMBER .)
+    +               reduce using rule 37 (exp -> NUMBER .)
+    -               reduce using rule 37 (exp -> NUMBER .)
+    *               reduce using rule 37 (exp -> NUMBER .)
+    /               reduce using rule 37 (exp -> NUMBER .)
+    EQ              reduce using rule 37 (exp -> NUMBER .)
+    LE              reduce using rule 37 (exp -> NUMBER .)
+    !               reduce using rule 37 (exp -> NUMBER .)
+    (               reduce using rule 37 (exp -> NUMBER .)
+    NUMBER          reduce using rule 37 (exp -> NUMBER .)
+    RVX             reduce using rule 37 (exp -> NUMBER .)
+    TSX             reduce using rule 37 (exp -> NUMBER .)
+    )               reduce using rule 37 (exp -> NUMBER .)
+    ]               reduce using rule 37 (exp -> NUMBER .)
+
+
+state 44
+
+    (11) instr -> JUMPF exp . label ;
+    (26) label -> . NAME
+
+    NAME            shift and go to state 46
+
+    label                          shift and go to state 73
+
+state 45
+
+    (12) instr -> JUMP label . ;
+
+    ;               shift and go to state 74
+
+
+state 46
+
+    (26) label -> NAME .
+
+    ;               reduce using rule 26 (label -> NAME .)
+
+
+state 47
+
+    (13) instr -> CALL label . ;
+
+    ;               shift and go to state 75
+
+
+state 48
+
+    (14) instr -> RETURN ; .
+
+    NAME            reduce using rule 14 (instr -> RETURN ; .)
+    PRINT           reduce using rule 14 (instr -> RETURN ; .)
+    INPUT           reduce using rule 14 (instr -> RETURN ; .)
+    STORE           reduce using rule 14 (instr -> RETURN ; .)
+    JUMPT           reduce using rule 14 (instr -> RETURN ; .)
+    JUMPF           reduce using rule 14 (instr -> RETURN ; .)
+    JUMP            reduce using rule 14 (instr -> RETURN ; .)
+    CALL            reduce using rule 14 (instr -> RETURN ; .)
+    RETURN          reduce using rule 14 (instr -> RETURN ; .)
+    PUSHV           reduce using rule 14 (instr -> RETURN ; .)
+    POPV            reduce using rule 14 (instr -> RETURN ; .)
+    PUSHF           reduce using rule 14 (instr -> RETURN ; .)
+    POPF            reduce using rule 14 (instr -> RETURN ; .)
+    STOP            reduce using rule 14 (instr -> RETURN ; .)
+    NOOP            reduce using rule 14 (instr -> RETURN ; .)
+    $end            reduce using rule 14 (instr -> RETURN ; .)
+
+
+state 49
+
+    (15) instr -> PUSHV exp . ;
+
+    ;               shift and go to state 76
+
+
+state 50
+
+    (16) instr -> POPV opt_storable . ;
+
+    ;               shift and go to state 77
+
+
+state 51
+
+    (23) opt_storable -> storable .
+
+    ;               reduce using rule 23 (opt_storable -> storable .)
+
+
+state 52
+
+    (24) opt_storable -> empty .
+
+    ;               reduce using rule 24 (opt_storable -> empty .)
+
+
+state 53
+
+    (17) instr -> PUSHF size . ;
+
+    ;               shift and go to state 78
+
+
+state 54
+
+    (25) size -> exp .
+
+    ;               reduce using rule 25 (size -> exp .)
+
+
+state 55
+
+    (18) instr -> POPF size . ;
+
+    ;               shift and go to state 79
+
+
+state 56
+
+    (19) instr -> STOP ; .
+
+    NAME            reduce using rule 19 (instr -> STOP ; .)
+    PRINT           reduce using rule 19 (instr -> STOP ; .)
+    INPUT           reduce using rule 19 (instr -> STOP ; .)
+    STORE           reduce using rule 19 (instr -> STOP ; .)
+    JUMPT           reduce using rule 19 (instr -> STOP ; .)
+    JUMPF           reduce using rule 19 (instr -> STOP ; .)
+    JUMP            reduce using rule 19 (instr -> STOP ; .)
+    CALL            reduce using rule 19 (instr -> STOP ; .)
+    RETURN          reduce using rule 19 (instr -> STOP ; .)
+    PUSHV           reduce using rule 19 (instr -> STOP ; .)
+    POPV            reduce using rule 19 (instr -> STOP ; .)
+    PUSHF           reduce using rule 19 (instr -> STOP ; .)
+    POPF            reduce using rule 19 (instr -> STOP ; .)
+    STOP            reduce using rule 19 (instr -> STOP ; .)
+    NOOP            reduce using rule 19 (instr -> STOP ; .)
+    $end            reduce using rule 19 (instr -> STOP ; .)
+
+
+state 57
+
+    (20) instr -> NOOP ; .
+
+    NAME            reduce using rule 20 (instr -> NOOP ; .)
+    PRINT           reduce using rule 20 (instr -> NOOP ; .)
+    INPUT           reduce using rule 20 (instr -> NOOP ; .)
+    STORE           reduce using rule 20 (instr -> NOOP ; .)
+    JUMPT           reduce using rule 20 (instr -> NOOP ; .)
+    JUMPF           reduce using rule 20 (instr -> NOOP ; .)
+    JUMP            reduce using rule 20 (instr -> NOOP ; .)
+    CALL            reduce using rule 20 (instr -> NOOP ; .)
+    RETURN          reduce using rule 20 (instr -> NOOP ; .)
+    PUSHV           reduce using rule 20 (instr -> NOOP ; .)
+    POPV            reduce using rule 20 (instr -> NOOP ; .)
+    PUSHF           reduce using rule 20 (instr -> NOOP ; .)
+    POPF            reduce using rule 20 (instr -> NOOP ; .)
+    STOP            reduce using rule 20 (instr -> NOOP ; .)
+    NOOP            reduce using rule 20 (instr -> NOOP ; .)
+    $end            reduce using rule 20 (instr -> NOOP ; .)
+
+
+state 58
+
+    (7) instr -> PRINT opt_string exp . ;
+
+    ;               shift and go to state 80
+
+
+state 59
+
+    (8) instr -> INPUT opt_string storable . ;
+
+    ;               shift and go to state 81
+
+
+state 60
+
+    (9) instr -> STORE storable exp . ;
+
+    ;               shift and go to state 82
+
+
+state 61
+
+    (40) storable -> TSX opt_offset .
+
+    +               reduce using rule 40 (storable -> TSX opt_offset .)
+    -               reduce using rule 40 (storable -> TSX opt_offset .)
+    *               reduce using rule 40 (storable -> TSX opt_offset .)
+    /               reduce using rule 40 (storable -> TSX opt_offset .)
+    EQ              reduce using rule 40 (storable -> TSX opt_offset .)
+    LE              reduce using rule 40 (storable -> TSX opt_offset .)
+    !               reduce using rule 40 (storable -> TSX opt_offset .)
+    (               reduce using rule 40 (storable -> TSX opt_offset .)
+    NUMBER          reduce using rule 40 (storable -> TSX opt_offset .)
+    RVX             reduce using rule 40 (storable -> TSX opt_offset .)
+    TSX             reduce using rule 40 (storable -> TSX opt_offset .)
+    NAME            reduce using rule 40 (storable -> TSX opt_offset .)
+    ;               reduce using rule 40 (storable -> TSX opt_offset .)
+    )               reduce using rule 40 (storable -> TSX opt_offset .)
+    ]               reduce using rule 40 (storable -> TSX opt_offset .)
+
+
+state 62
+
+    (41) opt_offset -> [ . offset ]
+    (43) offset -> . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    offset                         shift and go to state 83
+    exp                            shift and go to state 84
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 63
+
+    (42) opt_offset -> empty .
+
+    +               reduce using rule 42 (opt_offset -> empty .)
+    -               reduce using rule 42 (opt_offset -> empty .)
+    *               reduce using rule 42 (opt_offset -> empty .)
+    /               reduce using rule 42 (opt_offset -> empty .)
+    EQ              reduce using rule 42 (opt_offset -> empty .)
+    LE              reduce using rule 42 (opt_offset -> empty .)
+    !               reduce using rule 42 (opt_offset -> empty .)
+    (               reduce using rule 42 (opt_offset -> empty .)
+    NUMBER          reduce using rule 42 (opt_offset -> empty .)
+    RVX             reduce using rule 42 (opt_offset -> empty .)
+    TSX             reduce using rule 42 (opt_offset -> empty .)
+    NAME            reduce using rule 42 (opt_offset -> empty .)
+    ;               reduce using rule 42 (opt_offset -> empty .)
+    )               reduce using rule 42 (opt_offset -> empty .)
+    ]               reduce using rule 42 (opt_offset -> empty .)
+
+
+state 64
+
+    (10) instr -> JUMPT exp label . ;
+
+    ;               shift and go to state 85
+
+
+state 65
+
+    (27) exp -> + exp . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 86
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 66
+
+    (28) exp -> - exp . exp
+    (29) exp -> - exp .
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+  ! shift/reduce conflict for + resolved as shift
+  ! shift/reduce conflict for - resolved as shift
+  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for / resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+  ! shift/reduce conflict for LE resolved as shift
+  ! shift/reduce conflict for ! resolved as shift
+  ! shift/reduce conflict for ( resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for RVX resolved as shift
+  ! shift/reduce conflict for TSX resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+    ;               reduce using rule 29 (exp -> - exp .)
+    )               reduce using rule 29 (exp -> - exp .)
+    ]               reduce using rule 29 (exp -> - exp .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+  ! NAME            [ reduce using rule 29 (exp -> - exp .) ]
+  ! +               [ reduce using rule 29 (exp -> - exp .) ]
+  ! -               [ reduce using rule 29 (exp -> - exp .) ]
+  ! *               [ reduce using rule 29 (exp -> - exp .) ]
+  ! /               [ reduce using rule 29 (exp -> - exp .) ]
+  ! EQ              [ reduce using rule 29 (exp -> - exp .) ]
+  ! LE              [ reduce using rule 29 (exp -> - exp .) ]
+  ! !               [ reduce using rule 29 (exp -> - exp .) ]
+  ! (               [ reduce using rule 29 (exp -> - exp .) ]
+  ! NUMBER          [ reduce using rule 29 (exp -> - exp .) ]
+  ! RVX             [ reduce using rule 29 (exp -> - exp .) ]
+  ! TSX             [ reduce using rule 29 (exp -> - exp .) ]
+
+    exp                            shift and go to state 87
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 67
+
+    (30) exp -> * exp . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 88
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 68
+
+    (31) exp -> / exp . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 89
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 69
+
+    (32) exp -> EQ exp . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 90
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 70
+
+    (33) exp -> LE exp . exp
+    (27) exp -> . + exp exp
+    (28) exp -> . - exp exp
+    (29) exp -> . - exp
+    (30) exp -> . * exp exp
+    (31) exp -> . / exp exp
+    (32) exp -> . EQ exp exp
+    (33) exp -> . LE exp exp
+    (34) exp -> . ! exp
+    (35) exp -> . ( exp )
+    (36) exp -> . storable
+    (37) exp -> . NUMBER
+    (38) storable -> . var
+    (39) storable -> . RVX
+    (40) storable -> . TSX opt_offset
+    (44) var -> . NAME
+
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    EQ              shift and go to state 38
+    LE              shift and go to state 39
+    !               shift and go to state 40
+    (               shift and go to state 41
+    NUMBER          shift and go to state 43
+    RVX             shift and go to state 30
+    TSX             shift and go to state 31
+    NAME            shift and go to state 32
+
+    exp                            shift and go to state 91
+    storable                       shift and go to state 42
+    var                            shift and go to state 29
+
+state 71
+
+    (34) exp -> ! exp .
+
+    NAME            reduce using rule 34 (exp -> ! exp .)
+    ;               reduce using rule 34 (exp -> ! exp .)
+    +               reduce using rule 34 (exp -> ! exp .)
+    -               reduce using rule 34 (exp -> ! exp .)
+    *               reduce using rule 34 (exp -> ! exp .)
+    /               reduce using rule 34 (exp -> ! exp .)
+    EQ              reduce using rule 34 (exp -> ! exp .)
+    LE              reduce using rule 34 (exp -> ! exp .)
+    !               reduce using rule 34 (exp -> ! exp .)
+    (               reduce using rule 34 (exp -> ! exp .)
+    NUMBER          reduce using rule 34 (exp -> ! exp .)
+    RVX             reduce using rule 34 (exp -> ! exp .)
+    TSX             reduce using rule 34 (exp -> ! exp .)
+    )               reduce using rule 34 (exp -> ! exp .)
+    ]               reduce using rule 34 (exp -> ! exp .)
+
+
+state 72
+
+    (35) exp -> ( exp . )
+
+    )               shift and go to state 92
+
+
+state 73
+
+    (11) instr -> JUMPF exp label . ;
+
+    ;               shift and go to state 93
+
+
+state 74
+
+    (12) instr -> JUMP label ; .
+
+    NAME            reduce using rule 12 (instr -> JUMP label ; .)
+    PRINT           reduce using rule 12 (instr -> JUMP label ; .)
+    INPUT           reduce using rule 12 (instr -> JUMP label ; .)
+    STORE           reduce using rule 12 (instr -> JUMP label ; .)
+    JUMPT           reduce using rule 12 (instr -> JUMP label ; .)
+    JUMPF           reduce using rule 12 (instr -> JUMP label ; .)
+    JUMP            reduce using rule 12 (instr -> JUMP label ; .)
+    CALL            reduce using rule 12 (instr -> JUMP label ; .)
+    RETURN          reduce using rule 12 (instr -> JUMP label ; .)
+    PUSHV           reduce using rule 12 (instr -> JUMP label ; .)
+    POPV            reduce using rule 12 (instr -> JUMP label ; .)
+    PUSHF           reduce using rule 12 (instr -> JUMP label ; .)
+    POPF            reduce using rule 12 (instr -> JUMP label ; .)
+    STOP            reduce using rule 12 (instr -> JUMP label ; .)
+    NOOP            reduce using rule 12 (instr -> JUMP label ; .)
+    $end            reduce using rule 12 (instr -> JUMP label ; .)
+
+
+state 75
+
+    (13) instr -> CALL label ; .
+
+    NAME            reduce using rule 13 (instr -> CALL label ; .)
+    PRINT           reduce using rule 13 (instr -> CALL label ; .)
+    INPUT           reduce using rule 13 (instr -> CALL label ; .)
+    STORE           reduce using rule 13 (instr -> CALL label ; .)
+    JUMPT           reduce using rule 13 (instr -> CALL label ; .)
+    JUMPF           reduce using rule 13 (instr -> CALL label ; .)
+    JUMP            reduce using rule 13 (instr -> CALL label ; .)
+    CALL            reduce using rule 13 (instr -> CALL label ; .)
+    RETURN          reduce using rule 13 (instr -> CALL label ; .)
+    PUSHV           reduce using rule 13 (instr -> CALL label ; .)
+    POPV            reduce using rule 13 (instr -> CALL label ; .)
+    PUSHF           reduce using rule 13 (instr -> CALL label ; .)
+    POPF            reduce using rule 13 (instr -> CALL label ; .)
+    STOP            reduce using rule 13 (instr -> CALL label ; .)
+    NOOP            reduce using rule 13 (instr -> CALL label ; .)
+    $end            reduce using rule 13 (instr -> CALL label ; .)
+
+
+state 76
+
+    (15) instr -> PUSHV exp ; .
+
+    NAME            reduce using rule 15 (instr -> PUSHV exp ; .)
+    PRINT           reduce using rule 15 (instr -> PUSHV exp ; .)
+    INPUT           reduce using rule 15 (instr -> PUSHV exp ; .)
+    STORE           reduce using rule 15 (instr -> PUSHV exp ; .)
+    JUMPT           reduce using rule 15 (instr -> PUSHV exp ; .)
+    JUMPF           reduce using rule 15 (instr -> PUSHV exp ; .)
+    JUMP            reduce using rule 15 (instr -> PUSHV exp ; .)
+    CALL            reduce using rule 15 (instr -> PUSHV exp ; .)
+    RETURN          reduce using rule 15 (instr -> PUSHV exp ; .)
+    PUSHV           reduce using rule 15 (instr -> PUSHV exp ; .)
+    POPV            reduce using rule 15 (instr -> PUSHV exp ; .)
+    PUSHF           reduce using rule 15 (instr -> PUSHV exp ; .)
+    POPF            reduce using rule 15 (instr -> PUSHV exp ; .)
+    STOP            reduce using rule 15 (instr -> PUSHV exp ; .)
+    NOOP            reduce using rule 15 (instr -> PUSHV exp ; .)
+    $end            reduce using rule 15 (instr -> PUSHV exp ; .)
+
+
+state 77
+
+    (16) instr -> POPV opt_storable ; .
+
+    NAME            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    PRINT           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    INPUT           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    STORE           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    JUMPT           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    JUMPF           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    JUMP            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    CALL            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    RETURN          reduce using rule 16 (instr -> POPV opt_storable ; .)
+    PUSHV           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    POPV            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    PUSHF           reduce using rule 16 (instr -> POPV opt_storable ; .)
+    POPF            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    STOP            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    NOOP            reduce using rule 16 (instr -> POPV opt_storable ; .)
+    $end            reduce using rule 16 (instr -> POPV opt_storable ; .)
+
+
+state 78
+
+    (17) instr -> PUSHF size ; .
+
+    NAME            reduce using rule 17 (instr -> PUSHF size ; .)
+    PRINT           reduce using rule 17 (instr -> PUSHF size ; .)
+    INPUT           reduce using rule 17 (instr -> PUSHF size ; .)
+    STORE           reduce using rule 17 (instr -> PUSHF size ; .)
+    JUMPT           reduce using rule 17 (instr -> PUSHF size ; .)
+    JUMPF           reduce using rule 17 (instr -> PUSHF size ; .)
+    JUMP            reduce using rule 17 (instr -> PUSHF size ; .)
+    CALL            reduce using rule 17 (instr -> PUSHF size ; .)
+    RETURN          reduce using rule 17 (instr -> PUSHF size ; .)
+    PUSHV           reduce using rule 17 (instr -> PUSHF size ; .)
+    POPV            reduce using rule 17 (instr -> PUSHF size ; .)
+    PUSHF           reduce using rule 17 (instr -> PUSHF size ; .)
+    POPF            reduce using rule 17 (instr -> PUSHF size ; .)
+    STOP            reduce using rule 17 (instr -> PUSHF size ; .)
+    NOOP            reduce using rule 17 (instr -> PUSHF size ; .)
+    $end            reduce using rule 17 (instr -> PUSHF size ; .)
+
+
+state 79
+
+    (18) instr -> POPF size ; .
+
+    NAME            reduce using rule 18 (instr -> POPF size ; .)
+    PRINT           reduce using rule 18 (instr -> POPF size ; .)
+    INPUT           reduce using rule 18 (instr -> POPF size ; .)
+    STORE           reduce using rule 18 (instr -> POPF size ; .)
+    JUMPT           reduce using rule 18 (instr -> POPF size ; .)
+    JUMPF           reduce using rule 18 (instr -> POPF size ; .)
+    JUMP            reduce using rule 18 (instr -> POPF size ; .)
+    CALL            reduce using rule 18 (instr -> POPF size ; .)
+    RETURN          reduce using rule 18 (instr -> POPF size ; .)
+    PUSHV           reduce using rule 18 (instr -> POPF size ; .)
+    POPV            reduce using rule 18 (instr -> POPF size ; .)
+    PUSHF           reduce using rule 18 (instr -> POPF size ; .)
+    POPF            reduce using rule 18 (instr -> POPF size ; .)
+    STOP            reduce using rule 18 (instr -> POPF size ; .)
+    NOOP            reduce using rule 18 (instr -> POPF size ; .)
+    $end            reduce using rule 18 (instr -> POPF size ; .)
+
+
+state 80
+
+    (7) instr -> PRINT opt_string exp ; .
+
+    NAME            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    PRINT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    INPUT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    STORE           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    JUMPT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    JUMPF           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    JUMP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    CALL            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    RETURN          reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    PUSHV           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    POPV            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    PUSHF           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    POPF            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    STOP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    NOOP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+    $end            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
+
+
+state 81
+
+    (8) instr -> INPUT opt_string storable ; .
+
+    NAME            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    PRINT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    INPUT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    STORE           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    JUMPT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    JUMPF           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    JUMP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    CALL            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    RETURN          reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    PUSHV           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    POPV            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    PUSHF           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    POPF            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    STOP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    NOOP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+    $end            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
+
+
+state 82
+
+    (9) instr -> STORE storable exp ; .
+
+    NAME            reduce using rule 9 (instr -> STORE storable exp ; .)
+    PRINT           reduce using rule 9 (instr -> STORE storable exp ; .)
+    INPUT           reduce using rule 9 (instr -> STORE storable exp ; .)
+    STORE           reduce using rule 9 (instr -> STORE storable exp ; .)
+    JUMPT           reduce using rule 9 (instr -> STORE storable exp ; .)
+    JUMPF           reduce using rule 9 (instr -> STORE storable exp ; .)
+    JUMP            reduce using rule 9 (instr -> STORE storable exp ; .)
+    CALL            reduce using rule 9 (instr -> STORE storable exp ; .)
+    RETURN          reduce using rule 9 (instr -> STORE storable exp ; .)
+    PUSHV           reduce using rule 9 (instr -> STORE storable exp ; .)
+    POPV            reduce using rule 9 (instr -> STORE storable exp ; .)
+    PUSHF           reduce using rule 9 (instr -> STORE storable exp ; .)
+    POPF            reduce using rule 9 (instr -> STORE storable exp ; .)
+    STOP            reduce using rule 9 (instr -> STORE storable exp ; .)
+    NOOP            reduce using rule 9 (instr -> STORE storable exp ; .)
+    $end            reduce using rule 9 (instr -> STORE storable exp ; .)
+
+
+state 83
+
+    (41) opt_offset -> [ offset . ]
+
+    ]               shift and go to state 94
+
+
+state 84
+
+    (43) offset -> exp .
+
+    ]               reduce using rule 43 (offset -> exp .)
+
+
+state 85
+
+    (10) instr -> JUMPT exp label ; .
+
+    NAME            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    PRINT           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    INPUT           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    STORE           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    JUMPT           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    JUMPF           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    JUMP            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    CALL            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    RETURN          reduce using rule 10 (instr -> JUMPT exp label ; .)
+    PUSHV           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    POPV            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    PUSHF           reduce using rule 10 (instr -> JUMPT exp label ; .)
+    POPF            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    STOP            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    NOOP            reduce using rule 10 (instr -> JUMPT exp label ; .)
+    $end            reduce using rule 10 (instr -> JUMPT exp label ; .)
+
+
+state 86
+
+    (27) exp -> + exp exp .
+
+    NAME            reduce using rule 27 (exp -> + exp exp .)
+    ;               reduce using rule 27 (exp -> + exp exp .)
+    +               reduce using rule 27 (exp -> + exp exp .)
+    -               reduce using rule 27 (exp -> + exp exp .)
+    *               reduce using rule 27 (exp -> + exp exp .)
+    /               reduce using rule 27 (exp -> + exp exp .)
+    EQ              reduce using rule 27 (exp -> + exp exp .)
+    LE              reduce using rule 27 (exp -> + exp exp .)
+    !               reduce using rule 27 (exp -> + exp exp .)
+    (               reduce using rule 27 (exp -> + exp exp .)
+    NUMBER          reduce using rule 27 (exp -> + exp exp .)
+    RVX             reduce using rule 27 (exp -> + exp exp .)
+    TSX             reduce using rule 27 (exp -> + exp exp .)
+    )               reduce using rule 27 (exp -> + exp exp .)
+    ]               reduce using rule 27 (exp -> + exp exp .)
+
+
+state 87
+
+    (28) exp -> - exp exp .
+
+    NAME            reduce using rule 28 (exp -> - exp exp .)
+    ;               reduce using rule 28 (exp -> - exp exp .)
+    +               reduce using rule 28 (exp -> - exp exp .)
+    -               reduce using rule 28 (exp -> - exp exp .)
+    *               reduce using rule 28 (exp -> - exp exp .)
+    /               reduce using rule 28 (exp -> - exp exp .)
+    EQ              reduce using rule 28 (exp -> - exp exp .)
+    LE              reduce using rule 28 (exp -> - exp exp .)
+    !               reduce using rule 28 (exp -> - exp exp .)
+    (               reduce using rule 28 (exp -> - exp exp .)
+    NUMBER          reduce using rule 28 (exp -> - exp exp .)
+    RVX             reduce using rule 28 (exp -> - exp exp .)
+    TSX             reduce using rule 28 (exp -> - exp exp .)
+    )               reduce using rule 28 (exp -> - exp exp .)
+    ]               reduce using rule 28 (exp -> - exp exp .)
+
+
+state 88
+
+    (30) exp -> * exp exp .
+
+    NAME            reduce using rule 30 (exp -> * exp exp .)
+    ;               reduce using rule 30 (exp -> * exp exp .)
+    +               reduce using rule 30 (exp -> * exp exp .)
+    -               reduce using rule 30 (exp -> * exp exp .)
+    *               reduce using rule 30 (exp -> * exp exp .)
+    /               reduce using rule 30 (exp -> * exp exp .)
+    EQ              reduce using rule 30 (exp -> * exp exp .)
+    LE              reduce using rule 30 (exp -> * exp exp .)
+    !               reduce using rule 30 (exp -> * exp exp .)
+    (               reduce using rule 30 (exp -> * exp exp .)
+    NUMBER          reduce using rule 30 (exp -> * exp exp .)
+    RVX             reduce using rule 30 (exp -> * exp exp .)
+    TSX             reduce using rule 30 (exp -> * exp exp .)
+    )               reduce using rule 30 (exp -> * exp exp .)
+    ]               reduce using rule 30 (exp -> * exp exp .)
+
+
+state 89
+
+    (31) exp -> / exp exp .
+
+    NAME            reduce using rule 31 (exp -> / exp exp .)
+    ;               reduce using rule 31 (exp -> / exp exp .)
+    +               reduce using rule 31 (exp -> / exp exp .)
+    -               reduce using rule 31 (exp -> / exp exp .)
+    *               reduce using rule 31 (exp -> / exp exp .)
+    /               reduce using rule 31 (exp -> / exp exp .)
+    EQ              reduce using rule 31 (exp -> / exp exp .)
+    LE              reduce using rule 31 (exp -> / exp exp .)
+    !               reduce using rule 31 (exp -> / exp exp .)
+    (               reduce using rule 31 (exp -> / exp exp .)
+    NUMBER          reduce using rule 31 (exp -> / exp exp .)
+    RVX             reduce using rule 31 (exp -> / exp exp .)
+    TSX             reduce using rule 31 (exp -> / exp exp .)
+    )               reduce using rule 31 (exp -> / exp exp .)
+    ]               reduce using rule 31 (exp -> / exp exp .)
+
+
+state 90
+
+    (32) exp -> EQ exp exp .
+
+    NAME            reduce using rule 32 (exp -> EQ exp exp .)
+    ;               reduce using rule 32 (exp -> EQ exp exp .)
+    +               reduce using rule 32 (exp -> EQ exp exp .)
+    -               reduce using rule 32 (exp -> EQ exp exp .)
+    *               reduce using rule 32 (exp -> EQ exp exp .)
+    /               reduce using rule 32 (exp -> EQ exp exp .)
+    EQ              reduce using rule 32 (exp -> EQ exp exp .)
+    LE              reduce using rule 32 (exp -> EQ exp exp .)
+    !               reduce using rule 32 (exp -> EQ exp exp .)
+    (               reduce using rule 32 (exp -> EQ exp exp .)
+    NUMBER          reduce using rule 32 (exp -> EQ exp exp .)
+    RVX             reduce using rule 32 (exp -> EQ exp exp .)
+    TSX             reduce using rule 32 (exp -> EQ exp exp .)
+    )               reduce using rule 32 (exp -> EQ exp exp .)
+    ]               reduce using rule 32 (exp -> EQ exp exp .)
+
+
+state 91
+
+    (33) exp -> LE exp exp .
+
+    NAME            reduce using rule 33 (exp -> LE exp exp .)
+    ;               reduce using rule 33 (exp -> LE exp exp .)
+    +               reduce using rule 33 (exp -> LE exp exp .)
+    -               reduce using rule 33 (exp -> LE exp exp .)
+    *               reduce using rule 33 (exp -> LE exp exp .)
+    /               reduce using rule 33 (exp -> LE exp exp .)
+    EQ              reduce using rule 33 (exp -> LE exp exp .)
+    LE              reduce using rule 33 (exp -> LE exp exp .)
+    !               reduce using rule 33 (exp -> LE exp exp .)
+    (               reduce using rule 33 (exp -> LE exp exp .)
+    NUMBER          reduce using rule 33 (exp -> LE exp exp .)
+    RVX             reduce using rule 33 (exp -> LE exp exp .)
+    TSX             reduce using rule 33 (exp -> LE exp exp .)
+    )               reduce using rule 33 (exp -> LE exp exp .)
+    ]               reduce using rule 33 (exp -> LE exp exp .)
+
+
+state 92
+
+    (35) exp -> ( exp ) .
+
+    NAME            reduce using rule 35 (exp -> ( exp ) .)
+    ;               reduce using rule 35 (exp -> ( exp ) .)
+    +               reduce using rule 35 (exp -> ( exp ) .)
+    -               reduce using rule 35 (exp -> ( exp ) .)
+    *               reduce using rule 35 (exp -> ( exp ) .)
+    /               reduce using rule 35 (exp -> ( exp ) .)
+    EQ              reduce using rule 35 (exp -> ( exp ) .)
+    LE              reduce using rule 35 (exp -> ( exp ) .)
+    !               reduce using rule 35 (exp -> ( exp ) .)
+    (               reduce using rule 35 (exp -> ( exp ) .)
+    NUMBER          reduce using rule 35 (exp -> ( exp ) .)
+    RVX             reduce using rule 35 (exp -> ( exp ) .)
+    TSX             reduce using rule 35 (exp -> ( exp ) .)
+    )               reduce using rule 35 (exp -> ( exp ) .)
+    ]               reduce using rule 35 (exp -> ( exp ) .)
+
+
+state 93
+
+    (11) instr -> JUMPF exp label ; .
+
+    NAME            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    PRINT           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    INPUT           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    STORE           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    JUMPT           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    JUMPF           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    JUMP            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    CALL            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    RETURN          reduce using rule 11 (instr -> JUMPF exp label ; .)
+    PUSHV           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    POPV            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    PUSHF           reduce using rule 11 (instr -> JUMPF exp label ; .)
+    POPF            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    STOP            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    NOOP            reduce using rule 11 (instr -> JUMPF exp label ; .)
+    $end            reduce using rule 11 (instr -> JUMPF exp label ; .)
+
+
+state 94
+
+    (41) opt_offset -> [ offset ] .
+
+    +               reduce using rule 41 (opt_offset -> [ offset ] .)
+    -               reduce using rule 41 (opt_offset -> [ offset ] .)
+    *               reduce using rule 41 (opt_offset -> [ offset ] .)
+    /               reduce using rule 41 (opt_offset -> [ offset ] .)
+    EQ              reduce using rule 41 (opt_offset -> [ offset ] .)
+    LE              reduce using rule 41 (opt_offset -> [ offset ] .)
+    !               reduce using rule 41 (opt_offset -> [ offset ] .)
+    (               reduce using rule 41 (opt_offset -> [ offset ] .)
+    NUMBER          reduce using rule 41 (opt_offset -> [ offset ] .)
+    RVX             reduce using rule 41 (opt_offset -> [ offset ] .)
+    TSX             reduce using rule 41 (opt_offset -> [ offset ] .)
+    NAME            reduce using rule 41 (opt_offset -> [ offset ] .)
+    ;               reduce using rule 41 (opt_offset -> [ offset ] .)
+    )               reduce using rule 41 (opt_offset -> [ offset ] .)
+    ]               reduce using rule 41 (opt_offset -> [ offset ] .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for + in state 66 resolved as shift
+WARNING: shift/reduce conflict for - in state 66 resolved as shift
+WARNING: shift/reduce conflict for * in state 66 resolved as shift
+WARNING: shift/reduce conflict for / in state 66 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 66 resolved as shift
+WARNING: shift/reduce conflict for LE in state 66 resolved as shift
+WARNING: shift/reduce conflict for ! in state 66 resolved as shift
+WARNING: shift/reduce conflict for ( in state 66 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 66 resolved as shift
+WARNING: shift/reduce conflict for RVX in state 66 resolved as shift
+WARNING: shift/reduce conflict for TSX in state 66 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 66 resolved as shift

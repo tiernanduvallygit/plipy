@@ -1,8 +1,7 @@
 # This is the output phase of the Cuppa1 compiler
 
 # take a list of Exp1bytecode instruction tuples and format them nicely
-# for output. Noop instructions that are the targets of jumps are deleted
-# as long as they are not the last instruction in the instruction stream
+# for output.
 
 #########################################################################
 def output(instr_stream):
@@ -166,6 +165,7 @@ def backpatch_label(orig_label, repl_label, instr_stream):
             new_instr = ('jump', repl_label)
             instr_stream.insert(ix, new_instr)
 
+#########################################################################
 
 
 

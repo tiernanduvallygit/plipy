@@ -1,0 +1,1 @@
+simple = "input x; print x"
