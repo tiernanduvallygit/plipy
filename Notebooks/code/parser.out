@@ -3,141 +3,115 @@ Created by PLY version 3.10 (http://www.dabeaz.com/ply)
 Grammar
 
 Rule 0     S' -> prog
-Rule 1     prog -> instr_list
-Rule 2     instr_list -> labeled_instr instr_list
-Rule 3     instr_list -> empty
-Rule 4     labeled_instr -> label_def instr
-Rule 5     label_def -> NAME :
-Rule 6     label_def -> empty
-Rule 7     instr -> PRINT opt_string exp ;
-Rule 8     instr -> INPUT opt_string storable ;
-Rule 9     instr -> STORE storable exp ;
-Rule 10    instr -> JUMPT exp label ;
-Rule 11    instr -> JUMPF exp label ;
-Rule 12    instr -> JUMP label ;
-Rule 13    instr -> CALL label ;
-Rule 14    instr -> RETURN ;
-Rule 15    instr -> PUSHV exp ;
-Rule 16    instr -> POPV opt_storable ;
-Rule 17    instr -> PUSHF size ;
-Rule 18    instr -> POPF size ;
-Rule 19    instr -> STOP ;
-Rule 20    instr -> NOOP ;
-Rule 21    opt_string -> STRING
-Rule 22    opt_string -> empty
-Rule 23    opt_storable -> storable
-Rule 24    opt_storable -> empty
-Rule 25    size -> exp
-Rule 26    label -> NAME
-Rule 27    exp -> + exp exp
-Rule 28    exp -> - exp exp
-Rule 29    exp -> - exp
-Rule 30    exp -> * exp exp
-Rule 31    exp -> / exp exp
-Rule 32    exp -> EQ exp exp
-Rule 33    exp -> LE exp exp
-Rule 34    exp -> ! exp
-Rule 35    exp -> ( exp )
-Rule 36    exp -> storable
-Rule 37    exp -> NUMBER
-Rule 38    storable -> var
-Rule 39    storable -> RVX
-Rule 40    storable -> TSX opt_offset
-Rule 41    opt_offset -> [ offset ]
-Rule 42    opt_offset -> empty
-Rule 43    offset -> exp
-Rule 44    var -> NAME
-Rule 45    empty -> <empty>
+Rule 1     prog -> stmt_list
+Rule 2     stmt_list -> stmt stmt_list
+Rule 3     stmt_list -> stmt
+Rule 4     stmt -> ID = exp
+Rule 5     stmt -> INPUT opt_string ID
+Rule 6     stmt -> PRINT value value_list
+Rule 7     stmt -> END
+Rule 8     stmt -> IF exp THEN stmt_list opt_else ENDIF
+Rule 9     stmt -> WHILE exp stmt_list ENDWHILE
+Rule 10    stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID
+Rule 11    opt_string -> STRING ,
+Rule 12    opt_string -> empty
+Rule 13    value_list -> , value value_list
+Rule 14    value_list -> empty
+Rule 15    opt_else -> ELSE stmt_list
+Rule 16    opt_else -> empty
+Rule 17    opt_step -> STEP exp
+Rule 18    opt_step -> empty
+Rule 19    exp -> exp PLUS exp
+Rule 20    exp -> exp MINUS exp
+Rule 21    exp -> exp TIMES exp
+Rule 22    exp -> exp DIVIDE exp
+Rule 23    exp -> exp EQ exp
+Rule 24    exp -> exp LE exp
+Rule 25    exp -> exp AND exp
+Rule 26    exp -> exp OR exp
+Rule 27    exp -> INTEGER
+Rule 28    exp -> ID
+Rule 29    exp -> ( exp )
+Rule 30    exp -> MINUS exp
+Rule 31    exp -> NOT exp
+Rule 32    value -> ID
+Rule 33    value -> INTEGER
+Rule 34    value -> STRING
+Rule 35    empty -> <empty>
 
 Terminals, with rules where they appear
 
-!                    : 34
-(                    : 35
-)                    : 35
-*                    : 30
-+                    : 27
--                    : 28 29
-/                    : 31
-:                    : 5
-;                    : 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-CALL                 : 13
-EQ                   : 32
-INPUT                : 8
-JUMP                 : 12
-JUMPF                : 11
-JUMPT                : 10
-LE                   : 33
-NAME                 : 5 26 44
-NOOP                 : 20
-NUMBER               : 37
-POPF                 : 18
-POPV                 : 16
-PRINT                : 7
-PUSHF                : 17
-PUSHV                : 15
-RETURN               : 14
-RVX                  : 39
-STOP                 : 19
-STORE                : 9
-STRING               : 21
-TSX                  : 40
-[                    : 41
-]                    : 41
+(                    : 29
+)                    : 29
+,                    : 11 13
+=                    : 4 10
+AND                  : 25
+DIVIDE               : 22
+ELSE                 : 15
+END                  : 7
+ENDIF                : 8
+ENDWHILE             : 9
+EQ                   : 23
+FOR                  : 10
+ID                   : 4 5 10 10 28 32
+IF                   : 8
+INPUT                : 5
+INTEGER              : 27 33
+LE                   : 24
+MINUS                : 20 30
+NEXT                 : 10
+NOT                  : 31
+OR                   : 26
+PLUS                 : 19
+PRINT                : 6
+STEP                 : 17
+STRING               : 11 34
+THEN                 : 8
+TIMES                : 21
+TO                   : 10
+WHILE                : 9
 error                : 
 
 Nonterminals, with rules where they appear
 
-empty                : 3 6 22 24 42
-exp                  : 7 9 10 11 15 25 27 27 28 28 29 30 30 31 31 32 32 33 33 34 35 43
-instr                : 4
-instr_list           : 1 2
-label                : 10 11 12 13
-label_def            : 4
-labeled_instr        : 2
-offset               : 41
-opt_offset           : 40
-opt_storable         : 16
-opt_string           : 7 8
+empty                : 12 14 16 18
+exp                  : 4 8 9 10 10 17 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 29 30 31
+opt_else             : 8
+opt_step             : 10
+opt_string           : 5
 prog                 : 0
-size                 : 17 18
-storable             : 8 9 23 36
-var                  : 38
+stmt                 : 2 3
+stmt_list            : 1 2 8 9 10 15
+value                : 6 13
+value_list           : 6 13
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . prog
-    (1) prog -> . instr_list
-    (2) instr_list -> . labeled_instr instr_list
-    (3) instr_list -> . empty
-    (4) labeled_instr -> . label_def instr
-    (45) empty -> .
-    (5) label_def -> . NAME :
-    (6) label_def -> . empty
+    (1) prog -> . stmt_list
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    $end            reduce using rule 45 (empty -> .)
-    PRINT           reduce using rule 45 (empty -> .)
-    INPUT           reduce using rule 45 (empty -> .)
-    STORE           reduce using rule 45 (empty -> .)
-    JUMPT           reduce using rule 45 (empty -> .)
-    JUMPF           reduce using rule 45 (empty -> .)
-    JUMP            reduce using rule 45 (empty -> .)
-    CALL            reduce using rule 45 (empty -> .)
-    RETURN          reduce using rule 45 (empty -> .)
-    PUSHV           reduce using rule 45 (empty -> .)
-    POPV            reduce using rule 45 (empty -> .)
-    PUSHF           reduce using rule 45 (empty -> .)
-    POPF            reduce using rule 45 (empty -> .)
-    STOP            reduce using rule 45 (empty -> .)
-    NOOP            reduce using rule 45 (empty -> .)
-    NAME            shift and go to state 6
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
     prog                           shift and go to state 1
-    instr_list                     shift and go to state 2
-    labeled_instr                  shift and go to state 3
-    empty                          shift and go to state 4
-    label_def                      shift and go to state 5
+    stmt_list                      shift and go to state 2
+    stmt                           shift and go to state 3
 
 state 1
 
@@ -147,1975 +121,1717 @@ state 1
 
 state 2
 
-    (1) prog -> instr_list .
+    (1) prog -> stmt_list .
 
-    $end            reduce using rule 1 (prog -> instr_list .)
+    $end            reduce using rule 1 (prog -> stmt_list .)
 
 
 state 3
 
-    (2) instr_list -> labeled_instr . instr_list
-    (2) instr_list -> . labeled_instr instr_list
-    (3) instr_list -> . empty
-    (4) labeled_instr -> . label_def instr
-    (45) empty -> .
-    (5) label_def -> . NAME :
-    (6) label_def -> . empty
+    (2) stmt_list -> stmt . stmt_list
+    (3) stmt_list -> stmt .
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    $end            reduce using rule 45 (empty -> .)
-    PRINT           reduce using rule 45 (empty -> .)
-    INPUT           reduce using rule 45 (empty -> .)
-    STORE           reduce using rule 45 (empty -> .)
-    JUMPT           reduce using rule 45 (empty -> .)
-    JUMPF           reduce using rule 45 (empty -> .)
-    JUMP            reduce using rule 45 (empty -> .)
-    CALL            reduce using rule 45 (empty -> .)
-    RETURN          reduce using rule 45 (empty -> .)
-    PUSHV           reduce using rule 45 (empty -> .)
-    POPV            reduce using rule 45 (empty -> .)
-    PUSHF           reduce using rule 45 (empty -> .)
-    POPF            reduce using rule 45 (empty -> .)
-    STOP            reduce using rule 45 (empty -> .)
-    NOOP            reduce using rule 45 (empty -> .)
-    NAME            shift and go to state 6
+    $end            reduce using rule 3 (stmt_list -> stmt .)
+    ENDWHILE        reduce using rule 3 (stmt_list -> stmt .)
+    ELSE            reduce using rule 3 (stmt_list -> stmt .)
+    ENDIF           reduce using rule 3 (stmt_list -> stmt .)
+    NEXT            reduce using rule 3 (stmt_list -> stmt .)
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
-    labeled_instr                  shift and go to state 3
-    instr_list                     shift and go to state 7
-    empty                          shift and go to state 4
-    label_def                      shift and go to state 5
+    stmt                           shift and go to state 3
+    stmt_list                      shift and go to state 11
 
 state 4
 
-    (3) instr_list -> empty .
-    (6) label_def -> empty .
+    (4) stmt -> ID . = exp
 
-    $end            reduce using rule 3 (instr_list -> empty .)
-    PRINT           reduce using rule 6 (label_def -> empty .)
-    INPUT           reduce using rule 6 (label_def -> empty .)
-    STORE           reduce using rule 6 (label_def -> empty .)
-    JUMPT           reduce using rule 6 (label_def -> empty .)
-    JUMPF           reduce using rule 6 (label_def -> empty .)
-    JUMP            reduce using rule 6 (label_def -> empty .)
-    CALL            reduce using rule 6 (label_def -> empty .)
-    RETURN          reduce using rule 6 (label_def -> empty .)
-    PUSHV           reduce using rule 6 (label_def -> empty .)
-    POPV            reduce using rule 6 (label_def -> empty .)
-    PUSHF           reduce using rule 6 (label_def -> empty .)
-    POPF            reduce using rule 6 (label_def -> empty .)
-    STOP            reduce using rule 6 (label_def -> empty .)
-    NOOP            reduce using rule 6 (label_def -> empty .)
+    =               shift and go to state 12
 
 
 state 5
 
-    (4) labeled_instr -> label_def . instr
-    (7) instr -> . PRINT opt_string exp ;
-    (8) instr -> . INPUT opt_string storable ;
-    (9) instr -> . STORE storable exp ;
-    (10) instr -> . JUMPT exp label ;
-    (11) instr -> . JUMPF exp label ;
-    (12) instr -> . JUMP label ;
-    (13) instr -> . CALL label ;
-    (14) instr -> . RETURN ;
-    (15) instr -> . PUSHV exp ;
-    (16) instr -> . POPV opt_storable ;
-    (17) instr -> . PUSHF size ;
-    (18) instr -> . POPF size ;
-    (19) instr -> . STOP ;
-    (20) instr -> . NOOP ;
+    (5) stmt -> INPUT . opt_string ID
+    (11) opt_string -> . STRING ,
+    (12) opt_string -> . empty
+    (35) empty -> .
 
-    PRINT           shift and go to state 9
-    INPUT           shift and go to state 10
-    STORE           shift and go to state 11
-    JUMPT           shift and go to state 12
-    JUMPF           shift and go to state 13
-    JUMP            shift and go to state 14
-    CALL            shift and go to state 15
-    RETURN          shift and go to state 16
-    PUSHV           shift and go to state 17
-    POPV            shift and go to state 18
-    PUSHF           shift and go to state 19
-    POPF            shift and go to state 20
-    STOP            shift and go to state 21
-    NOOP            shift and go to state 22
+    STRING          shift and go to state 14
+    ID              reduce using rule 35 (empty -> .)
 
-    instr                          shift and go to state 8
+    opt_string                     shift and go to state 13
+    empty                          shift and go to state 15
 
 state 6
 
-    (5) label_def -> NAME . :
+    (6) stmt -> PRINT . value value_list
+    (32) value -> . ID
+    (33) value -> . INTEGER
+    (34) value -> . STRING
 
-    :               shift and go to state 23
+    ID              shift and go to state 17
+    INTEGER         shift and go to state 18
+    STRING          shift and go to state 19
 
+    value                          shift and go to state 16
 
 state 7
 
-    (2) instr_list -> labeled_instr instr_list .
+    (7) stmt -> END .
 
-    $end            reduce using rule 2 (instr_list -> labeled_instr instr_list .)
+    ID              reduce using rule 7 (stmt -> END .)
+    INPUT           reduce using rule 7 (stmt -> END .)
+    PRINT           reduce using rule 7 (stmt -> END .)
+    END             reduce using rule 7 (stmt -> END .)
+    IF              reduce using rule 7 (stmt -> END .)
+    WHILE           reduce using rule 7 (stmt -> END .)
+    FOR             reduce using rule 7 (stmt -> END .)
+    $end            reduce using rule 7 (stmt -> END .)
+    ENDWHILE        reduce using rule 7 (stmt -> END .)
+    ELSE            reduce using rule 7 (stmt -> END .)
+    ENDIF           reduce using rule 7 (stmt -> END .)
+    NEXT            reduce using rule 7 (stmt -> END .)
 
 
 state 8
 
-    (4) labeled_instr -> label_def instr .
+    (8) stmt -> IF . exp THEN stmt_list opt_else ENDIF
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    NAME            reduce using rule 4 (labeled_instr -> label_def instr .)
-    PRINT           reduce using rule 4 (labeled_instr -> label_def instr .)
-    INPUT           reduce using rule 4 (labeled_instr -> label_def instr .)
-    STORE           reduce using rule 4 (labeled_instr -> label_def instr .)
-    JUMPT           reduce using rule 4 (labeled_instr -> label_def instr .)
-    JUMPF           reduce using rule 4 (labeled_instr -> label_def instr .)
-    JUMP            reduce using rule 4 (labeled_instr -> label_def instr .)
-    CALL            reduce using rule 4 (labeled_instr -> label_def instr .)
-    RETURN          reduce using rule 4 (labeled_instr -> label_def instr .)
-    PUSHV           reduce using rule 4 (labeled_instr -> label_def instr .)
-    POPV            reduce using rule 4 (labeled_instr -> label_def instr .)
-    PUSHF           reduce using rule 4 (labeled_instr -> label_def instr .)
-    POPF            reduce using rule 4 (labeled_instr -> label_def instr .)
-    STOP            reduce using rule 4 (labeled_instr -> label_def instr .)
-    NOOP            reduce using rule 4 (labeled_instr -> label_def instr .)
-    $end            reduce using rule 4 (labeled_instr -> label_def instr .)
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 20
 
 state 9
 
-    (7) instr -> PRINT . opt_string exp ;
-    (21) opt_string -> . STRING
-    (22) opt_string -> . empty
-    (45) empty -> .
+    (9) stmt -> WHILE . exp stmt_list ENDWHILE
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    STRING          shift and go to state 25
-    +               reduce using rule 45 (empty -> .)
-    -               reduce using rule 45 (empty -> .)
-    *               reduce using rule 45 (empty -> .)
-    /               reduce using rule 45 (empty -> .)
-    EQ              reduce using rule 45 (empty -> .)
-    LE              reduce using rule 45 (empty -> .)
-    !               reduce using rule 45 (empty -> .)
-    (               reduce using rule 45 (empty -> .)
-    NUMBER          reduce using rule 45 (empty -> .)
-    RVX             reduce using rule 45 (empty -> .)
-    TSX             reduce using rule 45 (empty -> .)
-    NAME            reduce using rule 45 (empty -> .)
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    opt_string                     shift and go to state 24
-    empty                          shift and go to state 26
+    exp                            shift and go to state 26
 
 state 10
 
-    (8) instr -> INPUT . opt_string storable ;
-    (21) opt_string -> . STRING
-    (22) opt_string -> . empty
-    (45) empty -> .
+    (10) stmt -> FOR . ID = exp TO exp opt_step stmt_list NEXT ID
 
-    STRING          shift and go to state 25
-    RVX             reduce using rule 45 (empty -> .)
-    TSX             reduce using rule 45 (empty -> .)
-    NAME            reduce using rule 45 (empty -> .)
+    ID              shift and go to state 27
 
-    opt_string                     shift and go to state 27
-    empty                          shift and go to state 26
 
 state 11
 
-    (9) instr -> STORE . storable exp ;
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (2) stmt_list -> stmt stmt_list .
 
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    $end            reduce using rule 2 (stmt_list -> stmt stmt_list .)
+    ENDWHILE        reduce using rule 2 (stmt_list -> stmt stmt_list .)
+    ELSE            reduce using rule 2 (stmt_list -> stmt stmt_list .)
+    ENDIF           reduce using rule 2 (stmt_list -> stmt stmt_list .)
+    NEXT            reduce using rule 2 (stmt_list -> stmt stmt_list .)
 
-    storable                       shift and go to state 28
-    var                            shift and go to state 29
 
 state 12
 
-    (10) instr -> JUMPT . exp label ;
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (4) stmt -> ID = . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 33
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 28
 
 state 13
 
-    (11) instr -> JUMPF . exp label ;
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (5) stmt -> INPUT opt_string . ID
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ID              shift and go to state 29
 
-    exp                            shift and go to state 44
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 14
 
-    (12) instr -> JUMP . label ;
-    (26) label -> . NAME
+    (11) opt_string -> STRING . ,
 
-    NAME            shift and go to state 46
+    ,               shift and go to state 30
 
-    label                          shift and go to state 45
 
 state 15
 
-    (13) instr -> CALL . label ;
-    (26) label -> . NAME
+    (12) opt_string -> empty .
 
-    NAME            shift and go to state 46
+    ID              reduce using rule 12 (opt_string -> empty .)
 
-    label                          shift and go to state 47
 
 state 16
 
-    (14) instr -> RETURN . ;
+    (6) stmt -> PRINT value . value_list
+    (13) value_list -> . , value value_list
+    (14) value_list -> . empty
+    (35) empty -> .
 
-    ;               shift and go to state 48
+    ,               shift and go to state 32
+    ID              reduce using rule 35 (empty -> .)
+    INPUT           reduce using rule 35 (empty -> .)
+    PRINT           reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    IF              reduce using rule 35 (empty -> .)
+    WHILE           reduce using rule 35 (empty -> .)
+    FOR             reduce using rule 35 (empty -> .)
+    $end            reduce using rule 35 (empty -> .)
+    ENDWHILE        reduce using rule 35 (empty -> .)
+    ELSE            reduce using rule 35 (empty -> .)
+    ENDIF           reduce using rule 35 (empty -> .)
+    NEXT            reduce using rule 35 (empty -> .)
 
+    value_list                     shift and go to state 31
+    empty                          shift and go to state 33
 
 state 17
 
-    (15) instr -> PUSHV . exp ;
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (32) value -> ID .
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ,               reduce using rule 32 (value -> ID .)
+    ID              reduce using rule 32 (value -> ID .)
+    INPUT           reduce using rule 32 (value -> ID .)
+    PRINT           reduce using rule 32 (value -> ID .)
+    END             reduce using rule 32 (value -> ID .)
+    IF              reduce using rule 32 (value -> ID .)
+    WHILE           reduce using rule 32 (value -> ID .)
+    FOR             reduce using rule 32 (value -> ID .)
+    $end            reduce using rule 32 (value -> ID .)
+    ENDWHILE        reduce using rule 32 (value -> ID .)
+    ELSE            reduce using rule 32 (value -> ID .)
+    ENDIF           reduce using rule 32 (value -> ID .)
+    NEXT            reduce using rule 32 (value -> ID .)
 
-    exp                            shift and go to state 49
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 18
 
-    (16) instr -> POPV . opt_storable ;
-    (23) opt_storable -> . storable
-    (24) opt_storable -> . empty
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (45) empty -> .
-    (44) var -> . NAME
+    (33) value -> INTEGER .
 
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    ;               reduce using rule 45 (empty -> .)
-    NAME            shift and go to state 32
+    ,               reduce using rule 33 (value -> INTEGER .)
+    ID              reduce using rule 33 (value -> INTEGER .)
+    INPUT           reduce using rule 33 (value -> INTEGER .)
+    PRINT           reduce using rule 33 (value -> INTEGER .)
+    END             reduce using rule 33 (value -> INTEGER .)
+    IF              reduce using rule 33 (value -> INTEGER .)
+    WHILE           reduce using rule 33 (value -> INTEGER .)
+    FOR             reduce using rule 33 (value -> INTEGER .)
+    $end            reduce using rule 33 (value -> INTEGER .)
+    ENDWHILE        reduce using rule 33 (value -> INTEGER .)
+    ELSE            reduce using rule 33 (value -> INTEGER .)
+    ENDIF           reduce using rule 33 (value -> INTEGER .)
+    NEXT            reduce using rule 33 (value -> INTEGER .)
 
-    opt_storable                   shift and go to state 50
-    storable                       shift and go to state 51
-    empty                          shift and go to state 52
-    var                            shift and go to state 29
 
 state 19
 
-    (17) instr -> PUSHF . size ;
-    (25) size -> . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (34) value -> STRING .
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ,               reduce using rule 34 (value -> STRING .)
+    ID              reduce using rule 34 (value -> STRING .)
+    INPUT           reduce using rule 34 (value -> STRING .)
+    PRINT           reduce using rule 34 (value -> STRING .)
+    END             reduce using rule 34 (value -> STRING .)
+    IF              reduce using rule 34 (value -> STRING .)
+    WHILE           reduce using rule 34 (value -> STRING .)
+    FOR             reduce using rule 34 (value -> STRING .)
+    $end            reduce using rule 34 (value -> STRING .)
+    ENDWHILE        reduce using rule 34 (value -> STRING .)
+    ELSE            reduce using rule 34 (value -> STRING .)
+    ENDIF           reduce using rule 34 (value -> STRING .)
+    NEXT            reduce using rule 34 (value -> STRING .)
 
-    size                           shift and go to state 53
-    exp                            shift and go to state 54
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 20
 
-    (18) instr -> POPF . size ;
-    (25) size -> . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (8) stmt -> IF exp . THEN stmt_list opt_else ENDIF
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    THEN            shift and go to state 34
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
 
-    size                           shift and go to state 55
-    exp                            shift and go to state 54
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 21
 
-    (19) instr -> STOP . ;
+    (30) exp -> MINUS . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    ;               shift and go to state 56
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 43
 
 state 22
 
-    (20) instr -> NOOP . ;
+    (27) exp -> INTEGER .
 
-    ;               shift and go to state 57
+    THEN            reduce using rule 27 (exp -> INTEGER .)
+    PLUS            reduce using rule 27 (exp -> INTEGER .)
+    MINUS           reduce using rule 27 (exp -> INTEGER .)
+    TIMES           reduce using rule 27 (exp -> INTEGER .)
+    DIVIDE          reduce using rule 27 (exp -> INTEGER .)
+    EQ              reduce using rule 27 (exp -> INTEGER .)
+    LE              reduce using rule 27 (exp -> INTEGER .)
+    AND             reduce using rule 27 (exp -> INTEGER .)
+    OR              reduce using rule 27 (exp -> INTEGER .)
+    ID              reduce using rule 27 (exp -> INTEGER .)
+    INPUT           reduce using rule 27 (exp -> INTEGER .)
+    PRINT           reduce using rule 27 (exp -> INTEGER .)
+    END             reduce using rule 27 (exp -> INTEGER .)
+    IF              reduce using rule 27 (exp -> INTEGER .)
+    WHILE           reduce using rule 27 (exp -> INTEGER .)
+    FOR             reduce using rule 27 (exp -> INTEGER .)
+    $end            reduce using rule 27 (exp -> INTEGER .)
+    ENDWHILE        reduce using rule 27 (exp -> INTEGER .)
+    ELSE            reduce using rule 27 (exp -> INTEGER .)
+    ENDIF           reduce using rule 27 (exp -> INTEGER .)
+    NEXT            reduce using rule 27 (exp -> INTEGER .)
+    )               reduce using rule 27 (exp -> INTEGER .)
+    TO              reduce using rule 27 (exp -> INTEGER .)
+    STEP            reduce using rule 27 (exp -> INTEGER .)
 
 
 state 23
 
-    (5) label_def -> NAME : .
+    (28) exp -> ID .
 
-    PRINT           reduce using rule 5 (label_def -> NAME : .)
-    INPUT           reduce using rule 5 (label_def -> NAME : .)
-    STORE           reduce using rule 5 (label_def -> NAME : .)
-    JUMPT           reduce using rule 5 (label_def -> NAME : .)
-    JUMPF           reduce using rule 5 (label_def -> NAME : .)
-    JUMP            reduce using rule 5 (label_def -> NAME : .)
-    CALL            reduce using rule 5 (label_def -> NAME : .)
-    RETURN          reduce using rule 5 (label_def -> NAME : .)
-    PUSHV           reduce using rule 5 (label_def -> NAME : .)
-    POPV            reduce using rule 5 (label_def -> NAME : .)
-    PUSHF           reduce using rule 5 (label_def -> NAME : .)
-    POPF            reduce using rule 5 (label_def -> NAME : .)
-    STOP            reduce using rule 5 (label_def -> NAME : .)
-    NOOP            reduce using rule 5 (label_def -> NAME : .)
+    THEN            reduce using rule 28 (exp -> ID .)
+    PLUS            reduce using rule 28 (exp -> ID .)
+    MINUS           reduce using rule 28 (exp -> ID .)
+    TIMES           reduce using rule 28 (exp -> ID .)
+    DIVIDE          reduce using rule 28 (exp -> ID .)
+    EQ              reduce using rule 28 (exp -> ID .)
+    LE              reduce using rule 28 (exp -> ID .)
+    AND             reduce using rule 28 (exp -> ID .)
+    OR              reduce using rule 28 (exp -> ID .)
+    ID              reduce using rule 28 (exp -> ID .)
+    INPUT           reduce using rule 28 (exp -> ID .)
+    PRINT           reduce using rule 28 (exp -> ID .)
+    END             reduce using rule 28 (exp -> ID .)
+    IF              reduce using rule 28 (exp -> ID .)
+    WHILE           reduce using rule 28 (exp -> ID .)
+    FOR             reduce using rule 28 (exp -> ID .)
+    $end            reduce using rule 28 (exp -> ID .)
+    ENDWHILE        reduce using rule 28 (exp -> ID .)
+    ELSE            reduce using rule 28 (exp -> ID .)
+    ENDIF           reduce using rule 28 (exp -> ID .)
+    NEXT            reduce using rule 28 (exp -> ID .)
+    )               reduce using rule 28 (exp -> ID .)
+    TO              reduce using rule 28 (exp -> ID .)
+    STEP            reduce using rule 28 (exp -> ID .)
 
 
 state 24
 
-    (7) instr -> PRINT opt_string . exp ;
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (29) exp -> ( . exp )
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 58
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 44
 
 state 25
 
-    (21) opt_string -> STRING .
+    (31) exp -> NOT . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               reduce using rule 21 (opt_string -> STRING .)
-    -               reduce using rule 21 (opt_string -> STRING .)
-    *               reduce using rule 21 (opt_string -> STRING .)
-    /               reduce using rule 21 (opt_string -> STRING .)
-    EQ              reduce using rule 21 (opt_string -> STRING .)
-    LE              reduce using rule 21 (opt_string -> STRING .)
-    !               reduce using rule 21 (opt_string -> STRING .)
-    (               reduce using rule 21 (opt_string -> STRING .)
-    NUMBER          reduce using rule 21 (opt_string -> STRING .)
-    RVX             reduce using rule 21 (opt_string -> STRING .)
-    TSX             reduce using rule 21 (opt_string -> STRING .)
-    NAME            reduce using rule 21 (opt_string -> STRING .)
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 45
 
 state 26
 
-    (22) opt_string -> empty .
+    (9) stmt -> WHILE exp . stmt_list ENDWHILE
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    +               reduce using rule 22 (opt_string -> empty .)
-    -               reduce using rule 22 (opt_string -> empty .)
-    *               reduce using rule 22 (opt_string -> empty .)
-    /               reduce using rule 22 (opt_string -> empty .)
-    EQ              reduce using rule 22 (opt_string -> empty .)
-    LE              reduce using rule 22 (opt_string -> empty .)
-    !               reduce using rule 22 (opt_string -> empty .)
-    (               reduce using rule 22 (opt_string -> empty .)
-    NUMBER          reduce using rule 22 (opt_string -> empty .)
-    RVX             reduce using rule 22 (opt_string -> empty .)
-    TSX             reduce using rule 22 (opt_string -> empty .)
-    NAME            reduce using rule 22 (opt_string -> empty .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
+    stmt_list                      shift and go to state 46
+    stmt                           shift and go to state 3
 
 state 27
 
-    (8) instr -> INPUT opt_string . storable ;
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (10) stmt -> FOR ID . = exp TO exp opt_step stmt_list NEXT ID
 
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    =               shift and go to state 47
 
-    storable                       shift and go to state 59
-    var                            shift and go to state 29
 
 state 28
 
-    (9) instr -> STORE storable . exp ;
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (4) stmt -> ID = exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ID              reduce using rule 4 (stmt -> ID = exp .)
+    INPUT           reduce using rule 4 (stmt -> ID = exp .)
+    PRINT           reduce using rule 4 (stmt -> ID = exp .)
+    END             reduce using rule 4 (stmt -> ID = exp .)
+    IF              reduce using rule 4 (stmt -> ID = exp .)
+    WHILE           reduce using rule 4 (stmt -> ID = exp .)
+    FOR             reduce using rule 4 (stmt -> ID = exp .)
+    $end            reduce using rule 4 (stmt -> ID = exp .)
+    ENDWHILE        reduce using rule 4 (stmt -> ID = exp .)
+    ELSE            reduce using rule 4 (stmt -> ID = exp .)
+    ENDIF           reduce using rule 4 (stmt -> ID = exp .)
+    NEXT            reduce using rule 4 (stmt -> ID = exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
 
-    storable                       shift and go to state 42
-    exp                            shift and go to state 60
-    var                            shift and go to state 29
 
 state 29
 
-    (38) storable -> var .
+    (5) stmt -> INPUT opt_string ID .
 
-    +               reduce using rule 38 (storable -> var .)
-    -               reduce using rule 38 (storable -> var .)
-    *               reduce using rule 38 (storable -> var .)
-    /               reduce using rule 38 (storable -> var .)
-    EQ              reduce using rule 38 (storable -> var .)
-    LE              reduce using rule 38 (storable -> var .)
-    !               reduce using rule 38 (storable -> var .)
-    (               reduce using rule 38 (storable -> var .)
-    NUMBER          reduce using rule 38 (storable -> var .)
-    RVX             reduce using rule 38 (storable -> var .)
-    TSX             reduce using rule 38 (storable -> var .)
-    NAME            reduce using rule 38 (storable -> var .)
-    ;               reduce using rule 38 (storable -> var .)
-    )               reduce using rule 38 (storable -> var .)
-    ]               reduce using rule 38 (storable -> var .)
+    ID              reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    INPUT           reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    PRINT           reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    END             reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    IF              reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    WHILE           reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    FOR             reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    $end            reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    ENDWHILE        reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    ELSE            reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    ENDIF           reduce using rule 5 (stmt -> INPUT opt_string ID .)
+    NEXT            reduce using rule 5 (stmt -> INPUT opt_string ID .)
 
 
 state 30
 
-    (39) storable -> RVX .
+    (11) opt_string -> STRING , .
 
-    +               reduce using rule 39 (storable -> RVX .)
-    -               reduce using rule 39 (storable -> RVX .)
-    *               reduce using rule 39 (storable -> RVX .)
-    /               reduce using rule 39 (storable -> RVX .)
-    EQ              reduce using rule 39 (storable -> RVX .)
-    LE              reduce using rule 39 (storable -> RVX .)
-    !               reduce using rule 39 (storable -> RVX .)
-    (               reduce using rule 39 (storable -> RVX .)
-    NUMBER          reduce using rule 39 (storable -> RVX .)
-    RVX             reduce using rule 39 (storable -> RVX .)
-    TSX             reduce using rule 39 (storable -> RVX .)
-    NAME            reduce using rule 39 (storable -> RVX .)
-    ;               reduce using rule 39 (storable -> RVX .)
-    )               reduce using rule 39 (storable -> RVX .)
-    ]               reduce using rule 39 (storable -> RVX .)
+    ID              reduce using rule 11 (opt_string -> STRING , .)
 
 
 state 31
 
-    (40) storable -> TSX . opt_offset
-    (41) opt_offset -> . [ offset ]
-    (42) opt_offset -> . empty
-    (45) empty -> .
+    (6) stmt -> PRINT value value_list .
 
-    [               shift and go to state 62
-    +               reduce using rule 45 (empty -> .)
-    -               reduce using rule 45 (empty -> .)
-    *               reduce using rule 45 (empty -> .)
-    /               reduce using rule 45 (empty -> .)
-    EQ              reduce using rule 45 (empty -> .)
-    LE              reduce using rule 45 (empty -> .)
-    !               reduce using rule 45 (empty -> .)
-    (               reduce using rule 45 (empty -> .)
-    NUMBER          reduce using rule 45 (empty -> .)
-    RVX             reduce using rule 45 (empty -> .)
-    TSX             reduce using rule 45 (empty -> .)
-    NAME            reduce using rule 45 (empty -> .)
-    ;               reduce using rule 45 (empty -> .)
-    )               reduce using rule 45 (empty -> .)
-    ]               reduce using rule 45 (empty -> .)
+    ID              reduce using rule 6 (stmt -> PRINT value value_list .)
+    INPUT           reduce using rule 6 (stmt -> PRINT value value_list .)
+    PRINT           reduce using rule 6 (stmt -> PRINT value value_list .)
+    END             reduce using rule 6 (stmt -> PRINT value value_list .)
+    IF              reduce using rule 6 (stmt -> PRINT value value_list .)
+    WHILE           reduce using rule 6 (stmt -> PRINT value value_list .)
+    FOR             reduce using rule 6 (stmt -> PRINT value value_list .)
+    $end            reduce using rule 6 (stmt -> PRINT value value_list .)
+    ENDWHILE        reduce using rule 6 (stmt -> PRINT value value_list .)
+    ELSE            reduce using rule 6 (stmt -> PRINT value value_list .)
+    ENDIF           reduce using rule 6 (stmt -> PRINT value value_list .)
+    NEXT            reduce using rule 6 (stmt -> PRINT value value_list .)
 
-    opt_offset                     shift and go to state 61
-    empty                          shift and go to state 63
 
 state 32
 
-    (44) var -> NAME .
+    (13) value_list -> , . value value_list
+    (32) value -> . ID
+    (33) value -> . INTEGER
+    (34) value -> . STRING
 
-    +               reduce using rule 44 (var -> NAME .)
-    -               reduce using rule 44 (var -> NAME .)
-    *               reduce using rule 44 (var -> NAME .)
-    /               reduce using rule 44 (var -> NAME .)
-    EQ              reduce using rule 44 (var -> NAME .)
-    LE              reduce using rule 44 (var -> NAME .)
-    !               reduce using rule 44 (var -> NAME .)
-    (               reduce using rule 44 (var -> NAME .)
-    NUMBER          reduce using rule 44 (var -> NAME .)
-    RVX             reduce using rule 44 (var -> NAME .)
-    TSX             reduce using rule 44 (var -> NAME .)
-    NAME            reduce using rule 44 (var -> NAME .)
-    ;               reduce using rule 44 (var -> NAME .)
-    )               reduce using rule 44 (var -> NAME .)
-    ]               reduce using rule 44 (var -> NAME .)
+    ID              shift and go to state 17
+    INTEGER         shift and go to state 18
+    STRING          shift and go to state 19
 
+    value                          shift and go to state 48
 
 state 33
 
-    (10) instr -> JUMPT exp . label ;
-    (26) label -> . NAME
+    (14) value_list -> empty .
 
-    NAME            shift and go to state 46
+    ID              reduce using rule 14 (value_list -> empty .)
+    INPUT           reduce using rule 14 (value_list -> empty .)
+    PRINT           reduce using rule 14 (value_list -> empty .)
+    END             reduce using rule 14 (value_list -> empty .)
+    IF              reduce using rule 14 (value_list -> empty .)
+    WHILE           reduce using rule 14 (value_list -> empty .)
+    FOR             reduce using rule 14 (value_list -> empty .)
+    $end            reduce using rule 14 (value_list -> empty .)
+    ENDWHILE        reduce using rule 14 (value_list -> empty .)
+    ELSE            reduce using rule 14 (value_list -> empty .)
+    ENDIF           reduce using rule 14 (value_list -> empty .)
+    NEXT            reduce using rule 14 (value_list -> empty .)
 
-    label                          shift and go to state 64
 
 state 34
 
-    (27) exp -> + . exp exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (8) stmt -> IF exp THEN . stmt_list opt_else ENDIF
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
-    exp                            shift and go to state 65
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    stmt_list                      shift and go to state 49
+    stmt                           shift and go to state 3
 
 state 35
 
-    (28) exp -> - . exp exp
-    (29) exp -> - . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (19) exp -> exp PLUS . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 66
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 50
 
 state 36
 
-    (30) exp -> * . exp exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (20) exp -> exp MINUS . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 67
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 51
 
 state 37
 
-    (31) exp -> / . exp exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (21) exp -> exp TIMES . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 68
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 52
 
 state 38
 
-    (32) exp -> EQ . exp exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (22) exp -> exp DIVIDE . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 69
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 53
 
 state 39
 
-    (33) exp -> LE . exp exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (23) exp -> exp EQ . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 70
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 54
 
 state 40
 
-    (34) exp -> ! . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (24) exp -> exp LE . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 71
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 55
 
 state 41
 
-    (35) exp -> ( . exp )
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (25) exp -> exp AND . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 72
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 56
 
 state 42
 
-    (36) exp -> storable .
+    (26) exp -> exp OR . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    NAME            reduce using rule 36 (exp -> storable .)
-    ;               reduce using rule 36 (exp -> storable .)
-    +               reduce using rule 36 (exp -> storable .)
-    -               reduce using rule 36 (exp -> storable .)
-    *               reduce using rule 36 (exp -> storable .)
-    /               reduce using rule 36 (exp -> storable .)
-    EQ              reduce using rule 36 (exp -> storable .)
-    LE              reduce using rule 36 (exp -> storable .)
-    !               reduce using rule 36 (exp -> storable .)
-    (               reduce using rule 36 (exp -> storable .)
-    NUMBER          reduce using rule 36 (exp -> storable .)
-    RVX             reduce using rule 36 (exp -> storable .)
-    TSX             reduce using rule 36 (exp -> storable .)
-    )               reduce using rule 36 (exp -> storable .)
-    ]               reduce using rule 36 (exp -> storable .)
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 57
 
 state 43
 
-    (37) exp -> NUMBER .
+    (30) exp -> MINUS exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    NAME            reduce using rule 37 (exp -> NUMBER .)
-    ;               reduce using rule 37 (exp -> NUMBER .)
-    +               reduce using rule 37 (exp -> NUMBER .)
-    -               reduce using rule 37 (exp -> NUMBER .)
-    *               reduce using rule 37 (exp -> NUMBER .)
-    /               reduce using rule 37 (exp -> NUMBER .)
-    EQ              reduce using rule 37 (exp -> NUMBER .)
-    LE              reduce using rule 37 (exp -> NUMBER .)
-    !               reduce using rule 37 (exp -> NUMBER .)
-    (               reduce using rule 37 (exp -> NUMBER .)
-    NUMBER          reduce using rule 37 (exp -> NUMBER .)
-    RVX             reduce using rule 37 (exp -> NUMBER .)
-    TSX             reduce using rule 37 (exp -> NUMBER .)
-    )               reduce using rule 37 (exp -> NUMBER .)
-    ]               reduce using rule 37 (exp -> NUMBER .)
+    THEN            reduce using rule 30 (exp -> MINUS exp .)
+    PLUS            reduce using rule 30 (exp -> MINUS exp .)
+    MINUS           reduce using rule 30 (exp -> MINUS exp .)
+    TIMES           reduce using rule 30 (exp -> MINUS exp .)
+    DIVIDE          reduce using rule 30 (exp -> MINUS exp .)
+    EQ              reduce using rule 30 (exp -> MINUS exp .)
+    LE              reduce using rule 30 (exp -> MINUS exp .)
+    AND             reduce using rule 30 (exp -> MINUS exp .)
+    OR              reduce using rule 30 (exp -> MINUS exp .)
+    ID              reduce using rule 30 (exp -> MINUS exp .)
+    INPUT           reduce using rule 30 (exp -> MINUS exp .)
+    PRINT           reduce using rule 30 (exp -> MINUS exp .)
+    END             reduce using rule 30 (exp -> MINUS exp .)
+    IF              reduce using rule 30 (exp -> MINUS exp .)
+    WHILE           reduce using rule 30 (exp -> MINUS exp .)
+    FOR             reduce using rule 30 (exp -> MINUS exp .)
+    $end            reduce using rule 30 (exp -> MINUS exp .)
+    ENDWHILE        reduce using rule 30 (exp -> MINUS exp .)
+    ELSE            reduce using rule 30 (exp -> MINUS exp .)
+    ENDIF           reduce using rule 30 (exp -> MINUS exp .)
+    NEXT            reduce using rule 30 (exp -> MINUS exp .)
+    )               reduce using rule 30 (exp -> MINUS exp .)
+    TO              reduce using rule 30 (exp -> MINUS exp .)
+    STEP            reduce using rule 30 (exp -> MINUS exp .)
+
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! TIMES           [ shift and go to state 37 ]
+  ! DIVIDE          [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 44
 
-    (11) instr -> JUMPF exp . label ;
-    (26) label -> . NAME
+    (29) exp -> ( exp . )
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    NAME            shift and go to state 46
+    )               shift and go to state 58
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
 
-    label                          shift and go to state 73
 
 state 45
 
-    (12) instr -> JUMP label . ;
+    (31) exp -> NOT exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 74
+    THEN            reduce using rule 31 (exp -> NOT exp .)
+    PLUS            reduce using rule 31 (exp -> NOT exp .)
+    MINUS           reduce using rule 31 (exp -> NOT exp .)
+    TIMES           reduce using rule 31 (exp -> NOT exp .)
+    DIVIDE          reduce using rule 31 (exp -> NOT exp .)
+    EQ              reduce using rule 31 (exp -> NOT exp .)
+    LE              reduce using rule 31 (exp -> NOT exp .)
+    AND             reduce using rule 31 (exp -> NOT exp .)
+    OR              reduce using rule 31 (exp -> NOT exp .)
+    ID              reduce using rule 31 (exp -> NOT exp .)
+    INPUT           reduce using rule 31 (exp -> NOT exp .)
+    PRINT           reduce using rule 31 (exp -> NOT exp .)
+    END             reduce using rule 31 (exp -> NOT exp .)
+    IF              reduce using rule 31 (exp -> NOT exp .)
+    WHILE           reduce using rule 31 (exp -> NOT exp .)
+    FOR             reduce using rule 31 (exp -> NOT exp .)
+    $end            reduce using rule 31 (exp -> NOT exp .)
+    ENDWHILE        reduce using rule 31 (exp -> NOT exp .)
+    ELSE            reduce using rule 31 (exp -> NOT exp .)
+    ENDIF           reduce using rule 31 (exp -> NOT exp .)
+    NEXT            reduce using rule 31 (exp -> NOT exp .)
+    )               reduce using rule 31 (exp -> NOT exp .)
+    TO              reduce using rule 31 (exp -> NOT exp .)
+    STEP            reduce using rule 31 (exp -> NOT exp .)
+
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! TIMES           [ shift and go to state 37 ]
+  ! DIVIDE          [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 46
 
-    (26) label -> NAME .
+    (9) stmt -> WHILE exp stmt_list . ENDWHILE
 
-    ;               reduce using rule 26 (label -> NAME .)
+    ENDWHILE        shift and go to state 59
 
 
 state 47
 
-    (13) instr -> CALL label . ;
+    (10) stmt -> FOR ID = . exp TO exp opt_step stmt_list NEXT ID
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    ;               shift and go to state 75
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 60
 
 state 48
 
-    (14) instr -> RETURN ; .
+    (13) value_list -> , value . value_list
+    (13) value_list -> . , value value_list
+    (14) value_list -> . empty
+    (35) empty -> .
 
-    NAME            reduce using rule 14 (instr -> RETURN ; .)
-    PRINT           reduce using rule 14 (instr -> RETURN ; .)
-    INPUT           reduce using rule 14 (instr -> RETURN ; .)
-    STORE           reduce using rule 14 (instr -> RETURN ; .)
-    JUMPT           reduce using rule 14 (instr -> RETURN ; .)
-    JUMPF           reduce using rule 14 (instr -> RETURN ; .)
-    JUMP            reduce using rule 14 (instr -> RETURN ; .)
-    CALL            reduce using rule 14 (instr -> RETURN ; .)
-    RETURN          reduce using rule 14 (instr -> RETURN ; .)
-    PUSHV           reduce using rule 14 (instr -> RETURN ; .)
-    POPV            reduce using rule 14 (instr -> RETURN ; .)
-    PUSHF           reduce using rule 14 (instr -> RETURN ; .)
-    POPF            reduce using rule 14 (instr -> RETURN ; .)
-    STOP            reduce using rule 14 (instr -> RETURN ; .)
-    NOOP            reduce using rule 14 (instr -> RETURN ; .)
-    $end            reduce using rule 14 (instr -> RETURN ; .)
+    ,               shift and go to state 32
+    ID              reduce using rule 35 (empty -> .)
+    INPUT           reduce using rule 35 (empty -> .)
+    PRINT           reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    IF              reduce using rule 35 (empty -> .)
+    WHILE           reduce using rule 35 (empty -> .)
+    FOR             reduce using rule 35 (empty -> .)
+    $end            reduce using rule 35 (empty -> .)
+    ENDWHILE        reduce using rule 35 (empty -> .)
+    ELSE            reduce using rule 35 (empty -> .)
+    ENDIF           reduce using rule 35 (empty -> .)
+    NEXT            reduce using rule 35 (empty -> .)
 
+    value_list                     shift and go to state 61
+    empty                          shift and go to state 33
 
 state 49
 
-    (15) instr -> PUSHV exp . ;
+    (8) stmt -> IF exp THEN stmt_list . opt_else ENDIF
+    (15) opt_else -> . ELSE stmt_list
+    (16) opt_else -> . empty
+    (35) empty -> .
 
-    ;               shift and go to state 76
+    ELSE            shift and go to state 63
+    ENDIF           reduce using rule 35 (empty -> .)
 
+    opt_else                       shift and go to state 62
+    empty                          shift and go to state 64
 
 state 50
 
-    (16) instr -> POPV opt_storable . ;
+    (19) exp -> exp PLUS exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 77
+    THEN            reduce using rule 19 (exp -> exp PLUS exp .)
+    PLUS            reduce using rule 19 (exp -> exp PLUS exp .)
+    MINUS           reduce using rule 19 (exp -> exp PLUS exp .)
+    EQ              reduce using rule 19 (exp -> exp PLUS exp .)
+    LE              reduce using rule 19 (exp -> exp PLUS exp .)
+    AND             reduce using rule 19 (exp -> exp PLUS exp .)
+    OR              reduce using rule 19 (exp -> exp PLUS exp .)
+    ID              reduce using rule 19 (exp -> exp PLUS exp .)
+    INPUT           reduce using rule 19 (exp -> exp PLUS exp .)
+    PRINT           reduce using rule 19 (exp -> exp PLUS exp .)
+    END             reduce using rule 19 (exp -> exp PLUS exp .)
+    IF              reduce using rule 19 (exp -> exp PLUS exp .)
+    WHILE           reduce using rule 19 (exp -> exp PLUS exp .)
+    FOR             reduce using rule 19 (exp -> exp PLUS exp .)
+    $end            reduce using rule 19 (exp -> exp PLUS exp .)
+    ENDWHILE        reduce using rule 19 (exp -> exp PLUS exp .)
+    ELSE            reduce using rule 19 (exp -> exp PLUS exp .)
+    ENDIF           reduce using rule 19 (exp -> exp PLUS exp .)
+    NEXT            reduce using rule 19 (exp -> exp PLUS exp .)
+    )               reduce using rule 19 (exp -> exp PLUS exp .)
+    TO              reduce using rule 19 (exp -> exp PLUS exp .)
+    STEP            reduce using rule 19 (exp -> exp PLUS exp .)
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+
+  ! TIMES           [ reduce using rule 19 (exp -> exp PLUS exp .) ]
+  ! DIVIDE          [ reduce using rule 19 (exp -> exp PLUS exp .) ]
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 51
 
-    (23) opt_storable -> storable .
+    (20) exp -> exp MINUS exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               reduce using rule 23 (opt_storable -> storable .)
+    THEN            reduce using rule 20 (exp -> exp MINUS exp .)
+    PLUS            reduce using rule 20 (exp -> exp MINUS exp .)
+    MINUS           reduce using rule 20 (exp -> exp MINUS exp .)
+    EQ              reduce using rule 20 (exp -> exp MINUS exp .)
+    LE              reduce using rule 20 (exp -> exp MINUS exp .)
+    AND             reduce using rule 20 (exp -> exp MINUS exp .)
+    OR              reduce using rule 20 (exp -> exp MINUS exp .)
+    ID              reduce using rule 20 (exp -> exp MINUS exp .)
+    INPUT           reduce using rule 20 (exp -> exp MINUS exp .)
+    PRINT           reduce using rule 20 (exp -> exp MINUS exp .)
+    END             reduce using rule 20 (exp -> exp MINUS exp .)
+    IF              reduce using rule 20 (exp -> exp MINUS exp .)
+    WHILE           reduce using rule 20 (exp -> exp MINUS exp .)
+    FOR             reduce using rule 20 (exp -> exp MINUS exp .)
+    $end            reduce using rule 20 (exp -> exp MINUS exp .)
+    ENDWHILE        reduce using rule 20 (exp -> exp MINUS exp .)
+    ELSE            reduce using rule 20 (exp -> exp MINUS exp .)
+    ENDIF           reduce using rule 20 (exp -> exp MINUS exp .)
+    NEXT            reduce using rule 20 (exp -> exp MINUS exp .)
+    )               reduce using rule 20 (exp -> exp MINUS exp .)
+    TO              reduce using rule 20 (exp -> exp MINUS exp .)
+    STEP            reduce using rule 20 (exp -> exp MINUS exp .)
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+
+  ! TIMES           [ reduce using rule 20 (exp -> exp MINUS exp .) ]
+  ! DIVIDE          [ reduce using rule 20 (exp -> exp MINUS exp .) ]
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 52
 
-    (24) opt_storable -> empty .
+    (21) exp -> exp TIMES exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               reduce using rule 24 (opt_storable -> empty .)
+    THEN            reduce using rule 21 (exp -> exp TIMES exp .)
+    PLUS            reduce using rule 21 (exp -> exp TIMES exp .)
+    MINUS           reduce using rule 21 (exp -> exp TIMES exp .)
+    TIMES           reduce using rule 21 (exp -> exp TIMES exp .)
+    DIVIDE          reduce using rule 21 (exp -> exp TIMES exp .)
+    EQ              reduce using rule 21 (exp -> exp TIMES exp .)
+    LE              reduce using rule 21 (exp -> exp TIMES exp .)
+    AND             reduce using rule 21 (exp -> exp TIMES exp .)
+    OR              reduce using rule 21 (exp -> exp TIMES exp .)
+    ID              reduce using rule 21 (exp -> exp TIMES exp .)
+    INPUT           reduce using rule 21 (exp -> exp TIMES exp .)
+    PRINT           reduce using rule 21 (exp -> exp TIMES exp .)
+    END             reduce using rule 21 (exp -> exp TIMES exp .)
+    IF              reduce using rule 21 (exp -> exp TIMES exp .)
+    WHILE           reduce using rule 21 (exp -> exp TIMES exp .)
+    FOR             reduce using rule 21 (exp -> exp TIMES exp .)
+    $end            reduce using rule 21 (exp -> exp TIMES exp .)
+    ENDWHILE        reduce using rule 21 (exp -> exp TIMES exp .)
+    ELSE            reduce using rule 21 (exp -> exp TIMES exp .)
+    ENDIF           reduce using rule 21 (exp -> exp TIMES exp .)
+    NEXT            reduce using rule 21 (exp -> exp TIMES exp .)
+    )               reduce using rule 21 (exp -> exp TIMES exp .)
+    TO              reduce using rule 21 (exp -> exp TIMES exp .)
+    STEP            reduce using rule 21 (exp -> exp TIMES exp .)
+
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! TIMES           [ shift and go to state 37 ]
+  ! DIVIDE          [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 53
 
-    (17) instr -> PUSHF size . ;
+    (22) exp -> exp DIVIDE exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 78
+    THEN            reduce using rule 22 (exp -> exp DIVIDE exp .)
+    PLUS            reduce using rule 22 (exp -> exp DIVIDE exp .)
+    MINUS           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    TIMES           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    DIVIDE          reduce using rule 22 (exp -> exp DIVIDE exp .)
+    EQ              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    LE              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    AND             reduce using rule 22 (exp -> exp DIVIDE exp .)
+    OR              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    ID              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    INPUT           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    PRINT           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    END             reduce using rule 22 (exp -> exp DIVIDE exp .)
+    IF              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    WHILE           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    FOR             reduce using rule 22 (exp -> exp DIVIDE exp .)
+    $end            reduce using rule 22 (exp -> exp DIVIDE exp .)
+    ENDWHILE        reduce using rule 22 (exp -> exp DIVIDE exp .)
+    ELSE            reduce using rule 22 (exp -> exp DIVIDE exp .)
+    ENDIF           reduce using rule 22 (exp -> exp DIVIDE exp .)
+    NEXT            reduce using rule 22 (exp -> exp DIVIDE exp .)
+    )               reduce using rule 22 (exp -> exp DIVIDE exp .)
+    TO              reduce using rule 22 (exp -> exp DIVIDE exp .)
+    STEP            reduce using rule 22 (exp -> exp DIVIDE exp .)
+
+  ! PLUS            [ shift and go to state 35 ]
+  ! MINUS           [ shift and go to state 36 ]
+  ! TIMES           [ shift and go to state 37 ]
+  ! DIVIDE          [ shift and go to state 38 ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 54
 
-    (25) size -> exp .
+    (23) exp -> exp EQ exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               reduce using rule 25 (size -> exp .)
+    THEN            reduce using rule 23 (exp -> exp EQ exp .)
+    EQ              reduce using rule 23 (exp -> exp EQ exp .)
+    LE              reduce using rule 23 (exp -> exp EQ exp .)
+    AND             reduce using rule 23 (exp -> exp EQ exp .)
+    OR              reduce using rule 23 (exp -> exp EQ exp .)
+    ID              reduce using rule 23 (exp -> exp EQ exp .)
+    INPUT           reduce using rule 23 (exp -> exp EQ exp .)
+    PRINT           reduce using rule 23 (exp -> exp EQ exp .)
+    END             reduce using rule 23 (exp -> exp EQ exp .)
+    IF              reduce using rule 23 (exp -> exp EQ exp .)
+    WHILE           reduce using rule 23 (exp -> exp EQ exp .)
+    FOR             reduce using rule 23 (exp -> exp EQ exp .)
+    $end            reduce using rule 23 (exp -> exp EQ exp .)
+    ENDWHILE        reduce using rule 23 (exp -> exp EQ exp .)
+    ELSE            reduce using rule 23 (exp -> exp EQ exp .)
+    ENDIF           reduce using rule 23 (exp -> exp EQ exp .)
+    NEXT            reduce using rule 23 (exp -> exp EQ exp .)
+    )               reduce using rule 23 (exp -> exp EQ exp .)
+    TO              reduce using rule 23 (exp -> exp EQ exp .)
+    STEP            reduce using rule 23 (exp -> exp EQ exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+
+  ! PLUS            [ reduce using rule 23 (exp -> exp EQ exp .) ]
+  ! MINUS           [ reduce using rule 23 (exp -> exp EQ exp .) ]
+  ! TIMES           [ reduce using rule 23 (exp -> exp EQ exp .) ]
+  ! DIVIDE          [ reduce using rule 23 (exp -> exp EQ exp .) ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 55
 
-    (18) instr -> POPF size . ;
+    (24) exp -> exp LE exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 79
+    THEN            reduce using rule 24 (exp -> exp LE exp .)
+    EQ              reduce using rule 24 (exp -> exp LE exp .)
+    LE              reduce using rule 24 (exp -> exp LE exp .)
+    AND             reduce using rule 24 (exp -> exp LE exp .)
+    OR              reduce using rule 24 (exp -> exp LE exp .)
+    ID              reduce using rule 24 (exp -> exp LE exp .)
+    INPUT           reduce using rule 24 (exp -> exp LE exp .)
+    PRINT           reduce using rule 24 (exp -> exp LE exp .)
+    END             reduce using rule 24 (exp -> exp LE exp .)
+    IF              reduce using rule 24 (exp -> exp LE exp .)
+    WHILE           reduce using rule 24 (exp -> exp LE exp .)
+    FOR             reduce using rule 24 (exp -> exp LE exp .)
+    $end            reduce using rule 24 (exp -> exp LE exp .)
+    ENDWHILE        reduce using rule 24 (exp -> exp LE exp .)
+    ELSE            reduce using rule 24 (exp -> exp LE exp .)
+    ENDIF           reduce using rule 24 (exp -> exp LE exp .)
+    NEXT            reduce using rule 24 (exp -> exp LE exp .)
+    )               reduce using rule 24 (exp -> exp LE exp .)
+    TO              reduce using rule 24 (exp -> exp LE exp .)
+    STEP            reduce using rule 24 (exp -> exp LE exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+
+  ! PLUS            [ reduce using rule 24 (exp -> exp LE exp .) ]
+  ! MINUS           [ reduce using rule 24 (exp -> exp LE exp .) ]
+  ! TIMES           [ reduce using rule 24 (exp -> exp LE exp .) ]
+  ! DIVIDE          [ reduce using rule 24 (exp -> exp LE exp .) ]
+  ! EQ              [ shift and go to state 39 ]
+  ! LE              [ shift and go to state 40 ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 56
 
-    (19) instr -> STOP ; .
+    (25) exp -> exp AND exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    NAME            reduce using rule 19 (instr -> STOP ; .)
-    PRINT           reduce using rule 19 (instr -> STOP ; .)
-    INPUT           reduce using rule 19 (instr -> STOP ; .)
-    STORE           reduce using rule 19 (instr -> STOP ; .)
-    JUMPT           reduce using rule 19 (instr -> STOP ; .)
-    JUMPF           reduce using rule 19 (instr -> STOP ; .)
-    JUMP            reduce using rule 19 (instr -> STOP ; .)
-    CALL            reduce using rule 19 (instr -> STOP ; .)
-    RETURN          reduce using rule 19 (instr -> STOP ; .)
-    PUSHV           reduce using rule 19 (instr -> STOP ; .)
-    POPV            reduce using rule 19 (instr -> STOP ; .)
-    PUSHF           reduce using rule 19 (instr -> STOP ; .)
-    POPF            reduce using rule 19 (instr -> STOP ; .)
-    STOP            reduce using rule 19 (instr -> STOP ; .)
-    NOOP            reduce using rule 19 (instr -> STOP ; .)
-    $end            reduce using rule 19 (instr -> STOP ; .)
+    THEN            reduce using rule 25 (exp -> exp AND exp .)
+    AND             reduce using rule 25 (exp -> exp AND exp .)
+    OR              reduce using rule 25 (exp -> exp AND exp .)
+    ID              reduce using rule 25 (exp -> exp AND exp .)
+    INPUT           reduce using rule 25 (exp -> exp AND exp .)
+    PRINT           reduce using rule 25 (exp -> exp AND exp .)
+    END             reduce using rule 25 (exp -> exp AND exp .)
+    IF              reduce using rule 25 (exp -> exp AND exp .)
+    WHILE           reduce using rule 25 (exp -> exp AND exp .)
+    FOR             reduce using rule 25 (exp -> exp AND exp .)
+    $end            reduce using rule 25 (exp -> exp AND exp .)
+    ENDWHILE        reduce using rule 25 (exp -> exp AND exp .)
+    ELSE            reduce using rule 25 (exp -> exp AND exp .)
+    ENDIF           reduce using rule 25 (exp -> exp AND exp .)
+    NEXT            reduce using rule 25 (exp -> exp AND exp .)
+    )               reduce using rule 25 (exp -> exp AND exp .)
+    TO              reduce using rule 25 (exp -> exp AND exp .)
+    STEP            reduce using rule 25 (exp -> exp AND exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+
+  ! PLUS            [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! MINUS           [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! TIMES           [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! DIVIDE          [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! EQ              [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! LE              [ reduce using rule 25 (exp -> exp AND exp .) ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 57
 
-    (20) instr -> NOOP ; .
+    (26) exp -> exp OR exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    NAME            reduce using rule 20 (instr -> NOOP ; .)
-    PRINT           reduce using rule 20 (instr -> NOOP ; .)
-    INPUT           reduce using rule 20 (instr -> NOOP ; .)
-    STORE           reduce using rule 20 (instr -> NOOP ; .)
-    JUMPT           reduce using rule 20 (instr -> NOOP ; .)
-    JUMPF           reduce using rule 20 (instr -> NOOP ; .)
-    JUMP            reduce using rule 20 (instr -> NOOP ; .)
-    CALL            reduce using rule 20 (instr -> NOOP ; .)
-    RETURN          reduce using rule 20 (instr -> NOOP ; .)
-    PUSHV           reduce using rule 20 (instr -> NOOP ; .)
-    POPV            reduce using rule 20 (instr -> NOOP ; .)
-    PUSHF           reduce using rule 20 (instr -> NOOP ; .)
-    POPF            reduce using rule 20 (instr -> NOOP ; .)
-    STOP            reduce using rule 20 (instr -> NOOP ; .)
-    NOOP            reduce using rule 20 (instr -> NOOP ; .)
-    $end            reduce using rule 20 (instr -> NOOP ; .)
+    THEN            reduce using rule 26 (exp -> exp OR exp .)
+    AND             reduce using rule 26 (exp -> exp OR exp .)
+    OR              reduce using rule 26 (exp -> exp OR exp .)
+    ID              reduce using rule 26 (exp -> exp OR exp .)
+    INPUT           reduce using rule 26 (exp -> exp OR exp .)
+    PRINT           reduce using rule 26 (exp -> exp OR exp .)
+    END             reduce using rule 26 (exp -> exp OR exp .)
+    IF              reduce using rule 26 (exp -> exp OR exp .)
+    WHILE           reduce using rule 26 (exp -> exp OR exp .)
+    FOR             reduce using rule 26 (exp -> exp OR exp .)
+    $end            reduce using rule 26 (exp -> exp OR exp .)
+    ENDWHILE        reduce using rule 26 (exp -> exp OR exp .)
+    ELSE            reduce using rule 26 (exp -> exp OR exp .)
+    ENDIF           reduce using rule 26 (exp -> exp OR exp .)
+    NEXT            reduce using rule 26 (exp -> exp OR exp .)
+    )               reduce using rule 26 (exp -> exp OR exp .)
+    TO              reduce using rule 26 (exp -> exp OR exp .)
+    STEP            reduce using rule 26 (exp -> exp OR exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+
+  ! PLUS            [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! MINUS           [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! TIMES           [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! DIVIDE          [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! EQ              [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! LE              [ reduce using rule 26 (exp -> exp OR exp .) ]
+  ! AND             [ shift and go to state 41 ]
+  ! OR              [ shift and go to state 42 ]
 
 
 state 58
 
-    (7) instr -> PRINT opt_string exp . ;
+    (29) exp -> ( exp ) .
 
-    ;               shift and go to state 80
+    THEN            reduce using rule 29 (exp -> ( exp ) .)
+    PLUS            reduce using rule 29 (exp -> ( exp ) .)
+    MINUS           reduce using rule 29 (exp -> ( exp ) .)
+    TIMES           reduce using rule 29 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 29 (exp -> ( exp ) .)
+    EQ              reduce using rule 29 (exp -> ( exp ) .)
+    LE              reduce using rule 29 (exp -> ( exp ) .)
+    AND             reduce using rule 29 (exp -> ( exp ) .)
+    OR              reduce using rule 29 (exp -> ( exp ) .)
+    ID              reduce using rule 29 (exp -> ( exp ) .)
+    INPUT           reduce using rule 29 (exp -> ( exp ) .)
+    PRINT           reduce using rule 29 (exp -> ( exp ) .)
+    END             reduce using rule 29 (exp -> ( exp ) .)
+    IF              reduce using rule 29 (exp -> ( exp ) .)
+    WHILE           reduce using rule 29 (exp -> ( exp ) .)
+    FOR             reduce using rule 29 (exp -> ( exp ) .)
+    $end            reduce using rule 29 (exp -> ( exp ) .)
+    ENDWHILE        reduce using rule 29 (exp -> ( exp ) .)
+    ELSE            reduce using rule 29 (exp -> ( exp ) .)
+    ENDIF           reduce using rule 29 (exp -> ( exp ) .)
+    NEXT            reduce using rule 29 (exp -> ( exp ) .)
+    )               reduce using rule 29 (exp -> ( exp ) .)
+    TO              reduce using rule 29 (exp -> ( exp ) .)
+    STEP            reduce using rule 29 (exp -> ( exp ) .)
 
 
 state 59
 
-    (8) instr -> INPUT opt_string storable . ;
+    (9) stmt -> WHILE exp stmt_list ENDWHILE .
 
-    ;               shift and go to state 81
+    ID              reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    INPUT           reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    PRINT           reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    END             reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    IF              reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    WHILE           reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    FOR             reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    $end            reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    ENDWHILE        reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    ELSE            reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    ENDIF           reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
+    NEXT            reduce using rule 9 (stmt -> WHILE exp stmt_list ENDWHILE .)
 
 
 state 60
 
-    (9) instr -> STORE storable exp . ;
+    (10) stmt -> FOR ID = exp . TO exp opt_step stmt_list NEXT ID
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 82
+    TO              shift and go to state 65
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
 
 
 state 61
 
-    (40) storable -> TSX opt_offset .
+    (13) value_list -> , value value_list .
 
-    +               reduce using rule 40 (storable -> TSX opt_offset .)
-    -               reduce using rule 40 (storable -> TSX opt_offset .)
-    *               reduce using rule 40 (storable -> TSX opt_offset .)
-    /               reduce using rule 40 (storable -> TSX opt_offset .)
-    EQ              reduce using rule 40 (storable -> TSX opt_offset .)
-    LE              reduce using rule 40 (storable -> TSX opt_offset .)
-    !               reduce using rule 40 (storable -> TSX opt_offset .)
-    (               reduce using rule 40 (storable -> TSX opt_offset .)
-    NUMBER          reduce using rule 40 (storable -> TSX opt_offset .)
-    RVX             reduce using rule 40 (storable -> TSX opt_offset .)
-    TSX             reduce using rule 40 (storable -> TSX opt_offset .)
-    NAME            reduce using rule 40 (storable -> TSX opt_offset .)
-    ;               reduce using rule 40 (storable -> TSX opt_offset .)
-    )               reduce using rule 40 (storable -> TSX opt_offset .)
-    ]               reduce using rule 40 (storable -> TSX opt_offset .)
+    ID              reduce using rule 13 (value_list -> , value value_list .)
+    INPUT           reduce using rule 13 (value_list -> , value value_list .)
+    PRINT           reduce using rule 13 (value_list -> , value value_list .)
+    END             reduce using rule 13 (value_list -> , value value_list .)
+    IF              reduce using rule 13 (value_list -> , value value_list .)
+    WHILE           reduce using rule 13 (value_list -> , value value_list .)
+    FOR             reduce using rule 13 (value_list -> , value value_list .)
+    $end            reduce using rule 13 (value_list -> , value value_list .)
+    ENDWHILE        reduce using rule 13 (value_list -> , value value_list .)
+    ELSE            reduce using rule 13 (value_list -> , value value_list .)
+    ENDIF           reduce using rule 13 (value_list -> , value value_list .)
+    NEXT            reduce using rule 13 (value_list -> , value value_list .)
 
 
 state 62
 
-    (41) opt_offset -> [ . offset ]
-    (43) offset -> . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (8) stmt -> IF exp THEN stmt_list opt_else . ENDIF
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ENDIF           shift and go to state 66
 
-    offset                         shift and go to state 83
-    exp                            shift and go to state 84
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 63
 
-    (42) opt_offset -> empty .
+    (15) opt_else -> ELSE . stmt_list
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    +               reduce using rule 42 (opt_offset -> empty .)
-    -               reduce using rule 42 (opt_offset -> empty .)
-    *               reduce using rule 42 (opt_offset -> empty .)
-    /               reduce using rule 42 (opt_offset -> empty .)
-    EQ              reduce using rule 42 (opt_offset -> empty .)
-    LE              reduce using rule 42 (opt_offset -> empty .)
-    !               reduce using rule 42 (opt_offset -> empty .)
-    (               reduce using rule 42 (opt_offset -> empty .)
-    NUMBER          reduce using rule 42 (opt_offset -> empty .)
-    RVX             reduce using rule 42 (opt_offset -> empty .)
-    TSX             reduce using rule 42 (opt_offset -> empty .)
-    NAME            reduce using rule 42 (opt_offset -> empty .)
-    ;               reduce using rule 42 (opt_offset -> empty .)
-    )               reduce using rule 42 (opt_offset -> empty .)
-    ]               reduce using rule 42 (opt_offset -> empty .)
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
+    stmt_list                      shift and go to state 67
+    stmt                           shift and go to state 3
 
 state 64
 
-    (10) instr -> JUMPT exp label . ;
+    (16) opt_else -> empty .
 
-    ;               shift and go to state 85
+    ENDIF           reduce using rule 16 (opt_else -> empty .)
 
 
 state 65
 
-    (27) exp -> + exp . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (10) stmt -> FOR ID = exp TO . exp opt_step stmt_list NEXT ID
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 86
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 68
 
 state 66
 
-    (28) exp -> - exp . exp
-    (29) exp -> - exp .
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (8) stmt -> IF exp THEN stmt_list opt_else ENDIF .
 
-  ! shift/reduce conflict for + resolved as shift
-  ! shift/reduce conflict for - resolved as shift
-  ! shift/reduce conflict for * resolved as shift
-  ! shift/reduce conflict for / resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for LE resolved as shift
-  ! shift/reduce conflict for ! resolved as shift
-  ! shift/reduce conflict for ( resolved as shift
-  ! shift/reduce conflict for NUMBER resolved as shift
-  ! shift/reduce conflict for RVX resolved as shift
-  ! shift/reduce conflict for TSX resolved as shift
-  ! shift/reduce conflict for NAME resolved as shift
-    ;               reduce using rule 29 (exp -> - exp .)
-    )               reduce using rule 29 (exp -> - exp .)
-    ]               reduce using rule 29 (exp -> - exp .)
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ID              reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    INPUT           reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    PRINT           reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    END             reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    IF              reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    WHILE           reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    FOR             reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    $end            reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    ENDWHILE        reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    ELSE            reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    ENDIF           reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
+    NEXT            reduce using rule 8 (stmt -> IF exp THEN stmt_list opt_else ENDIF .)
 
-  ! NAME            [ reduce using rule 29 (exp -> - exp .) ]
-  ! +               [ reduce using rule 29 (exp -> - exp .) ]
-  ! -               [ reduce using rule 29 (exp -> - exp .) ]
-  ! *               [ reduce using rule 29 (exp -> - exp .) ]
-  ! /               [ reduce using rule 29 (exp -> - exp .) ]
-  ! EQ              [ reduce using rule 29 (exp -> - exp .) ]
-  ! LE              [ reduce using rule 29 (exp -> - exp .) ]
-  ! !               [ reduce using rule 29 (exp -> - exp .) ]
-  ! (               [ reduce using rule 29 (exp -> - exp .) ]
-  ! NUMBER          [ reduce using rule 29 (exp -> - exp .) ]
-  ! RVX             [ reduce using rule 29 (exp -> - exp .) ]
-  ! TSX             [ reduce using rule 29 (exp -> - exp .) ]
-
-    exp                            shift and go to state 87
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 67
 
-    (30) exp -> * exp . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (15) opt_else -> ELSE stmt_list .
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ENDIF           reduce using rule 15 (opt_else -> ELSE stmt_list .)
 
-    exp                            shift and go to state 88
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
 
 state 68
 
-    (31) exp -> / exp . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (10) stmt -> FOR ID = exp TO exp . opt_step stmt_list NEXT ID
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
+    (17) opt_step -> . STEP exp
+    (18) opt_step -> . empty
+    (35) empty -> .
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
+    STEP            shift and go to state 70
+    ID              reduce using rule 35 (empty -> .)
+    INPUT           reduce using rule 35 (empty -> .)
+    PRINT           reduce using rule 35 (empty -> .)
+    END             reduce using rule 35 (empty -> .)
+    IF              reduce using rule 35 (empty -> .)
+    WHILE           reduce using rule 35 (empty -> .)
+    FOR             reduce using rule 35 (empty -> .)
 
-    exp                            shift and go to state 89
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    opt_step                       shift and go to state 69
+    empty                          shift and go to state 71
 
 state 69
 
-    (32) exp -> EQ exp . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (10) stmt -> FOR ID = exp TO exp opt_step . stmt_list NEXT ID
+    (2) stmt_list -> . stmt stmt_list
+    (3) stmt_list -> . stmt
+    (4) stmt -> . ID = exp
+    (5) stmt -> . INPUT opt_string ID
+    (6) stmt -> . PRINT value value_list
+    (7) stmt -> . END
+    (8) stmt -> . IF exp THEN stmt_list opt_else ENDIF
+    (9) stmt -> . WHILE exp stmt_list ENDWHILE
+    (10) stmt -> . FOR ID = exp TO exp opt_step stmt_list NEXT ID
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    ID              shift and go to state 4
+    INPUT           shift and go to state 5
+    PRINT           shift and go to state 6
+    END             shift and go to state 7
+    IF              shift and go to state 8
+    WHILE           shift and go to state 9
+    FOR             shift and go to state 10
 
-    exp                            shift and go to state 90
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    stmt_list                      shift and go to state 72
+    stmt                           shift and go to state 3
 
 state 70
 
-    (33) exp -> LE exp . exp
-    (27) exp -> . + exp exp
-    (28) exp -> . - exp exp
-    (29) exp -> . - exp
-    (30) exp -> . * exp exp
-    (31) exp -> . / exp exp
-    (32) exp -> . EQ exp exp
-    (33) exp -> . LE exp exp
-    (34) exp -> . ! exp
-    (35) exp -> . ( exp )
-    (36) exp -> . storable
-    (37) exp -> . NUMBER
-    (38) storable -> . var
-    (39) storable -> . RVX
-    (40) storable -> . TSX opt_offset
-    (44) var -> . NAME
+    (17) opt_step -> STEP . exp
+    (19) exp -> . exp PLUS exp
+    (20) exp -> . exp MINUS exp
+    (21) exp -> . exp TIMES exp
+    (22) exp -> . exp DIVIDE exp
+    (23) exp -> . exp EQ exp
+    (24) exp -> . exp LE exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . INTEGER
+    (28) exp -> . ID
+    (29) exp -> . ( exp )
+    (30) exp -> . MINUS exp
+    (31) exp -> . NOT exp
 
-    +               shift and go to state 34
-    -               shift and go to state 35
-    *               shift and go to state 36
-    /               shift and go to state 37
-    EQ              shift and go to state 38
-    LE              shift and go to state 39
-    !               shift and go to state 40
-    (               shift and go to state 41
-    NUMBER          shift and go to state 43
-    RVX             shift and go to state 30
-    TSX             shift and go to state 31
-    NAME            shift and go to state 32
+    INTEGER         shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 21
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 91
-    storable                       shift and go to state 42
-    var                            shift and go to state 29
+    exp                            shift and go to state 73
 
 state 71
 
-    (34) exp -> ! exp .
+    (18) opt_step -> empty .
 
-    NAME            reduce using rule 34 (exp -> ! exp .)
-    ;               reduce using rule 34 (exp -> ! exp .)
-    +               reduce using rule 34 (exp -> ! exp .)
-    -               reduce using rule 34 (exp -> ! exp .)
-    *               reduce using rule 34 (exp -> ! exp .)
-    /               reduce using rule 34 (exp -> ! exp .)
-    EQ              reduce using rule 34 (exp -> ! exp .)
-    LE              reduce using rule 34 (exp -> ! exp .)
-    !               reduce using rule 34 (exp -> ! exp .)
-    (               reduce using rule 34 (exp -> ! exp .)
-    NUMBER          reduce using rule 34 (exp -> ! exp .)
-    RVX             reduce using rule 34 (exp -> ! exp .)
-    TSX             reduce using rule 34 (exp -> ! exp .)
-    )               reduce using rule 34 (exp -> ! exp .)
-    ]               reduce using rule 34 (exp -> ! exp .)
+    ID              reduce using rule 18 (opt_step -> empty .)
+    INPUT           reduce using rule 18 (opt_step -> empty .)
+    PRINT           reduce using rule 18 (opt_step -> empty .)
+    END             reduce using rule 18 (opt_step -> empty .)
+    IF              reduce using rule 18 (opt_step -> empty .)
+    WHILE           reduce using rule 18 (opt_step -> empty .)
+    FOR             reduce using rule 18 (opt_step -> empty .)
 
 
 state 72
 
-    (35) exp -> ( exp . )
+    (10) stmt -> FOR ID = exp TO exp opt_step stmt_list . NEXT ID
 
-    )               shift and go to state 92
+    NEXT            shift and go to state 74
 
 
 state 73
 
-    (11) instr -> JUMPF exp label . ;
+    (17) opt_step -> STEP exp .
+    (19) exp -> exp . PLUS exp
+    (20) exp -> exp . MINUS exp
+    (21) exp -> exp . TIMES exp
+    (22) exp -> exp . DIVIDE exp
+    (23) exp -> exp . EQ exp
+    (24) exp -> exp . LE exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
 
-    ;               shift and go to state 93
+    ID              reduce using rule 17 (opt_step -> STEP exp .)
+    INPUT           reduce using rule 17 (opt_step -> STEP exp .)
+    PRINT           reduce using rule 17 (opt_step -> STEP exp .)
+    END             reduce using rule 17 (opt_step -> STEP exp .)
+    IF              reduce using rule 17 (opt_step -> STEP exp .)
+    WHILE           reduce using rule 17 (opt_step -> STEP exp .)
+    FOR             reduce using rule 17 (opt_step -> STEP exp .)
+    PLUS            shift and go to state 35
+    MINUS           shift and go to state 36
+    TIMES           shift and go to state 37
+    DIVIDE          shift and go to state 38
+    EQ              shift and go to state 39
+    LE              shift and go to state 40
+    AND             shift and go to state 41
+    OR              shift and go to state 42
 
 
 state 74
 
-    (12) instr -> JUMP label ; .
+    (10) stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT . ID
 
-    NAME            reduce using rule 12 (instr -> JUMP label ; .)
-    PRINT           reduce using rule 12 (instr -> JUMP label ; .)
-    INPUT           reduce using rule 12 (instr -> JUMP label ; .)
-    STORE           reduce using rule 12 (instr -> JUMP label ; .)
-    JUMPT           reduce using rule 12 (instr -> JUMP label ; .)
-    JUMPF           reduce using rule 12 (instr -> JUMP label ; .)
-    JUMP            reduce using rule 12 (instr -> JUMP label ; .)
-    CALL            reduce using rule 12 (instr -> JUMP label ; .)
-    RETURN          reduce using rule 12 (instr -> JUMP label ; .)
-    PUSHV           reduce using rule 12 (instr -> JUMP label ; .)
-    POPV            reduce using rule 12 (instr -> JUMP label ; .)
-    PUSHF           reduce using rule 12 (instr -> JUMP label ; .)
-    POPF            reduce using rule 12 (instr -> JUMP label ; .)
-    STOP            reduce using rule 12 (instr -> JUMP label ; .)
-    NOOP            reduce using rule 12 (instr -> JUMP label ; .)
-    $end            reduce using rule 12 (instr -> JUMP label ; .)
+    ID              shift and go to state 75
 
 
 state 75
 
-    (13) instr -> CALL label ; .
+    (10) stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .
+
+    ID              reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    INPUT           reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    PRINT           reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    END             reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    IF              reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    WHILE           reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    FOR             reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    $end            reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    ENDWHILE        reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    ELSE            reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    ENDIF           reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
+    NEXT            reduce using rule 10 (stmt -> FOR ID = exp TO exp opt_step stmt_list NEXT ID .)
 
-    NAME            reduce using rule 13 (instr -> CALL label ; .)
-    PRINT           reduce using rule 13 (instr -> CALL label ; .)
-    INPUT           reduce using rule 13 (instr -> CALL label ; .)
-    STORE           reduce using rule 13 (instr -> CALL label ; .)
-    JUMPT           reduce using rule 13 (instr -> CALL label ; .)
-    JUMPF           reduce using rule 13 (instr -> CALL label ; .)
-    JUMP            reduce using rule 13 (instr -> CALL label ; .)
-    CALL            reduce using rule 13 (instr -> CALL label ; .)
-    RETURN          reduce using rule 13 (instr -> CALL label ; .)
-    PUSHV           reduce using rule 13 (instr -> CALL label ; .)
-    POPV            reduce using rule 13 (instr -> CALL label ; .)
-    PUSHF           reduce using rule 13 (instr -> CALL label ; .)
-    POPF            reduce using rule 13 (instr -> CALL label ; .)
-    STOP            reduce using rule 13 (instr -> CALL label ; .)
-    NOOP            reduce using rule 13 (instr -> CALL label ; .)
-    $end            reduce using rule 13 (instr -> CALL label ; .)
-
-
-state 76
-
-    (15) instr -> PUSHV exp ; .
-
-    NAME            reduce using rule 15 (instr -> PUSHV exp ; .)
-    PRINT           reduce using rule 15 (instr -> PUSHV exp ; .)
-    INPUT           reduce using rule 15 (instr -> PUSHV exp ; .)
-    STORE           reduce using rule 15 (instr -> PUSHV exp ; .)
-    JUMPT           reduce using rule 15 (instr -> PUSHV exp ; .)
-    JUMPF           reduce using rule 15 (instr -> PUSHV exp ; .)
-    JUMP            reduce using rule 15 (instr -> PUSHV exp ; .)
-    CALL            reduce using rule 15 (instr -> PUSHV exp ; .)
-    RETURN          reduce using rule 15 (instr -> PUSHV exp ; .)
-    PUSHV           reduce using rule 15 (instr -> PUSHV exp ; .)
-    POPV            reduce using rule 15 (instr -> PUSHV exp ; .)
-    PUSHF           reduce using rule 15 (instr -> PUSHV exp ; .)
-    POPF            reduce using rule 15 (instr -> PUSHV exp ; .)
-    STOP            reduce using rule 15 (instr -> PUSHV exp ; .)
-    NOOP            reduce using rule 15 (instr -> PUSHV exp ; .)
-    $end            reduce using rule 15 (instr -> PUSHV exp ; .)
-
-
-state 77
-
-    (16) instr -> POPV opt_storable ; .
-
-    NAME            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    PRINT           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    INPUT           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    STORE           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    JUMPT           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    JUMPF           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    JUMP            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    CALL            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    RETURN          reduce using rule 16 (instr -> POPV opt_storable ; .)
-    PUSHV           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    POPV            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    PUSHF           reduce using rule 16 (instr -> POPV opt_storable ; .)
-    POPF            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    STOP            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    NOOP            reduce using rule 16 (instr -> POPV opt_storable ; .)
-    $end            reduce using rule 16 (instr -> POPV opt_storable ; .)
-
-
-state 78
-
-    (17) instr -> PUSHF size ; .
-
-    NAME            reduce using rule 17 (instr -> PUSHF size ; .)
-    PRINT           reduce using rule 17 (instr -> PUSHF size ; .)
-    INPUT           reduce using rule 17 (instr -> PUSHF size ; .)
-    STORE           reduce using rule 17 (instr -> PUSHF size ; .)
-    JUMPT           reduce using rule 17 (instr -> PUSHF size ; .)
-    JUMPF           reduce using rule 17 (instr -> PUSHF size ; .)
-    JUMP            reduce using rule 17 (instr -> PUSHF size ; .)
-    CALL            reduce using rule 17 (instr -> PUSHF size ; .)
-    RETURN          reduce using rule 17 (instr -> PUSHF size ; .)
-    PUSHV           reduce using rule 17 (instr -> PUSHF size ; .)
-    POPV            reduce using rule 17 (instr -> PUSHF size ; .)
-    PUSHF           reduce using rule 17 (instr -> PUSHF size ; .)
-    POPF            reduce using rule 17 (instr -> PUSHF size ; .)
-    STOP            reduce using rule 17 (instr -> PUSHF size ; .)
-    NOOP            reduce using rule 17 (instr -> PUSHF size ; .)
-    $end            reduce using rule 17 (instr -> PUSHF size ; .)
-
-
-state 79
-
-    (18) instr -> POPF size ; .
-
-    NAME            reduce using rule 18 (instr -> POPF size ; .)
-    PRINT           reduce using rule 18 (instr -> POPF size ; .)
-    INPUT           reduce using rule 18 (instr -> POPF size ; .)
-    STORE           reduce using rule 18 (instr -> POPF size ; .)
-    JUMPT           reduce using rule 18 (instr -> POPF size ; .)
-    JUMPF           reduce using rule 18 (instr -> POPF size ; .)
-    JUMP            reduce using rule 18 (instr -> POPF size ; .)
-    CALL            reduce using rule 18 (instr -> POPF size ; .)
-    RETURN          reduce using rule 18 (instr -> POPF size ; .)
-    PUSHV           reduce using rule 18 (instr -> POPF size ; .)
-    POPV            reduce using rule 18 (instr -> POPF size ; .)
-    PUSHF           reduce using rule 18 (instr -> POPF size ; .)
-    POPF            reduce using rule 18 (instr -> POPF size ; .)
-    STOP            reduce using rule 18 (instr -> POPF size ; .)
-    NOOP            reduce using rule 18 (instr -> POPF size ; .)
-    $end            reduce using rule 18 (instr -> POPF size ; .)
-
-
-state 80
-
-    (7) instr -> PRINT opt_string exp ; .
-
-    NAME            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    PRINT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    INPUT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    STORE           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    JUMPT           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    JUMPF           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    JUMP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    CALL            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    RETURN          reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    PUSHV           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    POPV            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    PUSHF           reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    POPF            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    STOP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    NOOP            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-    $end            reduce using rule 7 (instr -> PRINT opt_string exp ; .)
-
-
-state 81
-
-    (8) instr -> INPUT opt_string storable ; .
-
-    NAME            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    PRINT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    INPUT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    STORE           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    JUMPT           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    JUMPF           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    JUMP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    CALL            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    RETURN          reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    PUSHV           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    POPV            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    PUSHF           reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    POPF            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    STOP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    NOOP            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-    $end            reduce using rule 8 (instr -> INPUT opt_string storable ; .)
-
-
-state 82
-
-    (9) instr -> STORE storable exp ; .
-
-    NAME            reduce using rule 9 (instr -> STORE storable exp ; .)
-    PRINT           reduce using rule 9 (instr -> STORE storable exp ; .)
-    INPUT           reduce using rule 9 (instr -> STORE storable exp ; .)
-    STORE           reduce using rule 9 (instr -> STORE storable exp ; .)
-    JUMPT           reduce using rule 9 (instr -> STORE storable exp ; .)
-    JUMPF           reduce using rule 9 (instr -> STORE storable exp ; .)
-    JUMP            reduce using rule 9 (instr -> STORE storable exp ; .)
-    CALL            reduce using rule 9 (instr -> STORE storable exp ; .)
-    RETURN          reduce using rule 9 (instr -> STORE storable exp ; .)
-    PUSHV           reduce using rule 9 (instr -> STORE storable exp ; .)
-    POPV            reduce using rule 9 (instr -> STORE storable exp ; .)
-    PUSHF           reduce using rule 9 (instr -> STORE storable exp ; .)
-    POPF            reduce using rule 9 (instr -> STORE storable exp ; .)
-    STOP            reduce using rule 9 (instr -> STORE storable exp ; .)
-    NOOP            reduce using rule 9 (instr -> STORE storable exp ; .)
-    $end            reduce using rule 9 (instr -> STORE storable exp ; .)
-
-
-state 83
-
-    (41) opt_offset -> [ offset . ]
-
-    ]               shift and go to state 94
-
-
-state 84
-
-    (43) offset -> exp .
-
-    ]               reduce using rule 43 (offset -> exp .)
-
-
-state 85
-
-    (10) instr -> JUMPT exp label ; .
-
-    NAME            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    PRINT           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    INPUT           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    STORE           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    JUMPT           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    JUMPF           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    JUMP            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    CALL            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    RETURN          reduce using rule 10 (instr -> JUMPT exp label ; .)
-    PUSHV           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    POPV            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    PUSHF           reduce using rule 10 (instr -> JUMPT exp label ; .)
-    POPF            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    STOP            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    NOOP            reduce using rule 10 (instr -> JUMPT exp label ; .)
-    $end            reduce using rule 10 (instr -> JUMPT exp label ; .)
-
-
-state 86
-
-    (27) exp -> + exp exp .
-
-    NAME            reduce using rule 27 (exp -> + exp exp .)
-    ;               reduce using rule 27 (exp -> + exp exp .)
-    +               reduce using rule 27 (exp -> + exp exp .)
-    -               reduce using rule 27 (exp -> + exp exp .)
-    *               reduce using rule 27 (exp -> + exp exp .)
-    /               reduce using rule 27 (exp -> + exp exp .)
-    EQ              reduce using rule 27 (exp -> + exp exp .)
-    LE              reduce using rule 27 (exp -> + exp exp .)
-    !               reduce using rule 27 (exp -> + exp exp .)
-    (               reduce using rule 27 (exp -> + exp exp .)
-    NUMBER          reduce using rule 27 (exp -> + exp exp .)
-    RVX             reduce using rule 27 (exp -> + exp exp .)
-    TSX             reduce using rule 27 (exp -> + exp exp .)
-    )               reduce using rule 27 (exp -> + exp exp .)
-    ]               reduce using rule 27 (exp -> + exp exp .)
-
-
-state 87
-
-    (28) exp -> - exp exp .
-
-    NAME            reduce using rule 28 (exp -> - exp exp .)
-    ;               reduce using rule 28 (exp -> - exp exp .)
-    +               reduce using rule 28 (exp -> - exp exp .)
-    -               reduce using rule 28 (exp -> - exp exp .)
-    *               reduce using rule 28 (exp -> - exp exp .)
-    /               reduce using rule 28 (exp -> - exp exp .)
-    EQ              reduce using rule 28 (exp -> - exp exp .)
-    LE              reduce using rule 28 (exp -> - exp exp .)
-    !               reduce using rule 28 (exp -> - exp exp .)
-    (               reduce using rule 28 (exp -> - exp exp .)
-    NUMBER          reduce using rule 28 (exp -> - exp exp .)
-    RVX             reduce using rule 28 (exp -> - exp exp .)
-    TSX             reduce using rule 28 (exp -> - exp exp .)
-    )               reduce using rule 28 (exp -> - exp exp .)
-    ]               reduce using rule 28 (exp -> - exp exp .)
-
-
-state 88
-
-    (30) exp -> * exp exp .
-
-    NAME            reduce using rule 30 (exp -> * exp exp .)
-    ;               reduce using rule 30 (exp -> * exp exp .)
-    +               reduce using rule 30 (exp -> * exp exp .)
-    -               reduce using rule 30 (exp -> * exp exp .)
-    *               reduce using rule 30 (exp -> * exp exp .)
-    /               reduce using rule 30 (exp -> * exp exp .)
-    EQ              reduce using rule 30 (exp -> * exp exp .)
-    LE              reduce using rule 30 (exp -> * exp exp .)
-    !               reduce using rule 30 (exp -> * exp exp .)
-    (               reduce using rule 30 (exp -> * exp exp .)
-    NUMBER          reduce using rule 30 (exp -> * exp exp .)
-    RVX             reduce using rule 30 (exp -> * exp exp .)
-    TSX             reduce using rule 30 (exp -> * exp exp .)
-    )               reduce using rule 30 (exp -> * exp exp .)
-    ]               reduce using rule 30 (exp -> * exp exp .)
-
-
-state 89
-
-    (31) exp -> / exp exp .
-
-    NAME            reduce using rule 31 (exp -> / exp exp .)
-    ;               reduce using rule 31 (exp -> / exp exp .)
-    +               reduce using rule 31 (exp -> / exp exp .)
-    -               reduce using rule 31 (exp -> / exp exp .)
-    *               reduce using rule 31 (exp -> / exp exp .)
-    /               reduce using rule 31 (exp -> / exp exp .)
-    EQ              reduce using rule 31 (exp -> / exp exp .)
-    LE              reduce using rule 31 (exp -> / exp exp .)
-    !               reduce using rule 31 (exp -> / exp exp .)
-    (               reduce using rule 31 (exp -> / exp exp .)
-    NUMBER          reduce using rule 31 (exp -> / exp exp .)
-    RVX             reduce using rule 31 (exp -> / exp exp .)
-    TSX             reduce using rule 31 (exp -> / exp exp .)
-    )               reduce using rule 31 (exp -> / exp exp .)
-    ]               reduce using rule 31 (exp -> / exp exp .)
-
-
-state 90
-
-    (32) exp -> EQ exp exp .
-
-    NAME            reduce using rule 32 (exp -> EQ exp exp .)
-    ;               reduce using rule 32 (exp -> EQ exp exp .)
-    +               reduce using rule 32 (exp -> EQ exp exp .)
-    -               reduce using rule 32 (exp -> EQ exp exp .)
-    *               reduce using rule 32 (exp -> EQ exp exp .)
-    /               reduce using rule 32 (exp -> EQ exp exp .)
-    EQ              reduce using rule 32 (exp -> EQ exp exp .)
-    LE              reduce using rule 32 (exp -> EQ exp exp .)
-    !               reduce using rule 32 (exp -> EQ exp exp .)
-    (               reduce using rule 32 (exp -> EQ exp exp .)
-    NUMBER          reduce using rule 32 (exp -> EQ exp exp .)
-    RVX             reduce using rule 32 (exp -> EQ exp exp .)
-    TSX             reduce using rule 32 (exp -> EQ exp exp .)
-    )               reduce using rule 32 (exp -> EQ exp exp .)
-    ]               reduce using rule 32 (exp -> EQ exp exp .)
-
-
-state 91
-
-    (33) exp -> LE exp exp .
-
-    NAME            reduce using rule 33 (exp -> LE exp exp .)
-    ;               reduce using rule 33 (exp -> LE exp exp .)
-    +               reduce using rule 33 (exp -> LE exp exp .)
-    -               reduce using rule 33 (exp -> LE exp exp .)
-    *               reduce using rule 33 (exp -> LE exp exp .)
-    /               reduce using rule 33 (exp -> LE exp exp .)
-    EQ              reduce using rule 33 (exp -> LE exp exp .)
-    LE              reduce using rule 33 (exp -> LE exp exp .)
-    !               reduce using rule 33 (exp -> LE exp exp .)
-    (               reduce using rule 33 (exp -> LE exp exp .)
-    NUMBER          reduce using rule 33 (exp -> LE exp exp .)
-    RVX             reduce using rule 33 (exp -> LE exp exp .)
-    TSX             reduce using rule 33 (exp -> LE exp exp .)
-    )               reduce using rule 33 (exp -> LE exp exp .)
-    ]               reduce using rule 33 (exp -> LE exp exp .)
-
-
-state 92
-
-    (35) exp -> ( exp ) .
-
-    NAME            reduce using rule 35 (exp -> ( exp ) .)
-    ;               reduce using rule 35 (exp -> ( exp ) .)
-    +               reduce using rule 35 (exp -> ( exp ) .)
-    -               reduce using rule 35 (exp -> ( exp ) .)
-    *               reduce using rule 35 (exp -> ( exp ) .)
-    /               reduce using rule 35 (exp -> ( exp ) .)
-    EQ              reduce using rule 35 (exp -> ( exp ) .)
-    LE              reduce using rule 35 (exp -> ( exp ) .)
-    !               reduce using rule 35 (exp -> ( exp ) .)
-    (               reduce using rule 35 (exp -> ( exp ) .)
-    NUMBER          reduce using rule 35 (exp -> ( exp ) .)
-    RVX             reduce using rule 35 (exp -> ( exp ) .)
-    TSX             reduce using rule 35 (exp -> ( exp ) .)
-    )               reduce using rule 35 (exp -> ( exp ) .)
-    ]               reduce using rule 35 (exp -> ( exp ) .)
-
-
-state 93
-
-    (11) instr -> JUMPF exp label ; .
-
-    NAME            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    PRINT           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    INPUT           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    STORE           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    JUMPT           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    JUMPF           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    JUMP            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    CALL            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    RETURN          reduce using rule 11 (instr -> JUMPF exp label ; .)
-    PUSHV           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    POPV            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    PUSHF           reduce using rule 11 (instr -> JUMPF exp label ; .)
-    POPF            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    STOP            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    NOOP            reduce using rule 11 (instr -> JUMPF exp label ; .)
-    $end            reduce using rule 11 (instr -> JUMPF exp label ; .)
-
-
-state 94
-
-    (41) opt_offset -> [ offset ] .
-
-    +               reduce using rule 41 (opt_offset -> [ offset ] .)
-    -               reduce using rule 41 (opt_offset -> [ offset ] .)
-    *               reduce using rule 41 (opt_offset -> [ offset ] .)
-    /               reduce using rule 41 (opt_offset -> [ offset ] .)
-    EQ              reduce using rule 41 (opt_offset -> [ offset ] .)
-    LE              reduce using rule 41 (opt_offset -> [ offset ] .)
-    !               reduce using rule 41 (opt_offset -> [ offset ] .)
-    (               reduce using rule 41 (opt_offset -> [ offset ] .)
-    NUMBER          reduce using rule 41 (opt_offset -> [ offset ] .)
-    RVX             reduce using rule 41 (opt_offset -> [ offset ] .)
-    TSX             reduce using rule 41 (opt_offset -> [ offset ] .)
-    NAME            reduce using rule 41 (opt_offset -> [ offset ] .)
-    ;               reduce using rule 41 (opt_offset -> [ offset ] .)
-    )               reduce using rule 41 (opt_offset -> [ offset ] .)
-    ]               reduce using rule 41 (opt_offset -> [ offset ] .)
-
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for + in state 66 resolved as shift
-WARNING: shift/reduce conflict for - in state 66 resolved as shift
-WARNING: shift/reduce conflict for * in state 66 resolved as shift
-WARNING: shift/reduce conflict for / in state 66 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 66 resolved as shift
-WARNING: shift/reduce conflict for LE in state 66 resolved as shift
-WARNING: shift/reduce conflict for ! in state 66 resolved as shift
-WARNING: shift/reduce conflict for ( in state 66 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 66 resolved as shift
-WARNING: shift/reduce conflict for RVX in state 66 resolved as shift
-WARNING: shift/reduce conflict for TSX in state 66 resolved as shift
-WARNING: shift/reduce conflict for NAME in state 66 resolved as shift
