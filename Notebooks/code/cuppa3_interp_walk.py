@@ -4,6 +4,17 @@ from cuppa3_state import state
 from grammar_stuff import assert_match
 
 #########################################################################
+# Use the exception mechanism to return values from function calls
+
+class ReturnValue(Exception):
+    
+    def __init__(self, value):
+        self.value = value
+    
+    def __str__(self):
+        return(repr(self.value))
+
+#########################################################################
 def len_seq(seq_list):
 
     if seq_list[0] == 'nil':
@@ -64,38 +75,28 @@ def handle_call(name, actual_arglist):
     # unpack the funval tuple
     (FUNVAL, formal_arglist, body, context) = val
 
-    if actual_arglist[0] == 'nil':
-        # call without actual args
-        # we are calling a function without actual args, make sure the function
-        # is not expecting any args.
-        if formal_arglist[0] != 'nil':
-            raise ValueError("function {} expects arguments".format(sym))
-        
-        # set up the environment for static scoping and then execute the function
-        save_symtab = state.symbol_table.get_config()  # save current symtab
-        state.symbol_table.set_config(context)         # make function context current symtab
-        state.symbol_table.push_scope()                # push new function scope
-        state.return_val = None                        # assume no return value
-        walk(body)                                     # execute the function
-        state.symbol_table.pop_scope()                 # pop function scope
-        state.symbol_table.set_config(save_symtab)     # restore original symtab config
+    if len_seq(formal_arglist) != len_seq(actual_arglist):
+        raise ValueError("function {} expects {} arguments".format(sym, len_seq(formal_arglist)))
 
-    else:
-        # call with actual args
-        # we are calling a function with actual args, make sure the two arg lists match
-        if len_seq(formal_arglist) != len_seq(actual_arglist):
-            raise ValueError("function {} expects {} arguments".format(sym, len_seq(formal_arglist)))
-        
-        # set up the environment for static scoping and then execute the function
-        actual_val_args = eval_actual_args(actual_arglist)   # evaluate actuals in current symtab
-        save_symtab = state.symbol_table.get_config()        # save current symtab
-        state.symbol_table.set_config(context)               # make function context current symtab
-        state.symbol_table.push_scope()                      # push new function scope
-        declare_formal_args(formal_arglist, actual_val_args) # declare formals in function scope
-        state.return_val = None                              # assume no return value
-        walk(body)                                           # execute the function
-        state.symbol_table.pop_scope()                       # pop function scope
-        state.symbol_table.set_config(save_symtab)           # restore original symtab config
+    # set up the environment for static scoping and then execute the function
+    actual_val_args = eval_actual_args(actual_arglist)   # evaluate actuals in current symtab
+    save_symtab = state.symbol_table.get_config()        # save current symtab
+
+    state.symbol_table.set_config(context)               # make function context current symtab
+    state.symbol_table.push_scope()                      # push new function scope
+    declare_formal_args(formal_arglist, actual_val_args) # declare formals in function scope
+
+    return_value = None
+    try:
+        walk(body)                                       # execute the function
+    except ReturnValue as val:
+        return_value = val.value
+
+    # NOTE: popping the function scope is not necessary because we
+    # are restoring the original symtab configuration
+    state.symbol_table.set_config(save_symtab)           # restore original symtab config
+
+    return return_value
 
 #########################################################################
 # node functions
@@ -215,10 +216,10 @@ def return_stmt(node):
         assert_match(RETURN, 'return')
         
         value = walk(exp)
-        state.return_val = value
+        raise ReturnValue(value)
 
     else: # return without exp
-        state.return_val = None
+        raise ReturnValue(None)
 
 #########################################################################
 def while_stmt(node):
@@ -360,12 +361,12 @@ def call_exp(node):
     (CALLEXP, name, args) = node
     assert_match(CALLEXP, 'callexp')
     
-    handle_call(name, args)
+    return_value = handle_call(name, args)
     
-    if not state.return_val:
+    if return_value is None:
         raise ValueError("No return value from function {}".format(name))
     
-    return state.return_val
+    return return_value
 
 #########################################################################
 def uminus_exp(node):

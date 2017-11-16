@@ -16,7 +16,8 @@ class SymTab:
 
     #-------
     def get_config(self):
-        return self.scoped_symtab
+        # we make a shallow copy of the symbol table
+        return list(self.scoped_symtab)
     
     #-------
     def set_config(self, c):

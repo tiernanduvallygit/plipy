@@ -36,11 +36,9 @@ seqsum(10);
 
 and_prog = \
 '''
-declare and(a,b) {
-    if (a)
-        if(b)
-            return 1;
-   return 0;
+declare and(a,b)
+{
+    return a*b;
 }
 
 
@@ -49,6 +47,7 @@ declare w;
 get v;
 get w;
 
+// enter v = -1 to stop loop
 while (0 <= v) 
 {
     put and(v,w)
@@ -89,27 +88,6 @@ declare fact(x)
 declare v;
 get v;
 put fact(v);
-'''
-
-fibonacci = \
-'''
-declare F(n)
-{
-   if (n==0)
-      return 0;
-   else if (n==1)
-      return 1;
-   else
-      return F(n-1)+F(n-2);
-}
-
-declare v;
-get v;
-while (0 <= v) 
-{
-   put F(v);
-   get v;
-}
 '''
 
 fold = \

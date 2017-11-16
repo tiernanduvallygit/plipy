@@ -11,7 +11,4 @@ class State:
         # when done parsing this variable will hold our AST
         self.AST = None
 
-        # this is used for function calls
-        self.return_val = None
-
 state = State()
