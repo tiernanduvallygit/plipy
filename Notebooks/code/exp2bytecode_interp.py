@@ -22,6 +22,7 @@ def do_storable(storable, val):
         # ('id', name)
         name = storable[1]
         state.symbol_table[name] = val
+
     elif storable[0] == '%rvx':
         # ('%rvx',)
         state.rvx = val
@@ -72,21 +73,18 @@ def interp_program():
             state.instr_ix += 1
         
         elif type == 'input':
-            # INPUT NAME
-            var_name = instr[2]
-            str = instr[1] if instr[1] else "Please enter a value for {}: ".format(var_name)
+            # INPUT opt_string storable
+            storable = instr[2]
+            str = instr[1] if instr[1] else "Please enter a value: "
             val = input(str)
-            state.symbol_table[var_name] = int(val)
+            do_storable(storable, val)
             state.instr_ix += 1
         
         elif type == 'store':
             # STORE storable exp
-
             storable = instr[1] # storable itself is a tuple (type, children...)
             val = eval_exp_tree(instr[2])
-
             do_storable(storable, val)
-            
             state.instr_ix += 1
         
         elif type == 'call':

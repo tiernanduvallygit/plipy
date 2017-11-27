@@ -36,7 +36,7 @@ def p_label_def(p):
 def p_instr(p):
     '''
     instr : PRINT opt_string exp ';'
-          | INPUT opt_string NAME ';'
+          | INPUT opt_string storable ';'
           | STORE storable exp ';'
           | JUMPT exp label ';'
           | JUMPF exp label ';'
