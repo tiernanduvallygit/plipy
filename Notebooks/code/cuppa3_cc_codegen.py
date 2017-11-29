@@ -89,13 +89,20 @@ def fundef_stmt(node):
     ignore_label = label()
     
     code = [('jump', ignore_label)]
+    code += [('#',' ')]
+    code += [('#','Start of function ' + name)]
+    code += [('#',' ')]
     code += [(name + ':',)]
     code += [('pushf', str(frame_size))]
     code += init_formal_args(formal_arglist, 0, frame_size)
     code += walk(body)
     code += [('popf', str(frame_size))]
     code += [('return',)]
+    code += [('#',' ')]
+    code += [('#','End of function ' + name)]
+    code += [('#',' ')]
     code += [(ignore_label + ':',)]
+    code += [('noop',)]
 
     frame_size = -1
 
@@ -264,13 +271,14 @@ def binop_exp(node):
 #########################################################################
 def call_exp(node):
 
-    (CALLEXP, name, actual_args) = node
+    (CALLEXP, temp, name, actual_args) = node
     assert_match(CALLEXP, 'callexp')
 
     code = push_args(actual_args)
     code += [('call', name)]
     code += pop_args(actual_args)
-    loc = '%rvx'
+    code += [('store', temp, '%rvx')]
+    loc = temp
 
     return (code, loc)
 

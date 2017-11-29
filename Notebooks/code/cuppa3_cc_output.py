@@ -12,6 +12,9 @@ def output(instr_stream):
 
         if label_def(instr):  # label def - print without preceeding '\t' or trailing ';'
             output_stream += instr[0] + '\n'
+        
+        elif instr[0] == '#': # comment dummy instruction
+            output_stream += instr[0] + ' ' + instr[1] + '\n'
 
         else:                 # regular instruction - indent and put a ';' at the end
             output_stream += '\t'

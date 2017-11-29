@@ -89,7 +89,7 @@ def handle_call(call_kind, name, actual_arglist):
     actual_val_args = eval_actual_args(actual_arglist)
 
     if call_kind == 'callexp':
-        return ('callexp', name, actual_val_args)
+        return ('callexp', declare_temp(), name, actual_val_args)
     else:
         return ('callstmt', name, actual_val_args)
 
