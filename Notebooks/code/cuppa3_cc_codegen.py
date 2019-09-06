@@ -2,12 +2,16 @@ from grammar_stuff import assert_match
 
 # codegen: this is the code generator for our Cuppa3 compiler
 
-# This is a bit of a hack: we use this global variable to broadcast
+# NOTE: this code generator does not need access to the symbol table,
+#       the abstraction level of the AST has been lowered already to the level
+#       of the abstract machine code
+
+
+#########################################################################
+# The following is a bit of a hack: we use this global variable to broadcast
 # the frame size of a function definition to all the statements within
 # the function body -- the return statement needs this information in order
-# to generate the proper instructions.  The alternatives would be to have
-# a full symbol table mechanism (overkill for just this single piece of info)
-# or propagate the framesize while walking the tree -- tedious...
+# to generate the proper instructions.
 frame_size = None
 
 #########################################################################

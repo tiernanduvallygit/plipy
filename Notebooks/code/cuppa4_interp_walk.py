@@ -1,28 +1,21 @@
-# A tree walker to rewrite Cuppa3 AST into a form that is
-# easily used to generate code for exp2bytecode.
+# A tree walker to interpret Cuppa3 programs
 
-from cuppa3_cc_state import state
+from cuppa3_state import state
 from grammar_stuff import assert_match
 
 #########################################################################
-temp_cnt = 0
+# Use the exception mechanism to return values from function calls
 
-def make_temp_name():
-    global temp_cnt
-    new_name = "v$" + str(temp_cnt)
-    temp_cnt += 1
-    return new_name
-
-#########################################################################
-def declare_temp():
-    name = make_temp_name()
-    state.symbol_table.declare_sym(name)
-    target_name = state.symbol_table.get_target_name(name)
-    return target_name
+class ReturnValue(Exception):
+    
+    def __init__(self, value):
+        self.value = value
+    
+    def __str__(self):
+        return(repr(self.value))
 
 #########################################################################
 def len_seq(seq_list):
-    # seq_list can either be a ('seq', item, rest) node or a ('nil',) node.
 
     if seq_list[0] == 'nil':
         return 0
@@ -38,41 +31,41 @@ def len_seq(seq_list):
 
 #########################################################################
 def eval_actual_args(args):
-    # args can either be a ('seq', item, rest) node or a ('nil',) node.
 
     if args[0] == 'nil':
         return ('nil',)
 
     elif args[0] == 'seq':
         # unpack the seq node
-        (SEQ, arg, rest) = args
+        (SEQ, p1, p2) = args
 
-        t = walk(arg)
+        (type, val) = walk(p1)
 
-        return ('seq', t, eval_actual_args(rest))
+        return ('seq', (type, val), eval_actual_args(p2))
 
     else:
         raise ValueError("unknown node type: {}".format(args[0]))
 
 #########################################################################
-def declare_formal_args(formal_args):
-    # formal_args can either be a ('seq', item, rest) node or a ('nil',) node.
-    
+def declare_formal_args(formal_args, actual_val_args):
+
+    if len_seq(actual_val_args) != len_seq(formal_args):
+        raise ValueError("actual and formal argument lists do not match")
+
     if formal_args[0] == 'nil':
-        return ('nil',)
+        return
 
-    else:
-        # unpack the args
-        (SEQ, (ID, sym), rest) = formal_args
+    # unpack the args
+    (SEQ, (ID, sym), p1) = formal_args
+    (SEQ, (type, val), p2) = actual_val_args
 
-        # declare the variable
-        state.symbol_table.declare_sym(sym)
-        target_name = state.symbol_table.get_target_name(sym)
+    # declare the variable
+    state.symbol_table.declare_sym(sym, (type, val))
 
-        return ('seq', target_name, declare_formal_args(rest))
+    declare_formal_args(p1, p2)
 
 #########################################################################
-def handle_call(call_kind, name, actual_arglist):
+def handle_call(name, actual_arglist):
     
     (type, val) = state.symbol_table.lookup_sym(name)
     
@@ -80,18 +73,30 @@ def handle_call(call_kind, name, actual_arglist):
         raise ValueError("{} is not a function".format(name))
 
     # unpack the funval tuple
-    (FUNVAL, formal_arglist) = val
+    (FUNVAL, formal_arglist, body, context) = val
 
     if len_seq(formal_arglist) != len_seq(actual_arglist):
         raise ValueError("function {} expects {} arguments".format(sym, len_seq(formal_arglist)))
 
-    # convert the actual values into three-address codes
-    actual_val_args = eval_actual_args(actual_arglist)
+    # set up the environment for static scoping and then execute the function
+    actual_val_args = eval_actual_args(actual_arglist)   # evaluate actuals in current symtab
+    save_symtab = state.symbol_table.get_config()        # save current symtab
 
-    if call_kind == 'callexp':
-        return ('callexp', declare_temp(), name, actual_val_args)
-    else:
-        return ('callstmt', name, actual_val_args)
+    state.symbol_table.set_config(context)               # make function context current symtab
+    state.symbol_table.push_scope()                      # push new function scope
+    declare_formal_args(formal_arglist, actual_val_args) # declare formals in function scope
+
+    return_value = None
+    try:
+        walk(body)                                       # execute the function
+    except ReturnValue as val:
+        return_value = val.value
+
+    # NOTE: popping the function scope is not necessary because we
+    # are restoring the original symtab configuration
+    state.symbol_table.set_config(save_symtab)           # restore original symtab config
+
+    return return_value
 
 #########################################################################
 # node functions
@@ -101,10 +106,8 @@ def seq(node):
     (SEQ, stmt, stmt_list) = node
     assert_match(SEQ, 'seq')
     
-    t1 = walk(stmt)
-    t2 = walk(stmt_list)
-    
-    return ('seq', t1, t2)
+    walk(stmt)
+    walk(stmt_list)
 
 #########################################################################
 def nil(node):
@@ -112,7 +115,8 @@ def nil(node):
     (NIL,) = node
     assert_match(NIL, 'nil')
     
-    return ('nil',)
+    # do nothing!
+    pass
 
 #########################################################################
 def fundecl_stmt(node):
@@ -125,32 +129,17 @@ def fundecl_stmt(node):
     except ValueError: # try fundecl with arglist
         (FUNDECL, name, arglist, body) = node
         assert_match(FUNDECL, 'fundecl')
-
-        # we don't need the function body - abbreviated function value
-        funval = ('funval', arglist)
+        
+        context = state.symbol_table.get_config()
+        funval = ('funval', arglist, body, context)
         state.symbol_table.declare_fun(name, funval)
-
-        state.symbol_table.enter_function()
-        new_arglist = declare_formal_args(arglist)
-        t = walk(body)
-        state.symbol_table.exit_function()
-        frame_size = state.symbol_table.get_frame_size()
-
-        return ('fundef', name, new_arglist, t, frame_size)
-
 
     else: # fundecl pattern matched
         # no arglist is present
-        # we don't need the function body - abbreviated function value
-        funval = ('funval', ('nil',))
+        context = state.symbol_table.get_config()
+        funval = ('funval', ('nil',), body, context)
         state.symbol_table.declare_fun(name, funval)
 
-        state.symbol_table.enter_function()
-        t = walk(body)
-        state.symbol_table.exit_function()
-        frame_size = state.symbol_table.get_frame_size()
-
-        return ('fundef', name, ('nil',), t, frame_size)
 
 #########################################################################
 def declare_stmt(node):
@@ -164,18 +153,12 @@ def declare_stmt(node):
         (DECLARE, name, init_val) = node
         assert_match(DECLARE, 'declare')
         
-        t = walk(init_val)
-        state.symbol_table.declare_sym(name)
-        target_name = state.symbol_table.get_target_name(name)
-        
-        return ('assign', target_name, t)
+        (type, value) = walk(init_val)
+        state.symbol_table.declare_sym(name, (type, value))
 
     else: # declare pattern matched
         # when no initializer is present we init with the value 0
-        state.symbol_table.declare_sym(name)
-        target_name = state.symbol_table.get_target_name(name)
-        
-        return ('assign', target_name, ('integer', 0))
+        state.symbol_table.declare_sym(name, ('integer', 0))
 
 #########################################################################
 def assign_stmt(node):
@@ -183,20 +166,23 @@ def assign_stmt(node):
     (ASSIGN, name, exp) = node
     assert_match(ASSIGN, 'assign')
     
-    t = walk(exp)
-    target_name = state.symbol_table.get_target_name(name)
-
-    return ('assign', target_name, t)
+    (type, value) = walk(exp)
+    state.symbol_table.update_sym(name, (type, value))
 
 #########################################################################
 def get_stmt(node):
 
     (GET, name) = node
     assert_match(GET, 'get')
-    
-    target_name = state.symbol_table.get_target_name(name)
 
-    return ('get', target_name)
+    s = input("Value for " + name + '? ')
+    
+    try:
+        value = int(s)
+    except ValueError:
+        raise ValueError("expected an integer value for " + name)
+    
+    state.symbol_table.update_sym(name, ('scalar', value))
 
 #########################################################################
 def put_stmt(node):
@@ -204,9 +190,8 @@ def put_stmt(node):
     (PUT, exp) = node
     assert_match(PUT, 'put')
     
-    t = walk(exp)
-
-    return ('put', t)
+    value = walk(exp)
+    print("> {}".format(value))
 
 #########################################################################
 def call_stmt(node):
@@ -214,31 +199,27 @@ def call_stmt(node):
     (CALLSTMT, name, actual_args) = node
     assert_match(CALLSTMT, 'callstmt')
 
-    return handle_call('callstmt', name, actual_args)
+    handle_call(name, actual_args)
 
 #########################################################################
 def return_stmt(node):
+    # if a return value exists the return stmt will record it
+    # in the state object
 
     try: # try return without exp
         (RETURN, (NIL,)) = node
         assert_match(RETURN, 'return')
         assert_match(NIL, 'nil')
-    
-        if not state.symbol_table.in_function:
-            raise ValueError("return has to appear in a function context.")
-        
-        return ('return', ('nil',))
 
     except ValueError: # return with exp
         (RETURN, exp) = node
         assert_match(RETURN, 'return')
         
-        if not state.symbol_table.in_function:
-            raise ValueError("return has to appear in a function context.")
-        
-        t = walk(exp)
-        
-        return ('return', t)
+        value = walk(exp)
+        raise ReturnValue(value)
+
+    else: # return without exp
+        raise ReturnValue(None)
 
 #########################################################################
 def while_stmt(node):
@@ -246,10 +227,10 @@ def while_stmt(node):
     (WHILE, cond, body) = node
     assert_match(WHILE, 'while')
     
-    t1 = walk(cond)
-    t2 = walk(body)
-
-    return ('while', t1, t2)
+    value = walk(cond)
+    while value != 0:
+        walk(body)
+        value = walk(cond)
 
 #########################################################################
 def if_stmt(node):
@@ -263,17 +244,17 @@ def if_stmt(node):
         (IF, cond, then_stmt, else_stmt) = node
         assert_match(IF, 'if')
         
-        t1 = walk(cond)
-        t2 = walk(then_stmt)
-        t3 = walk(else_stmt)
-
-        return ('if', t1, t2, t3)
+        value = walk(cond)
+        
+        if value != 0:
+            walk(then_stmt)
+        else:
+            walk(else_stmt)
 
     else: # if-then pattern matched
-        t1 = walk(cond)
-        t2 = walk(then_stmt)
-
-        return ('if', t1, t2, ('nil',))
+        value = walk(cond)
+        if value != 0:
+            walk(then_stmt)
 
 #########################################################################
 def block_stmt(node):
@@ -282,25 +263,74 @@ def block_stmt(node):
     assert_match(BLOCK, 'block')
     
     state.symbol_table.push_scope()
-    t = walk(stmt_list)
+    walk(stmt_list)
     state.symbol_table.pop_scope()
 
-    return ('block', t)
+#########################################################################
+def plus_exp(node):
+    
+    (PLUS,c1,c2) = node
+    assert_match(PLUS, '+')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 + v2
 
 #########################################################################
-def binop_exp(node):
-    # turn expressions into three-address codes
+def minus_exp(node):
     
-    (OP, c1, c2) = node
-    if OP not in ['+', '-', '*', '/', '==', '<=']:
-        raise ValueError("pattern match failed on " + OP)
+    (MINUS,c1,c2) = node
+    assert_match(MINUS, '-')
     
-    t1 = walk(c1)
-    t2 = walk(c2)
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 - v2
 
-    target_name = declare_temp()
+#########################################################################
+def times_exp(node):
+    
+    (TIMES,c1,c2) = node
+    assert_match(TIMES, '*')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 * v2
 
-    return (OP, target_name, t1, t2)
+#########################################################################
+def divide_exp(node):
+    
+    (DIVIDE,c1,c2) = node
+    assert_match(DIVIDE, '/')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return v1 // v2
+
+#########################################################################
+def eq_exp(node):
+    
+    (EQ,c1,c2) = node
+    assert_match(EQ, '==')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return 1 if v1 == v2 else 0
+
+#########################################################################
+def le_exp(node):
+    
+    (LE,c1,c2) = node
+    assert_match(LE, '<=')
+    
+    v1 = walk(c1)
+    v2 = walk(c2)
+    
+    return 1 if v1 <= v2 else 0
 
 #########################################################################
 def integer_exp(node):
@@ -308,7 +338,7 @@ def integer_exp(node):
     (INTEGER, value) = node
     assert_match(INTEGER, 'integer')
     
-    return ('integer', value)
+    return value
 
 #########################################################################
 def id_exp(node):
@@ -316,29 +346,36 @@ def id_exp(node):
     (ID, name) = node
     assert_match(ID, 'id')
     
-    target_name = state.symbol_table.get_target_name(name)
+    (type, val) = state.symbol_table.lookup_sym(name)
     
-    return ('id', target_name)
+    if type != 'scalar':
+        raise ValueError("{} is not a scalar".format(name))
+
+    return val
 
 #########################################################################
 def call_exp(node):
+    # call_exp works just like call_stmt with the exception
+    # that we have to pass back a return value
     
-    (CALLEXP, name, actual_args) = node
+    (CALLEXP, name, args) = node
     assert_match(CALLEXP, 'callexp')
     
-    return handle_call('callexp', name, actual_args)
+    return_value = handle_call(name, args)
     
+    if return_value is None:
+        raise ValueError("No return value from function {}".format(name))
+    
+    return return_value
+
 #########################################################################
 def uminus_exp(node):
     
     (UMINUS, exp) = node
     assert_match(UMINUS, 'uminus')
     
-    t = walk(exp)
-
-    target_name = declare_temp()
-    
-    return ('uminus', target_name, t)
+    val = walk(exp)
+    return - val
 
 #########################################################################
 def not_exp(node):
@@ -346,11 +383,8 @@ def not_exp(node):
     (NOT, exp) = node
     assert_match(NOT, 'not')
     
-    t = walk(exp)
-
-    target_name = declare_temp()
-
-    return ('not', target_name, t)
+    val = walk(exp)
+    return 0 if val != 0 else 1
 
 #########################################################################
 def paren_exp(node):
@@ -358,7 +392,7 @@ def paren_exp(node):
     (PAREN, exp) = node
     assert_match(PAREN, 'paren')
     
-    # get rid of parenthesis - not necessary in AST
+    # return the value of the parenthesized expression
     return walk(exp)
 
 #########################################################################
@@ -392,12 +426,12 @@ dispatch_dict = {
     'id'      : id_exp,
     'callexp' : call_exp,
     'paren'   : paren_exp,
-    '+'       : binop_exp,
-    '-'       : binop_exp,
-    '*'       : binop_exp,
-    '/'       : binop_exp,
-    '=='      : binop_exp,
-    '<='      : binop_exp,
+    '+'       : plus_exp,
+    '-'       : minus_exp,
+    '*'       : times_exp,
+    '/'       : divide_exp,
+    '=='      : eq_exp,
+    '<='      : le_exp,
     'uminus'  : uminus_exp,
     'not'     : not_exp
 }

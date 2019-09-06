@@ -13,7 +13,7 @@ To read this book online: [start here](https://nbviewer.jupyter.org/github/lutzh
 **Did I mention that this book is a rough draft.**
 
 To read this book interactively:
-- download and install [Anaconda3](https://www.continuum.io/downloads)
+- download and install [Anaconda3](https://www.anaconda.com/distribution)
 - make sure that anaconda/bin is in your path
 - download or clone this repository
 - start the Jupyter notebook server with

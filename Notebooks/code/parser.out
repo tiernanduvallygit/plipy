@@ -6,73 +6,72 @@ Rule 0     S' -> program
 Rule 1     program -> stmt_list
 Rule 2     stmt_list -> stmt stmt_list
 Rule 3     stmt_list -> empty
-Rule 4     stmt -> DECLARE ID opt_init semi
-Rule 5     stmt -> ID = exp semi
-Rule 6     stmt -> GET ID semi
-Rule 7     stmt -> PUT exp semi
-Rule 8     stmt -> ( function_value ) tuple_list semi
-Rule 9     stmt -> ID tuple_list semi
-Rule 10    stmt -> RETURN opt_exp semi
+Rule 4     stmt -> DECLARE ID ( opt_formal_args ) stmt
+Rule 5     stmt -> DECLARE ID opt_init opt_semi
+Rule 6     stmt -> ID = exp opt_semi
+Rule 7     stmt -> GET ID opt_semi
+Rule 8     stmt -> PUT exp opt_semi
+Rule 9     stmt -> ID ( opt_actual_args ) opt_semi
+Rule 10    stmt -> RETURN opt_exp opt_semi
 Rule 11    stmt -> WHILE ( exp ) stmt
 Rule 12    stmt -> IF ( exp ) stmt opt_else
 Rule 13    stmt -> { stmt_list }
-Rule 14    tuple_list -> ( opt_tuple ) tuple_list
-Rule 15    tuple_list -> ( opt_tuple )
-Rule 16    opt_tuple -> tuple
-Rule 17    opt_tuple -> empty
-Rule 18    tuple -> exp , tuple
-Rule 19    tuple -> exp
-Rule 20    opt_formal_args -> formal_args
-Rule 21    opt_formal_args -> empty
-Rule 22    formal_args -> ID , formal_args
-Rule 23    formal_args -> ID
-Rule 24    opt_init -> = exp
-Rule 25    opt_init -> empty
-Rule 26    opt_exp -> exp
-Rule 27    opt_exp -> empty
-Rule 28    opt_else -> ELSE stmt
-Rule 29    opt_else -> empty
-Rule 30    semi -> ;
-Rule 31    semi -> empty
-Rule 32    exp -> exp PLUS exp
-Rule 33    exp -> exp MINUS exp
-Rule 34    exp -> exp TIMES exp
-Rule 35    exp -> exp DIVIDE exp
-Rule 36    exp -> exp EQ exp
-Rule 37    exp -> exp LE exp
-Rule 38    exp -> INTEGER
-Rule 39    exp -> function_value
-Rule 40    exp -> exp tuple_list
-Rule 41    exp -> ID
-Rule 42    exp -> ( exp )
-Rule 43    exp -> MINUS exp
-Rule 44    exp -> NOT exp
-Rule 45    function_value -> FUNCTION ( opt_formal_args ) stmt
-Rule 46    empty -> <empty>
+Rule 14    opt_formal_args -> formal_args
+Rule 15    opt_formal_args -> empty
+Rule 16    formal_args -> ID , formal_args
+Rule 17    formal_args -> ID
+Rule 18    opt_init -> = exp
+Rule 19    opt_init -> empty
+Rule 20    opt_actual_args -> actual_args
+Rule 21    opt_actual_args -> empty
+Rule 22    actual_args -> exp , actual_args
+Rule 23    actual_args -> exp
+Rule 24    opt_exp -> exp
+Rule 25    opt_exp -> empty
+Rule 26    opt_else -> ELSE stmt
+Rule 27    opt_else -> empty
+Rule 28    opt_semi -> ;
+Rule 29    opt_semi -> empty
+Rule 30    exp -> exp PLUS exp
+Rule 31    exp -> exp MINUS exp
+Rule 32    exp -> exp TIMES exp
+Rule 33    exp -> exp DIVIDE exp
+Rule 34    exp -> exp EQ exp
+Rule 35    exp -> exp LE exp
+Rule 36    exp -> INTEGER
+Rule 37    exp -> FLOAT
+Rule 38    exp -> STRING
+Rule 39    exp -> ID
+Rule 40    exp -> ID ( opt_actual_args )
+Rule 41    exp -> ( exp )
+Rule 42    exp -> MINUS exp
+Rule 43    exp -> NOT exp
+Rule 44    empty -> <empty>
 
 Terminals, with rules where they appear
 
-(                    : 8 11 12 14 15 42 45
-)                    : 8 11 12 14 15 42 45
-,                    : 18 22
-;                    : 30
-=                    : 5 24
-DECLARE              : 4
-DIVIDE               : 35
-ELSE                 : 28
-EQ                   : 36
-FUNCTION             : 45
-GET                  : 6
-ID                   : 4 5 6 9 22 23 41
+(                    : 4 9 11 12 40 41
+)                    : 4 9 11 12 40 41
+,                    : 16 22
+;                    : 28
+=                    : 6 18
+DECLARE              : 4 5
+DIVIDE               : 33
+ELSE                 : 26
+EQ                   : 34
+FLOAT                : 37
+GET                  : 7
+ID                   : 4 5 6 7 9 16 17 39 40
 IF                   : 12
-INTEGER              : 38
-LE                   : 37
-MINUS                : 33 43
-NOT                  : 44
-PLUS                 : 32
-PUT                  : 7
+INTEGER              : 36
+LE                   : 35
+MINUS                : 31 42
+NOT                  : 43
+PLUS                 : 30
+PUT                  : 8
 RETURN               : 10
-TIMES                : 34
+STRING               : 38
+TIMES                : 32
 WHILE                : 11
 error                : 
 {                    : 13
@@ -80,21 +79,19 @@ error                :
 
 Nonterminals, with rules where they appear
 
-empty                : 3 17 21 25 27 29 31
-exp                  : 5 7 11 12 18 19 24 26 32 32 33 33 34 34 35 35 36 36 37 37 40 42 43 44
-formal_args          : 20 22
-function_value       : 8 39
+actual_args          : 20 22
+empty                : 3 15 19 21 25 27 29
+exp                  : 6 8 11 12 18 22 23 24 30 30 31 31 32 32 33 33 34 34 35 35 41 42 43
+formal_args          : 14 16
+opt_actual_args      : 9 40
 opt_else             : 12
 opt_exp              : 10
-opt_formal_args      : 45
-opt_init             : 4
-opt_tuple            : 14 15
+opt_formal_args      : 4
+opt_init             : 5
+opt_semi             : 5 6 7 8 9 10
 program              : 0
-semi                 : 4 5 6 7 8 9 10
-stmt                 : 2 11 12 28 45
+stmt                 : 2 4 11 12 26
 stmt_list            : 1 2 13
-tuple                : 16 18
-tuple_list           : 8 9 14 40
 
 Parsing method: LALR
 
@@ -104,28 +101,27 @@ state 0
     (1) program -> . stmt_list
     (2) stmt_list -> . stmt stmt_list
     (3) stmt_list -> . empty
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
     (11) stmt -> . WHILE ( exp ) stmt
     (12) stmt -> . IF ( exp ) stmt opt_else
     (13) stmt -> . { stmt_list }
-    (46) empty -> .
+    (44) empty -> .
 
     DECLARE         shift and go to state 5
     ID              shift and go to state 6
     GET             shift and go to state 7
     PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
-    $end            reduce using rule 46 (empty -> .)
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
+    $end            reduce using rule 44 (empty -> .)
 
     program                        shift and go to state 1
     stmt_list                      shift and go to state 2
@@ -150,32 +146,31 @@ state 3
     (2) stmt_list -> stmt . stmt_list
     (2) stmt_list -> . stmt stmt_list
     (3) stmt_list -> . empty
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
     (11) stmt -> . WHILE ( exp ) stmt
     (12) stmt -> . IF ( exp ) stmt opt_else
     (13) stmt -> . { stmt_list }
-    (46) empty -> .
+    (44) empty -> .
 
     DECLARE         shift and go to state 5
     ID              shift and go to state 6
     GET             shift and go to state 7
     PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
 
     stmt                           shift and go to state 3
-    stmt_list                      shift and go to state 14
+    stmt_list                      shift and go to state 13
     empty                          shift and go to state 4
 
 state 4
@@ -188,172 +183,149 @@ state 4
 
 state 5
 
-    (4) stmt -> DECLARE . ID opt_init semi
+    (4) stmt -> DECLARE . ID ( opt_formal_args ) stmt
+    (5) stmt -> DECLARE . ID opt_init opt_semi
 
-    ID              shift and go to state 15
+    ID              shift and go to state 14
 
 
 state 6
 
-    (5) stmt -> ID . = exp semi
-    (9) stmt -> ID . tuple_list semi
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (6) stmt -> ID . = exp opt_semi
+    (9) stmt -> ID . ( opt_actual_args ) opt_semi
 
-    =               shift and go to state 16
-    (               shift and go to state 18
+    =               shift and go to state 15
+    (               shift and go to state 16
 
-    tuple_list                     shift and go to state 17
 
 state 7
 
-    (6) stmt -> GET . ID semi
+    (7) stmt -> GET . ID opt_semi
 
-    ID              shift and go to state 19
+    ID              shift and go to state 17
 
 
 state 8
 
-    (7) stmt -> PUT . exp semi
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (8) stmt -> PUT . exp opt_semi
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 20
-    function_value                 shift and go to state 23
+    exp                            shift and go to state 18
 
 state 9
 
-    (8) stmt -> ( . function_value ) tuple_list semi
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (10) stmt -> RETURN . opt_exp opt_semi
+    (24) opt_exp -> . exp
+    (25) opt_exp -> . empty
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
+    (44) empty -> .
 
-    FUNCTION        shift and go to state 27
+  ! shift/reduce conflict for ID resolved as shift
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
+    ;               reduce using rule 44 (empty -> .)
+    DECLARE         reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-    function_value                 shift and go to state 28
+  ! ID              [ reduce using rule 44 (empty -> .) ]
+
+    opt_exp                        shift and go to state 26
+    exp                            shift and go to state 27
+    empty                          shift and go to state 28
 
 state 10
 
-    (10) stmt -> RETURN . opt_exp semi
-    (26) opt_exp -> . exp
-    (27) opt_exp -> . empty
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (46) empty -> .
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (11) stmt -> WHILE . ( exp ) stmt
 
-  ! shift/reduce conflict for ID resolved as shift
-  ! shift/reduce conflict for ( resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    DECLARE         reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    ;               reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
-    FUNCTION        shift and go to state 27
+    (               shift and go to state 29
 
-  ! ID              [ reduce using rule 46 (empty -> .) ]
-  ! (               [ reduce using rule 46 (empty -> .) ]
-  ! MINUS           [ reduce using rule 46 (empty -> .) ]
-
-    opt_exp                        shift and go to state 29
-    exp                            shift and go to state 30
-    empty                          shift and go to state 31
-    function_value                 shift and go to state 23
 
 state 11
 
-    (11) stmt -> WHILE . ( exp ) stmt
+    (12) stmt -> IF . ( exp ) stmt opt_else
 
-    (               shift and go to state 32
+    (               shift and go to state 30
 
 
 state 12
 
-    (12) stmt -> IF . ( exp ) stmt opt_else
-
-    (               shift and go to state 33
-
-
-state 13
-
     (13) stmt -> { . stmt_list }
     (2) stmt_list -> . stmt stmt_list
     (3) stmt_list -> . empty
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
     (11) stmt -> . WHILE ( exp ) stmt
     (12) stmt -> . IF ( exp ) stmt opt_else
     (13) stmt -> . { stmt_list }
-    (46) empty -> .
+    (44) empty -> .
 
     DECLARE         shift and go to state 5
     ID              shift and go to state 6
     GET             shift and go to state 7
     PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
-    }               reduce using rule 46 (empty -> .)
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
+    }               reduce using rule 44 (empty -> .)
 
-    stmt_list                      shift and go to state 34
+    stmt_list                      shift and go to state 31
     stmt                           shift and go to state 3
     empty                          shift and go to state 4
 
-state 14
+state 13
 
     (2) stmt_list -> stmt stmt_list .
 
@@ -361,1333 +333,1067 @@ state 14
     }               reduce using rule 2 (stmt_list -> stmt stmt_list .)
 
 
+state 14
+
+    (4) stmt -> DECLARE ID . ( opt_formal_args ) stmt
+    (5) stmt -> DECLARE ID . opt_init opt_semi
+    (18) opt_init -> . = exp
+    (19) opt_init -> . empty
+    (44) empty -> .
+
+    (               shift and go to state 32
+    =               shift and go to state 34
+    ;               reduce using rule 44 (empty -> .)
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
+
+    opt_init                       shift and go to state 33
+    empty                          shift and go to state 35
+
 state 15
 
-    (4) stmt -> DECLARE ID . opt_init semi
-    (24) opt_init -> . = exp
-    (25) opt_init -> . empty
-    (46) empty -> .
+    (6) stmt -> ID = . exp opt_semi
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    =               shift and go to state 36
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    ;               reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    opt_init                       shift and go to state 35
-    empty                          shift and go to state 37
+    exp                            shift and go to state 36
 
 state 16
 
-    (5) stmt -> ID = . exp semi
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (9) stmt -> ID ( . opt_actual_args ) opt_semi
+    (20) opt_actual_args -> . actual_args
+    (21) opt_actual_args -> . empty
+    (22) actual_args -> . exp , actual_args
+    (23) actual_args -> . exp
+    (44) empty -> .
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    )               reduce using rule 44 (empty -> .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 38
-    function_value                 shift and go to state 23
+    opt_actual_args                shift and go to state 37
+    actual_args                    shift and go to state 38
+    empty                          shift and go to state 39
+    exp                            shift and go to state 40
 
 state 17
 
-    (9) stmt -> ID tuple_list . semi
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (46) empty -> .
+    (7) stmt -> GET ID . opt_semi
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-  ! shift/reduce conflict for ; resolved as shift
-    ;               shift and go to state 40
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 39
-    empty                          shift and go to state 41
+    opt_semi                       shift and go to state 41
+    empty                          shift and go to state 43
 
 state 18
 
-    (14) tuple_list -> ( . opt_tuple ) tuple_list
-    (15) tuple_list -> ( . opt_tuple )
-    (16) opt_tuple -> . tuple
-    (17) opt_tuple -> . empty
-    (18) tuple -> . exp , tuple
-    (19) tuple -> . exp
-    (46) empty -> .
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (8) stmt -> PUT exp . opt_semi
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-    )               reduce using rule 46 (empty -> .)
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-    opt_tuple                      shift and go to state 42
-    tuple                          shift and go to state 43
-    empty                          shift and go to state 44
-    exp                            shift and go to state 45
-    function_value                 shift and go to state 23
+    opt_semi                       shift and go to state 44
+    empty                          shift and go to state 43
 
 state 19
 
-    (6) stmt -> GET ID . semi
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (46) empty -> .
+    (42) exp -> MINUS . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-  ! shift/reduce conflict for ; resolved as shift
-    ;               shift and go to state 40
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 46
-    empty                          shift and go to state 41
+    exp                            shift and go to state 51
 
 state 20
 
-    (7) stmt -> PUT exp . semi
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
-    (46) empty -> .
+    (36) exp -> INTEGER .
 
-  ! shift/reduce conflict for ( resolved as shift
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for LE resolved as shift
-  ! shift/reduce conflict for ; resolved as shift
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    ;               shift and go to state 40
-    (               shift and go to state 18
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    PLUS            reduce using rule 36 (exp -> INTEGER .)
+    MINUS           reduce using rule 36 (exp -> INTEGER .)
+    TIMES           reduce using rule 36 (exp -> INTEGER .)
+    DIVIDE          reduce using rule 36 (exp -> INTEGER .)
+    EQ              reduce using rule 36 (exp -> INTEGER .)
+    LE              reduce using rule 36 (exp -> INTEGER .)
+    ;               reduce using rule 36 (exp -> INTEGER .)
+    DECLARE         reduce using rule 36 (exp -> INTEGER .)
+    ID              reduce using rule 36 (exp -> INTEGER .)
+    GET             reduce using rule 36 (exp -> INTEGER .)
+    PUT             reduce using rule 36 (exp -> INTEGER .)
+    RETURN          reduce using rule 36 (exp -> INTEGER .)
+    WHILE           reduce using rule 36 (exp -> INTEGER .)
+    IF              reduce using rule 36 (exp -> INTEGER .)
+    {               reduce using rule 36 (exp -> INTEGER .)
+    $end            reduce using rule 36 (exp -> INTEGER .)
+    }               reduce using rule 36 (exp -> INTEGER .)
+    ELSE            reduce using rule 36 (exp -> INTEGER .)
+    ,               reduce using rule 36 (exp -> INTEGER .)
+    )               reduce using rule 36 (exp -> INTEGER .)
 
-  ! (               [ reduce using rule 46 (empty -> .) ]
-  ! PLUS            [ reduce using rule 46 (empty -> .) ]
-  ! MINUS           [ reduce using rule 46 (empty -> .) ]
-  ! TIMES           [ reduce using rule 46 (empty -> .) ]
-  ! DIVIDE          [ reduce using rule 46 (empty -> .) ]
-  ! EQ              [ reduce using rule 46 (empty -> .) ]
-  ! LE              [ reduce using rule 46 (empty -> .) ]
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 47
-    tuple_list                     shift and go to state 54
-    empty                          shift and go to state 41
 
 state 21
 
-    (43) exp -> MINUS . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (37) exp -> FLOAT .
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    PLUS            reduce using rule 37 (exp -> FLOAT .)
+    MINUS           reduce using rule 37 (exp -> FLOAT .)
+    TIMES           reduce using rule 37 (exp -> FLOAT .)
+    DIVIDE          reduce using rule 37 (exp -> FLOAT .)
+    EQ              reduce using rule 37 (exp -> FLOAT .)
+    LE              reduce using rule 37 (exp -> FLOAT .)
+    ;               reduce using rule 37 (exp -> FLOAT .)
+    DECLARE         reduce using rule 37 (exp -> FLOAT .)
+    ID              reduce using rule 37 (exp -> FLOAT .)
+    GET             reduce using rule 37 (exp -> FLOAT .)
+    PUT             reduce using rule 37 (exp -> FLOAT .)
+    RETURN          reduce using rule 37 (exp -> FLOAT .)
+    WHILE           reduce using rule 37 (exp -> FLOAT .)
+    IF              reduce using rule 37 (exp -> FLOAT .)
+    {               reduce using rule 37 (exp -> FLOAT .)
+    $end            reduce using rule 37 (exp -> FLOAT .)
+    }               reduce using rule 37 (exp -> FLOAT .)
+    ELSE            reduce using rule 37 (exp -> FLOAT .)
+    ,               reduce using rule 37 (exp -> FLOAT .)
+    )               reduce using rule 37 (exp -> FLOAT .)
 
-    exp                            shift and go to state 55
-    function_value                 shift and go to state 23
 
 state 22
 
-    (38) exp -> INTEGER .
+    (38) exp -> STRING .
 
-    DECLARE         reduce using rule 38 (exp -> INTEGER .)
-    ID              reduce using rule 38 (exp -> INTEGER .)
-    GET             reduce using rule 38 (exp -> INTEGER .)
-    PUT             reduce using rule 38 (exp -> INTEGER .)
-    (               reduce using rule 38 (exp -> INTEGER .)
-    RETURN          reduce using rule 38 (exp -> INTEGER .)
-    WHILE           reduce using rule 38 (exp -> INTEGER .)
-    IF              reduce using rule 38 (exp -> INTEGER .)
-    {               reduce using rule 38 (exp -> INTEGER .)
-    $end            reduce using rule 38 (exp -> INTEGER .)
-    }               reduce using rule 38 (exp -> INTEGER .)
-    ELSE            reduce using rule 38 (exp -> INTEGER .)
-    PLUS            reduce using rule 38 (exp -> INTEGER .)
-    MINUS           reduce using rule 38 (exp -> INTEGER .)
-    TIMES           reduce using rule 38 (exp -> INTEGER .)
-    DIVIDE          reduce using rule 38 (exp -> INTEGER .)
-    EQ              reduce using rule 38 (exp -> INTEGER .)
-    LE              reduce using rule 38 (exp -> INTEGER .)
-    ;               reduce using rule 38 (exp -> INTEGER .)
-    )               reduce using rule 38 (exp -> INTEGER .)
-    ,               reduce using rule 38 (exp -> INTEGER .)
+    PLUS            reduce using rule 38 (exp -> STRING .)
+    MINUS           reduce using rule 38 (exp -> STRING .)
+    TIMES           reduce using rule 38 (exp -> STRING .)
+    DIVIDE          reduce using rule 38 (exp -> STRING .)
+    EQ              reduce using rule 38 (exp -> STRING .)
+    LE              reduce using rule 38 (exp -> STRING .)
+    ;               reduce using rule 38 (exp -> STRING .)
+    DECLARE         reduce using rule 38 (exp -> STRING .)
+    ID              reduce using rule 38 (exp -> STRING .)
+    GET             reduce using rule 38 (exp -> STRING .)
+    PUT             reduce using rule 38 (exp -> STRING .)
+    RETURN          reduce using rule 38 (exp -> STRING .)
+    WHILE           reduce using rule 38 (exp -> STRING .)
+    IF              reduce using rule 38 (exp -> STRING .)
+    {               reduce using rule 38 (exp -> STRING .)
+    $end            reduce using rule 38 (exp -> STRING .)
+    }               reduce using rule 38 (exp -> STRING .)
+    ELSE            reduce using rule 38 (exp -> STRING .)
+    ,               reduce using rule 38 (exp -> STRING .)
+    )               reduce using rule 38 (exp -> STRING .)
 
 
 state 23
 
-    (39) exp -> function_value .
+    (39) exp -> ID .
+    (40) exp -> ID . ( opt_actual_args )
 
-    DECLARE         reduce using rule 39 (exp -> function_value .)
-    ID              reduce using rule 39 (exp -> function_value .)
-    GET             reduce using rule 39 (exp -> function_value .)
-    PUT             reduce using rule 39 (exp -> function_value .)
-    (               reduce using rule 39 (exp -> function_value .)
-    RETURN          reduce using rule 39 (exp -> function_value .)
-    WHILE           reduce using rule 39 (exp -> function_value .)
-    IF              reduce using rule 39 (exp -> function_value .)
-    {               reduce using rule 39 (exp -> function_value .)
-    $end            reduce using rule 39 (exp -> function_value .)
-    }               reduce using rule 39 (exp -> function_value .)
-    ELSE            reduce using rule 39 (exp -> function_value .)
-    PLUS            reduce using rule 39 (exp -> function_value .)
-    MINUS           reduce using rule 39 (exp -> function_value .)
-    TIMES           reduce using rule 39 (exp -> function_value .)
-    DIVIDE          reduce using rule 39 (exp -> function_value .)
-    EQ              reduce using rule 39 (exp -> function_value .)
-    LE              reduce using rule 39 (exp -> function_value .)
-    ;               reduce using rule 39 (exp -> function_value .)
-    )               reduce using rule 39 (exp -> function_value .)
-    ,               reduce using rule 39 (exp -> function_value .)
+    PLUS            reduce using rule 39 (exp -> ID .)
+    MINUS           reduce using rule 39 (exp -> ID .)
+    TIMES           reduce using rule 39 (exp -> ID .)
+    DIVIDE          reduce using rule 39 (exp -> ID .)
+    EQ              reduce using rule 39 (exp -> ID .)
+    LE              reduce using rule 39 (exp -> ID .)
+    ;               reduce using rule 39 (exp -> ID .)
+    DECLARE         reduce using rule 39 (exp -> ID .)
+    ID              reduce using rule 39 (exp -> ID .)
+    GET             reduce using rule 39 (exp -> ID .)
+    PUT             reduce using rule 39 (exp -> ID .)
+    RETURN          reduce using rule 39 (exp -> ID .)
+    WHILE           reduce using rule 39 (exp -> ID .)
+    IF              reduce using rule 39 (exp -> ID .)
+    {               reduce using rule 39 (exp -> ID .)
+    $end            reduce using rule 39 (exp -> ID .)
+    }               reduce using rule 39 (exp -> ID .)
+    ELSE            reduce using rule 39 (exp -> ID .)
+    ,               reduce using rule 39 (exp -> ID .)
+    )               reduce using rule 39 (exp -> ID .)
+    (               shift and go to state 52
 
 
 state 24
 
-    (41) exp -> ID .
+    (41) exp -> ( . exp )
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    DECLARE         reduce using rule 41 (exp -> ID .)
-    ID              reduce using rule 41 (exp -> ID .)
-    GET             reduce using rule 41 (exp -> ID .)
-    PUT             reduce using rule 41 (exp -> ID .)
-    (               reduce using rule 41 (exp -> ID .)
-    RETURN          reduce using rule 41 (exp -> ID .)
-    WHILE           reduce using rule 41 (exp -> ID .)
-    IF              reduce using rule 41 (exp -> ID .)
-    {               reduce using rule 41 (exp -> ID .)
-    $end            reduce using rule 41 (exp -> ID .)
-    }               reduce using rule 41 (exp -> ID .)
-    ELSE            reduce using rule 41 (exp -> ID .)
-    PLUS            reduce using rule 41 (exp -> ID .)
-    MINUS           reduce using rule 41 (exp -> ID .)
-    TIMES           reduce using rule 41 (exp -> ID .)
-    DIVIDE          reduce using rule 41 (exp -> ID .)
-    EQ              reduce using rule 41 (exp -> ID .)
-    LE              reduce using rule 41 (exp -> ID .)
-    ;               reduce using rule 41 (exp -> ID .)
-    )               reduce using rule 41 (exp -> ID .)
-    ,               reduce using rule 41 (exp -> ID .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 53
 
 state 25
 
-    (42) exp -> ( . exp )
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (43) exp -> NOT . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 56
-    function_value                 shift and go to state 23
+    exp                            shift and go to state 54
 
 state 26
 
-    (44) exp -> NOT . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (10) stmt -> RETURN opt_exp . opt_semi
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-    exp                            shift and go to state 57
-    function_value                 shift and go to state 23
+    opt_semi                       shift and go to state 55
+    empty                          shift and go to state 43
 
 state 27
 
-    (45) function_value -> FUNCTION . ( opt_formal_args ) stmt
+    (24) opt_exp -> exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    (               shift and go to state 58
+    ;               reduce using rule 24 (opt_exp -> exp .)
+    DECLARE         reduce using rule 24 (opt_exp -> exp .)
+    ID              reduce using rule 24 (opt_exp -> exp .)
+    GET             reduce using rule 24 (opt_exp -> exp .)
+    PUT             reduce using rule 24 (opt_exp -> exp .)
+    RETURN          reduce using rule 24 (opt_exp -> exp .)
+    WHILE           reduce using rule 24 (opt_exp -> exp .)
+    IF              reduce using rule 24 (opt_exp -> exp .)
+    {               reduce using rule 24 (opt_exp -> exp .)
+    $end            reduce using rule 24 (opt_exp -> exp .)
+    }               reduce using rule 24 (opt_exp -> exp .)
+    ELSE            reduce using rule 24 (opt_exp -> exp .)
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
 
 state 28
 
-    (8) stmt -> ( function_value . ) tuple_list semi
+    (25) opt_exp -> empty .
 
-    )               shift and go to state 59
+    ;               reduce using rule 25 (opt_exp -> empty .)
+    DECLARE         reduce using rule 25 (opt_exp -> empty .)
+    ID              reduce using rule 25 (opt_exp -> empty .)
+    GET             reduce using rule 25 (opt_exp -> empty .)
+    PUT             reduce using rule 25 (opt_exp -> empty .)
+    RETURN          reduce using rule 25 (opt_exp -> empty .)
+    WHILE           reduce using rule 25 (opt_exp -> empty .)
+    IF              reduce using rule 25 (opt_exp -> empty .)
+    {               reduce using rule 25 (opt_exp -> empty .)
+    $end            reduce using rule 25 (opt_exp -> empty .)
+    }               reduce using rule 25 (opt_exp -> empty .)
+    ELSE            reduce using rule 25 (opt_exp -> empty .)
 
 
 state 29
 
-    (10) stmt -> RETURN opt_exp . semi
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (46) empty -> .
+    (11) stmt -> WHILE ( . exp ) stmt
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-  ! shift/reduce conflict for ; resolved as shift
-    ;               shift and go to state 40
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 60
-    empty                          shift and go to state 41
+    exp                            shift and go to state 56
 
 state 30
 
-    (26) opt_exp -> exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (12) stmt -> IF ( . exp ) stmt opt_else
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for LE resolved as shift
-  ! shift/reduce conflict for ( resolved as shift
-    DECLARE         reduce using rule 26 (opt_exp -> exp .)
-    ID              reduce using rule 26 (opt_exp -> exp .)
-    GET             reduce using rule 26 (opt_exp -> exp .)
-    PUT             reduce using rule 26 (opt_exp -> exp .)
-    RETURN          reduce using rule 26 (opt_exp -> exp .)
-    WHILE           reduce using rule 26 (opt_exp -> exp .)
-    IF              reduce using rule 26 (opt_exp -> exp .)
-    {               reduce using rule 26 (opt_exp -> exp .)
-    $end            reduce using rule 26 (opt_exp -> exp .)
-    }               reduce using rule 26 (opt_exp -> exp .)
-    ELSE            reduce using rule 26 (opt_exp -> exp .)
-    ;               reduce using rule 26 (opt_exp -> exp .)
-    )               reduce using rule 26 (opt_exp -> exp .)
-    ,               reduce using rule 26 (opt_exp -> exp .)
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-  ! (               [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! PLUS            [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! MINUS           [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! TIMES           [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! DIVIDE          [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! EQ              [ reduce using rule 26 (opt_exp -> exp .) ]
-  ! LE              [ reduce using rule 26 (opt_exp -> exp .) ]
-
-    tuple_list                     shift and go to state 54
+    exp                            shift and go to state 57
 
 state 31
 
-    (27) opt_exp -> empty .
+    (13) stmt -> { stmt_list . }
 
-    DECLARE         reduce using rule 27 (opt_exp -> empty .)
-    ID              reduce using rule 27 (opt_exp -> empty .)
-    GET             reduce using rule 27 (opt_exp -> empty .)
-    PUT             reduce using rule 27 (opt_exp -> empty .)
-    (               reduce using rule 27 (opt_exp -> empty .)
-    RETURN          reduce using rule 27 (opt_exp -> empty .)
-    WHILE           reduce using rule 27 (opt_exp -> empty .)
-    IF              reduce using rule 27 (opt_exp -> empty .)
-    {               reduce using rule 27 (opt_exp -> empty .)
-    $end            reduce using rule 27 (opt_exp -> empty .)
-    }               reduce using rule 27 (opt_exp -> empty .)
-    ELSE            reduce using rule 27 (opt_exp -> empty .)
-    PLUS            reduce using rule 27 (opt_exp -> empty .)
-    MINUS           reduce using rule 27 (opt_exp -> empty .)
-    TIMES           reduce using rule 27 (opt_exp -> empty .)
-    DIVIDE          reduce using rule 27 (opt_exp -> empty .)
-    EQ              reduce using rule 27 (opt_exp -> empty .)
-    LE              reduce using rule 27 (opt_exp -> empty .)
-    ;               reduce using rule 27 (opt_exp -> empty .)
-    )               reduce using rule 27 (opt_exp -> empty .)
-    ,               reduce using rule 27 (opt_exp -> empty .)
+    }               shift and go to state 58
 
 
 state 32
 
-    (11) stmt -> WHILE ( . exp ) stmt
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (4) stmt -> DECLARE ID ( . opt_formal_args ) stmt
+    (14) opt_formal_args -> . formal_args
+    (15) opt_formal_args -> . empty
+    (16) formal_args -> . ID , formal_args
+    (17) formal_args -> . ID
+    (44) empty -> .
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    ID              shift and go to state 59
+    )               reduce using rule 44 (empty -> .)
 
-    exp                            shift and go to state 61
-    function_value                 shift and go to state 23
+    opt_formal_args                shift and go to state 60
+    formal_args                    shift and go to state 61
+    empty                          shift and go to state 62
 
 state 33
 
-    (12) stmt -> IF ( . exp ) stmt opt_else
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (5) stmt -> DECLARE ID opt_init . opt_semi
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-    exp                            shift and go to state 62
-    function_value                 shift and go to state 23
+    opt_semi                       shift and go to state 63
+    empty                          shift and go to state 43
 
 state 34
 
-    (13) stmt -> { stmt_list . }
+    (18) opt_init -> = . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    }               shift and go to state 63
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 64
 
 state 35
 
-    (4) stmt -> DECLARE ID opt_init . semi
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (46) empty -> .
+    (19) opt_init -> empty .
 
-  ! shift/reduce conflict for ; resolved as shift
-    ;               shift and go to state 40
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    ;               reduce using rule 19 (opt_init -> empty .)
+    DECLARE         reduce using rule 19 (opt_init -> empty .)
+    ID              reduce using rule 19 (opt_init -> empty .)
+    GET             reduce using rule 19 (opt_init -> empty .)
+    PUT             reduce using rule 19 (opt_init -> empty .)
+    RETURN          reduce using rule 19 (opt_init -> empty .)
+    WHILE           reduce using rule 19 (opt_init -> empty .)
+    IF              reduce using rule 19 (opt_init -> empty .)
+    {               reduce using rule 19 (opt_init -> empty .)
+    $end            reduce using rule 19 (opt_init -> empty .)
+    }               reduce using rule 19 (opt_init -> empty .)
+    ELSE            reduce using rule 19 (opt_init -> empty .)
 
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 64
-    empty                          shift and go to state 41
 
 state 36
 
-    (24) opt_init -> = . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (6) stmt -> ID = exp . opt_semi
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
-    exp                            shift and go to state 65
-    function_value                 shift and go to state 23
+    opt_semi                       shift and go to state 65
+    empty                          shift and go to state 43
 
 state 37
 
-    (25) opt_init -> empty .
+    (9) stmt -> ID ( opt_actual_args . ) opt_semi
 
-    DECLARE         reduce using rule 25 (opt_init -> empty .)
-    ID              reduce using rule 25 (opt_init -> empty .)
-    GET             reduce using rule 25 (opt_init -> empty .)
-    PUT             reduce using rule 25 (opt_init -> empty .)
-    (               reduce using rule 25 (opt_init -> empty .)
-    RETURN          reduce using rule 25 (opt_init -> empty .)
-    WHILE           reduce using rule 25 (opt_init -> empty .)
-    IF              reduce using rule 25 (opt_init -> empty .)
-    {               reduce using rule 25 (opt_init -> empty .)
-    $end            reduce using rule 25 (opt_init -> empty .)
-    }               reduce using rule 25 (opt_init -> empty .)
-    ELSE            reduce using rule 25 (opt_init -> empty .)
-    PLUS            reduce using rule 25 (opt_init -> empty .)
-    MINUS           reduce using rule 25 (opt_init -> empty .)
-    TIMES           reduce using rule 25 (opt_init -> empty .)
-    DIVIDE          reduce using rule 25 (opt_init -> empty .)
-    EQ              reduce using rule 25 (opt_init -> empty .)
-    LE              reduce using rule 25 (opt_init -> empty .)
-    ;               reduce using rule 25 (opt_init -> empty .)
-    )               reduce using rule 25 (opt_init -> empty .)
-    ,               reduce using rule 25 (opt_init -> empty .)
+    )               shift and go to state 66
 
 
 state 38
 
-    (5) stmt -> ID = exp . semi
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
-    (46) empty -> .
+    (20) opt_actual_args -> actual_args .
 
-  ! shift/reduce conflict for ( resolved as shift
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for LE resolved as shift
-  ! shift/reduce conflict for ; resolved as shift
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    ;               shift and go to state 40
-    (               shift and go to state 18
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    )               reduce using rule 20 (opt_actual_args -> actual_args .)
 
-  ! (               [ reduce using rule 46 (empty -> .) ]
-  ! PLUS            [ reduce using rule 46 (empty -> .) ]
-  ! MINUS           [ reduce using rule 46 (empty -> .) ]
-  ! TIMES           [ reduce using rule 46 (empty -> .) ]
-  ! DIVIDE          [ reduce using rule 46 (empty -> .) ]
-  ! EQ              [ reduce using rule 46 (empty -> .) ]
-  ! LE              [ reduce using rule 46 (empty -> .) ]
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 66
-    tuple_list                     shift and go to state 54
-    empty                          shift and go to state 41
 
 state 39
 
-    (9) stmt -> ID tuple_list semi .
+    (21) opt_actual_args -> empty .
 
-    DECLARE         reduce using rule 9 (stmt -> ID tuple_list semi .)
-    ID              reduce using rule 9 (stmt -> ID tuple_list semi .)
-    GET             reduce using rule 9 (stmt -> ID tuple_list semi .)
-    PUT             reduce using rule 9 (stmt -> ID tuple_list semi .)
-    (               reduce using rule 9 (stmt -> ID tuple_list semi .)
-    RETURN          reduce using rule 9 (stmt -> ID tuple_list semi .)
-    WHILE           reduce using rule 9 (stmt -> ID tuple_list semi .)
-    IF              reduce using rule 9 (stmt -> ID tuple_list semi .)
-    {               reduce using rule 9 (stmt -> ID tuple_list semi .)
-    $end            reduce using rule 9 (stmt -> ID tuple_list semi .)
-    }               reduce using rule 9 (stmt -> ID tuple_list semi .)
-    ELSE            reduce using rule 9 (stmt -> ID tuple_list semi .)
-    PLUS            reduce using rule 9 (stmt -> ID tuple_list semi .)
-    MINUS           reduce using rule 9 (stmt -> ID tuple_list semi .)
-    TIMES           reduce using rule 9 (stmt -> ID tuple_list semi .)
-    DIVIDE          reduce using rule 9 (stmt -> ID tuple_list semi .)
-    EQ              reduce using rule 9 (stmt -> ID tuple_list semi .)
-    LE              reduce using rule 9 (stmt -> ID tuple_list semi .)
-    ;               reduce using rule 9 (stmt -> ID tuple_list semi .)
-    )               reduce using rule 9 (stmt -> ID tuple_list semi .)
-    ,               reduce using rule 9 (stmt -> ID tuple_list semi .)
+    )               reduce using rule 21 (opt_actual_args -> empty .)
 
 
 state 40
 
-    (30) semi -> ; .
+    (22) actual_args -> exp . , actual_args
+    (23) actual_args -> exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 30 (semi -> ; .)
-    ID              reduce using rule 30 (semi -> ; .)
-    GET             reduce using rule 30 (semi -> ; .)
-    PUT             reduce using rule 30 (semi -> ; .)
-    (               reduce using rule 30 (semi -> ; .)
-    RETURN          reduce using rule 30 (semi -> ; .)
-    WHILE           reduce using rule 30 (semi -> ; .)
-    IF              reduce using rule 30 (semi -> ; .)
-    {               reduce using rule 30 (semi -> ; .)
-    $end            reduce using rule 30 (semi -> ; .)
-    }               reduce using rule 30 (semi -> ; .)
-    ELSE            reduce using rule 30 (semi -> ; .)
-    PLUS            reduce using rule 30 (semi -> ; .)
-    MINUS           reduce using rule 30 (semi -> ; .)
-    TIMES           reduce using rule 30 (semi -> ; .)
-    DIVIDE          reduce using rule 30 (semi -> ; .)
-    EQ              reduce using rule 30 (semi -> ; .)
-    LE              reduce using rule 30 (semi -> ; .)
-    ;               reduce using rule 30 (semi -> ; .)
-    )               reduce using rule 30 (semi -> ; .)
-    ,               reduce using rule 30 (semi -> ; .)
+    ,               shift and go to state 67
+    )               reduce using rule 23 (actual_args -> exp .)
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
 
 state 41
 
-    (31) semi -> empty .
+    (7) stmt -> GET ID opt_semi .
 
-    DECLARE         reduce using rule 31 (semi -> empty .)
-    ID              reduce using rule 31 (semi -> empty .)
-    GET             reduce using rule 31 (semi -> empty .)
-    PUT             reduce using rule 31 (semi -> empty .)
-    (               reduce using rule 31 (semi -> empty .)
-    RETURN          reduce using rule 31 (semi -> empty .)
-    WHILE           reduce using rule 31 (semi -> empty .)
-    IF              reduce using rule 31 (semi -> empty .)
-    {               reduce using rule 31 (semi -> empty .)
-    $end            reduce using rule 31 (semi -> empty .)
-    }               reduce using rule 31 (semi -> empty .)
-    ELSE            reduce using rule 31 (semi -> empty .)
-    PLUS            reduce using rule 31 (semi -> empty .)
-    MINUS           reduce using rule 31 (semi -> empty .)
-    TIMES           reduce using rule 31 (semi -> empty .)
-    DIVIDE          reduce using rule 31 (semi -> empty .)
-    EQ              reduce using rule 31 (semi -> empty .)
-    LE              reduce using rule 31 (semi -> empty .)
-    ;               reduce using rule 31 (semi -> empty .)
-    )               reduce using rule 31 (semi -> empty .)
-    ,               reduce using rule 31 (semi -> empty .)
+    DECLARE         reduce using rule 7 (stmt -> GET ID opt_semi .)
+    ID              reduce using rule 7 (stmt -> GET ID opt_semi .)
+    GET             reduce using rule 7 (stmt -> GET ID opt_semi .)
+    PUT             reduce using rule 7 (stmt -> GET ID opt_semi .)
+    RETURN          reduce using rule 7 (stmt -> GET ID opt_semi .)
+    WHILE           reduce using rule 7 (stmt -> GET ID opt_semi .)
+    IF              reduce using rule 7 (stmt -> GET ID opt_semi .)
+    {               reduce using rule 7 (stmt -> GET ID opt_semi .)
+    $end            reduce using rule 7 (stmt -> GET ID opt_semi .)
+    }               reduce using rule 7 (stmt -> GET ID opt_semi .)
+    ELSE            reduce using rule 7 (stmt -> GET ID opt_semi .)
 
 
 state 42
 
-    (14) tuple_list -> ( opt_tuple . ) tuple_list
-    (15) tuple_list -> ( opt_tuple . )
+    (28) opt_semi -> ; .
 
-    )               shift and go to state 67
+    DECLARE         reduce using rule 28 (opt_semi -> ; .)
+    ID              reduce using rule 28 (opt_semi -> ; .)
+    GET             reduce using rule 28 (opt_semi -> ; .)
+    PUT             reduce using rule 28 (opt_semi -> ; .)
+    RETURN          reduce using rule 28 (opt_semi -> ; .)
+    WHILE           reduce using rule 28 (opt_semi -> ; .)
+    IF              reduce using rule 28 (opt_semi -> ; .)
+    {               reduce using rule 28 (opt_semi -> ; .)
+    $end            reduce using rule 28 (opt_semi -> ; .)
+    }               reduce using rule 28 (opt_semi -> ; .)
+    ELSE            reduce using rule 28 (opt_semi -> ; .)
 
 
 state 43
 
-    (16) opt_tuple -> tuple .
+    (29) opt_semi -> empty .
 
-    )               reduce using rule 16 (opt_tuple -> tuple .)
+    DECLARE         reduce using rule 29 (opt_semi -> empty .)
+    ID              reduce using rule 29 (opt_semi -> empty .)
+    GET             reduce using rule 29 (opt_semi -> empty .)
+    PUT             reduce using rule 29 (opt_semi -> empty .)
+    RETURN          reduce using rule 29 (opt_semi -> empty .)
+    WHILE           reduce using rule 29 (opt_semi -> empty .)
+    IF              reduce using rule 29 (opt_semi -> empty .)
+    {               reduce using rule 29 (opt_semi -> empty .)
+    $end            reduce using rule 29 (opt_semi -> empty .)
+    }               reduce using rule 29 (opt_semi -> empty .)
+    ELSE            reduce using rule 29 (opt_semi -> empty .)
 
 
 state 44
 
-    (17) opt_tuple -> empty .
+    (8) stmt -> PUT exp opt_semi .
 
-    )               reduce using rule 17 (opt_tuple -> empty .)
+    DECLARE         reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    ID              reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    GET             reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    PUT             reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    RETURN          reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    WHILE           reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    IF              reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    {               reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    $end            reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    }               reduce using rule 8 (stmt -> PUT exp opt_semi .)
+    ELSE            reduce using rule 8 (stmt -> PUT exp opt_semi .)
 
 
 state 45
 
-    (18) tuple -> exp . , tuple
-    (19) tuple -> exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (30) exp -> exp PLUS . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    ,               shift and go to state 68
-    )               reduce using rule 19 (tuple -> exp .)
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    tuple_list                     shift and go to state 54
+    exp                            shift and go to state 68
 
 state 46
 
-    (6) stmt -> GET ID semi .
+    (31) exp -> exp MINUS . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    DECLARE         reduce using rule 6 (stmt -> GET ID semi .)
-    ID              reduce using rule 6 (stmt -> GET ID semi .)
-    GET             reduce using rule 6 (stmt -> GET ID semi .)
-    PUT             reduce using rule 6 (stmt -> GET ID semi .)
-    (               reduce using rule 6 (stmt -> GET ID semi .)
-    RETURN          reduce using rule 6 (stmt -> GET ID semi .)
-    WHILE           reduce using rule 6 (stmt -> GET ID semi .)
-    IF              reduce using rule 6 (stmt -> GET ID semi .)
-    {               reduce using rule 6 (stmt -> GET ID semi .)
-    $end            reduce using rule 6 (stmt -> GET ID semi .)
-    }               reduce using rule 6 (stmt -> GET ID semi .)
-    ELSE            reduce using rule 6 (stmt -> GET ID semi .)
-    PLUS            reduce using rule 6 (stmt -> GET ID semi .)
-    MINUS           reduce using rule 6 (stmt -> GET ID semi .)
-    TIMES           reduce using rule 6 (stmt -> GET ID semi .)
-    DIVIDE          reduce using rule 6 (stmt -> GET ID semi .)
-    EQ              reduce using rule 6 (stmt -> GET ID semi .)
-    LE              reduce using rule 6 (stmt -> GET ID semi .)
-    ;               reduce using rule 6 (stmt -> GET ID semi .)
-    )               reduce using rule 6 (stmt -> GET ID semi .)
-    ,               reduce using rule 6 (stmt -> GET ID semi .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 69
 
 state 47
 
-    (7) stmt -> PUT exp semi .
+    (32) exp -> exp TIMES . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    DECLARE         reduce using rule 7 (stmt -> PUT exp semi .)
-    ID              reduce using rule 7 (stmt -> PUT exp semi .)
-    GET             reduce using rule 7 (stmt -> PUT exp semi .)
-    PUT             reduce using rule 7 (stmt -> PUT exp semi .)
-    (               reduce using rule 7 (stmt -> PUT exp semi .)
-    RETURN          reduce using rule 7 (stmt -> PUT exp semi .)
-    WHILE           reduce using rule 7 (stmt -> PUT exp semi .)
-    IF              reduce using rule 7 (stmt -> PUT exp semi .)
-    {               reduce using rule 7 (stmt -> PUT exp semi .)
-    $end            reduce using rule 7 (stmt -> PUT exp semi .)
-    }               reduce using rule 7 (stmt -> PUT exp semi .)
-    ELSE            reduce using rule 7 (stmt -> PUT exp semi .)
-    PLUS            reduce using rule 7 (stmt -> PUT exp semi .)
-    MINUS           reduce using rule 7 (stmt -> PUT exp semi .)
-    TIMES           reduce using rule 7 (stmt -> PUT exp semi .)
-    DIVIDE          reduce using rule 7 (stmt -> PUT exp semi .)
-    EQ              reduce using rule 7 (stmt -> PUT exp semi .)
-    LE              reduce using rule 7 (stmt -> PUT exp semi .)
-    ;               reduce using rule 7 (stmt -> PUT exp semi .)
-    )               reduce using rule 7 (stmt -> PUT exp semi .)
-    ,               reduce using rule 7 (stmt -> PUT exp semi .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
+    exp                            shift and go to state 70
 
 state 48
 
-    (32) exp -> exp PLUS . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (33) exp -> exp DIVIDE . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 69
-    function_value                 shift and go to state 23
+    exp                            shift and go to state 71
 
 state 49
 
-    (33) exp -> exp MINUS . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (34) exp -> exp EQ . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 70
-    function_value                 shift and go to state 23
+    exp                            shift and go to state 72
 
 state 50
 
-    (34) exp -> exp TIMES . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (35) exp -> exp LE . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 71
-    function_value                 shift and go to state 23
+    exp                            shift and go to state 73
 
 state 51
 
-    (35) exp -> exp DIVIDE . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (42) exp -> MINUS exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    PLUS            reduce using rule 42 (exp -> MINUS exp .)
+    MINUS           reduce using rule 42 (exp -> MINUS exp .)
+    TIMES           reduce using rule 42 (exp -> MINUS exp .)
+    DIVIDE          reduce using rule 42 (exp -> MINUS exp .)
+    EQ              reduce using rule 42 (exp -> MINUS exp .)
+    LE              reduce using rule 42 (exp -> MINUS exp .)
+    ;               reduce using rule 42 (exp -> MINUS exp .)
+    DECLARE         reduce using rule 42 (exp -> MINUS exp .)
+    ID              reduce using rule 42 (exp -> MINUS exp .)
+    GET             reduce using rule 42 (exp -> MINUS exp .)
+    PUT             reduce using rule 42 (exp -> MINUS exp .)
+    RETURN          reduce using rule 42 (exp -> MINUS exp .)
+    WHILE           reduce using rule 42 (exp -> MINUS exp .)
+    IF              reduce using rule 42 (exp -> MINUS exp .)
+    {               reduce using rule 42 (exp -> MINUS exp .)
+    $end            reduce using rule 42 (exp -> MINUS exp .)
+    }               reduce using rule 42 (exp -> MINUS exp .)
+    ELSE            reduce using rule 42 (exp -> MINUS exp .)
+    ,               reduce using rule 42 (exp -> MINUS exp .)
+    )               reduce using rule 42 (exp -> MINUS exp .)
 
-    exp                            shift and go to state 72
-    function_value                 shift and go to state 23
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! TIMES           [ shift and go to state 47 ]
+  ! DIVIDE          [ shift and go to state 48 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
+
 
 state 52
 
-    (36) exp -> exp EQ . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (40) exp -> ID ( . opt_actual_args )
+    (20) opt_actual_args -> . actual_args
+    (21) opt_actual_args -> . empty
+    (22) actual_args -> . exp , actual_args
+    (23) actual_args -> . exp
+    (44) empty -> .
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    )               reduce using rule 44 (empty -> .)
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-    exp                            shift and go to state 73
-    function_value                 shift and go to state 23
+    opt_actual_args                shift and go to state 74
+    actual_args                    shift and go to state 38
+    empty                          shift and go to state 39
+    exp                            shift and go to state 40
 
 state 53
 
-    (37) exp -> exp LE . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (41) exp -> ( exp . )
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    )               shift and go to state 75
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
-    exp                            shift and go to state 74
-    function_value                 shift and go to state 23
 
 state 54
 
-    (40) exp -> exp tuple_list .
+    (43) exp -> NOT exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 40 (exp -> exp tuple_list .)
-    ID              reduce using rule 40 (exp -> exp tuple_list .)
-    GET             reduce using rule 40 (exp -> exp tuple_list .)
-    PUT             reduce using rule 40 (exp -> exp tuple_list .)
-    (               reduce using rule 40 (exp -> exp tuple_list .)
-    RETURN          reduce using rule 40 (exp -> exp tuple_list .)
-    WHILE           reduce using rule 40 (exp -> exp tuple_list .)
-    IF              reduce using rule 40 (exp -> exp tuple_list .)
-    {               reduce using rule 40 (exp -> exp tuple_list .)
-    $end            reduce using rule 40 (exp -> exp tuple_list .)
-    }               reduce using rule 40 (exp -> exp tuple_list .)
-    ELSE            reduce using rule 40 (exp -> exp tuple_list .)
-    PLUS            reduce using rule 40 (exp -> exp tuple_list .)
-    MINUS           reduce using rule 40 (exp -> exp tuple_list .)
-    TIMES           reduce using rule 40 (exp -> exp tuple_list .)
-    DIVIDE          reduce using rule 40 (exp -> exp tuple_list .)
-    EQ              reduce using rule 40 (exp -> exp tuple_list .)
-    LE              reduce using rule 40 (exp -> exp tuple_list .)
-    ;               reduce using rule 40 (exp -> exp tuple_list .)
-    )               reduce using rule 40 (exp -> exp tuple_list .)
-    ,               reduce using rule 40 (exp -> exp tuple_list .)
+    PLUS            reduce using rule 43 (exp -> NOT exp .)
+    MINUS           reduce using rule 43 (exp -> NOT exp .)
+    TIMES           reduce using rule 43 (exp -> NOT exp .)
+    DIVIDE          reduce using rule 43 (exp -> NOT exp .)
+    EQ              reduce using rule 43 (exp -> NOT exp .)
+    LE              reduce using rule 43 (exp -> NOT exp .)
+    ;               reduce using rule 43 (exp -> NOT exp .)
+    DECLARE         reduce using rule 43 (exp -> NOT exp .)
+    ID              reduce using rule 43 (exp -> NOT exp .)
+    GET             reduce using rule 43 (exp -> NOT exp .)
+    PUT             reduce using rule 43 (exp -> NOT exp .)
+    RETURN          reduce using rule 43 (exp -> NOT exp .)
+    WHILE           reduce using rule 43 (exp -> NOT exp .)
+    IF              reduce using rule 43 (exp -> NOT exp .)
+    {               reduce using rule 43 (exp -> NOT exp .)
+    $end            reduce using rule 43 (exp -> NOT exp .)
+    }               reduce using rule 43 (exp -> NOT exp .)
+    ELSE            reduce using rule 43 (exp -> NOT exp .)
+    ,               reduce using rule 43 (exp -> NOT exp .)
+    )               reduce using rule 43 (exp -> NOT exp .)
+
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! TIMES           [ shift and go to state 47 ]
+  ! DIVIDE          [ shift and go to state 48 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
 
 state 55
 
-    (43) exp -> MINUS exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (10) stmt -> RETURN opt_exp opt_semi .
 
-    DECLARE         reduce using rule 43 (exp -> MINUS exp .)
-    ID              reduce using rule 43 (exp -> MINUS exp .)
-    GET             reduce using rule 43 (exp -> MINUS exp .)
-    PUT             reduce using rule 43 (exp -> MINUS exp .)
-    (               reduce using rule 43 (exp -> MINUS exp .)
-    RETURN          reduce using rule 43 (exp -> MINUS exp .)
-    WHILE           reduce using rule 43 (exp -> MINUS exp .)
-    IF              reduce using rule 43 (exp -> MINUS exp .)
-    {               reduce using rule 43 (exp -> MINUS exp .)
-    $end            reduce using rule 43 (exp -> MINUS exp .)
-    }               reduce using rule 43 (exp -> MINUS exp .)
-    ELSE            reduce using rule 43 (exp -> MINUS exp .)
-    PLUS            reduce using rule 43 (exp -> MINUS exp .)
-    MINUS           reduce using rule 43 (exp -> MINUS exp .)
-    TIMES           reduce using rule 43 (exp -> MINUS exp .)
-    DIVIDE          reduce using rule 43 (exp -> MINUS exp .)
-    EQ              reduce using rule 43 (exp -> MINUS exp .)
-    LE              reduce using rule 43 (exp -> MINUS exp .)
-    ;               reduce using rule 43 (exp -> MINUS exp .)
-    )               reduce using rule 43 (exp -> MINUS exp .)
-    ,               reduce using rule 43 (exp -> MINUS exp .)
+    DECLARE         reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    ID              reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    GET             reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    PUT             reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    RETURN          reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    WHILE           reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    IF              reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    {               reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    $end            reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    }               reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
+    ELSE            reduce using rule 10 (stmt -> RETURN opt_exp opt_semi .)
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! TIMES           [ shift and go to state 50 ]
-  ! DIVIDE          [ shift and go to state 51 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
-
-    tuple_list                     shift and go to state 54
 
 state 56
 
-    (42) exp -> ( exp . )
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (11) stmt -> WHILE ( exp . ) stmt
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    )               shift and go to state 75
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
+    )               shift and go to state 76
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
-    tuple_list                     shift and go to state 54
 
 state 57
 
-    (44) exp -> NOT exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (12) stmt -> IF ( exp . ) stmt opt_else
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 44 (exp -> NOT exp .)
-    ID              reduce using rule 44 (exp -> NOT exp .)
-    GET             reduce using rule 44 (exp -> NOT exp .)
-    PUT             reduce using rule 44 (exp -> NOT exp .)
-    (               reduce using rule 44 (exp -> NOT exp .)
-    RETURN          reduce using rule 44 (exp -> NOT exp .)
-    WHILE           reduce using rule 44 (exp -> NOT exp .)
-    IF              reduce using rule 44 (exp -> NOT exp .)
-    {               reduce using rule 44 (exp -> NOT exp .)
-    $end            reduce using rule 44 (exp -> NOT exp .)
-    }               reduce using rule 44 (exp -> NOT exp .)
-    ELSE            reduce using rule 44 (exp -> NOT exp .)
-    PLUS            reduce using rule 44 (exp -> NOT exp .)
-    MINUS           reduce using rule 44 (exp -> NOT exp .)
-    TIMES           reduce using rule 44 (exp -> NOT exp .)
-    DIVIDE          reduce using rule 44 (exp -> NOT exp .)
-    EQ              reduce using rule 44 (exp -> NOT exp .)
-    LE              reduce using rule 44 (exp -> NOT exp .)
-    ;               reduce using rule 44 (exp -> NOT exp .)
-    )               reduce using rule 44 (exp -> NOT exp .)
-    ,               reduce using rule 44 (exp -> NOT exp .)
+    )               shift and go to state 77
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! TIMES           [ shift and go to state 50 ]
-  ! DIVIDE          [ shift and go to state 51 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
-
-    tuple_list                     shift and go to state 54
 
 state 58
-
-    (45) function_value -> FUNCTION ( . opt_formal_args ) stmt
-    (20) opt_formal_args -> . formal_args
-    (21) opt_formal_args -> . empty
-    (22) formal_args -> . ID , formal_args
-    (23) formal_args -> . ID
-    (46) empty -> .
-
-    ID              shift and go to state 79
-    )               reduce using rule 46 (empty -> .)
-
-    opt_formal_args                shift and go to state 76
-    formal_args                    shift and go to state 77
-    empty                          shift and go to state 78
-
-state 59
-
-    (8) stmt -> ( function_value ) . tuple_list semi
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
-
-    (               shift and go to state 18
-
-    tuple_list                     shift and go to state 80
-
-state 60
-
-    (10) stmt -> RETURN opt_exp semi .
-
-    DECLARE         reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    ID              reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    GET             reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    PUT             reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    (               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    RETURN          reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    WHILE           reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    IF              reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    {               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    $end            reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    }               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    ELSE            reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    PLUS            reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    MINUS           reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    TIMES           reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    DIVIDE          reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    EQ              reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    LE              reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    ;               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    )               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-    ,               reduce using rule 10 (stmt -> RETURN opt_exp semi .)
-
-
-state 61
-
-    (11) stmt -> WHILE ( exp . ) stmt
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
-
-    )               shift and go to state 81
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
-
-    tuple_list                     shift and go to state 54
-
-state 62
-
-    (12) stmt -> IF ( exp . ) stmt opt_else
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
-
-    )               shift and go to state 82
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
-
-    tuple_list                     shift and go to state 54
-
-state 63
 
     (13) stmt -> { stmt_list } .
 
@@ -1695,7 +1401,6 @@ state 63
     ID              reduce using rule 13 (stmt -> { stmt_list } .)
     GET             reduce using rule 13 (stmt -> { stmt_list } .)
     PUT             reduce using rule 13 (stmt -> { stmt_list } .)
-    (               reduce using rule 13 (stmt -> { stmt_list } .)
     RETURN          reduce using rule 13 (stmt -> { stmt_list } .)
     WHILE           reduce using rule 13 (stmt -> { stmt_list } .)
     IF              reduce using rule 13 (stmt -> { stmt_list } .)
@@ -1703,700 +1408,559 @@ state 63
     $end            reduce using rule 13 (stmt -> { stmt_list } .)
     }               reduce using rule 13 (stmt -> { stmt_list } .)
     ELSE            reduce using rule 13 (stmt -> { stmt_list } .)
-    PLUS            reduce using rule 13 (stmt -> { stmt_list } .)
-    MINUS           reduce using rule 13 (stmt -> { stmt_list } .)
-    TIMES           reduce using rule 13 (stmt -> { stmt_list } .)
-    DIVIDE          reduce using rule 13 (stmt -> { stmt_list } .)
-    EQ              reduce using rule 13 (stmt -> { stmt_list } .)
-    LE              reduce using rule 13 (stmt -> { stmt_list } .)
-    ;               reduce using rule 13 (stmt -> { stmt_list } .)
-    )               reduce using rule 13 (stmt -> { stmt_list } .)
-    ,               reduce using rule 13 (stmt -> { stmt_list } .)
+
+
+state 59
+
+    (16) formal_args -> ID . , formal_args
+    (17) formal_args -> ID .
+
+    ,               shift and go to state 78
+    )               reduce using rule 17 (formal_args -> ID .)
+
+
+state 60
+
+    (4) stmt -> DECLARE ID ( opt_formal_args . ) stmt
+
+    )               shift and go to state 79
+
+
+state 61
+
+    (14) opt_formal_args -> formal_args .
+
+    )               reduce using rule 14 (opt_formal_args -> formal_args .)
+
+
+state 62
+
+    (15) opt_formal_args -> empty .
+
+    )               reduce using rule 15 (opt_formal_args -> empty .)
+
+
+state 63
+
+    (5) stmt -> DECLARE ID opt_init opt_semi .
+
+    DECLARE         reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    ID              reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    GET             reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    PUT             reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    RETURN          reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    WHILE           reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    IF              reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    {               reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    $end            reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    }               reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
+    ELSE            reduce using rule 5 (stmt -> DECLARE ID opt_init opt_semi .)
 
 
 state 64
 
-    (4) stmt -> DECLARE ID opt_init semi .
+    (18) opt_init -> = exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    ID              reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    GET             reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    PUT             reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    (               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    RETURN          reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    WHILE           reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    IF              reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    {               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    $end            reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    }               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    ELSE            reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    PLUS            reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    MINUS           reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    TIMES           reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    DIVIDE          reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    EQ              reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    LE              reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    ;               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    )               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
-    ,               reduce using rule 4 (stmt -> DECLARE ID opt_init semi .)
+    ;               reduce using rule 18 (opt_init -> = exp .)
+    DECLARE         reduce using rule 18 (opt_init -> = exp .)
+    ID              reduce using rule 18 (opt_init -> = exp .)
+    GET             reduce using rule 18 (opt_init -> = exp .)
+    PUT             reduce using rule 18 (opt_init -> = exp .)
+    RETURN          reduce using rule 18 (opt_init -> = exp .)
+    WHILE           reduce using rule 18 (opt_init -> = exp .)
+    IF              reduce using rule 18 (opt_init -> = exp .)
+    {               reduce using rule 18 (opt_init -> = exp .)
+    $end            reduce using rule 18 (opt_init -> = exp .)
+    }               reduce using rule 18 (opt_init -> = exp .)
+    ELSE            reduce using rule 18 (opt_init -> = exp .)
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
+    EQ              shift and go to state 49
+    LE              shift and go to state 50
 
 
 state 65
 
-    (24) opt_init -> = exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (6) stmt -> ID = exp opt_semi .
 
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQ resolved as shift
-  ! shift/reduce conflict for LE resolved as shift
-  ! shift/reduce conflict for ( resolved as shift
-    DECLARE         reduce using rule 24 (opt_init -> = exp .)
-    ID              reduce using rule 24 (opt_init -> = exp .)
-    GET             reduce using rule 24 (opt_init -> = exp .)
-    PUT             reduce using rule 24 (opt_init -> = exp .)
-    RETURN          reduce using rule 24 (opt_init -> = exp .)
-    WHILE           reduce using rule 24 (opt_init -> = exp .)
-    IF              reduce using rule 24 (opt_init -> = exp .)
-    {               reduce using rule 24 (opt_init -> = exp .)
-    $end            reduce using rule 24 (opt_init -> = exp .)
-    }               reduce using rule 24 (opt_init -> = exp .)
-    ELSE            reduce using rule 24 (opt_init -> = exp .)
-    ;               reduce using rule 24 (opt_init -> = exp .)
-    )               reduce using rule 24 (opt_init -> = exp .)
-    ,               reduce using rule 24 (opt_init -> = exp .)
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
-    EQ              shift and go to state 52
-    LE              shift and go to state 53
-    (               shift and go to state 18
+    DECLARE         reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    ID              reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    GET             reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    PUT             reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    RETURN          reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    WHILE           reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    IF              reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    {               reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    $end            reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    }               reduce using rule 6 (stmt -> ID = exp opt_semi .)
+    ELSE            reduce using rule 6 (stmt -> ID = exp opt_semi .)
 
-  ! (               [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! PLUS            [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! MINUS           [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! TIMES           [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! DIVIDE          [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! EQ              [ reduce using rule 24 (opt_init -> = exp .) ]
-  ! LE              [ reduce using rule 24 (opt_init -> = exp .) ]
-
-    tuple_list                     shift and go to state 54
 
 state 66
 
-    (5) stmt -> ID = exp semi .
+    (9) stmt -> ID ( opt_actual_args ) . opt_semi
+    (28) opt_semi -> . ;
+    (29) opt_semi -> . empty
+    (44) empty -> .
 
-    DECLARE         reduce using rule 5 (stmt -> ID = exp semi .)
-    ID              reduce using rule 5 (stmt -> ID = exp semi .)
-    GET             reduce using rule 5 (stmt -> ID = exp semi .)
-    PUT             reduce using rule 5 (stmt -> ID = exp semi .)
-    (               reduce using rule 5 (stmt -> ID = exp semi .)
-    RETURN          reduce using rule 5 (stmt -> ID = exp semi .)
-    WHILE           reduce using rule 5 (stmt -> ID = exp semi .)
-    IF              reduce using rule 5 (stmt -> ID = exp semi .)
-    {               reduce using rule 5 (stmt -> ID = exp semi .)
-    $end            reduce using rule 5 (stmt -> ID = exp semi .)
-    }               reduce using rule 5 (stmt -> ID = exp semi .)
-    ELSE            reduce using rule 5 (stmt -> ID = exp semi .)
-    PLUS            reduce using rule 5 (stmt -> ID = exp semi .)
-    MINUS           reduce using rule 5 (stmt -> ID = exp semi .)
-    TIMES           reduce using rule 5 (stmt -> ID = exp semi .)
-    DIVIDE          reduce using rule 5 (stmt -> ID = exp semi .)
-    EQ              reduce using rule 5 (stmt -> ID = exp semi .)
-    LE              reduce using rule 5 (stmt -> ID = exp semi .)
-    ;               reduce using rule 5 (stmt -> ID = exp semi .)
-    )               reduce using rule 5 (stmt -> ID = exp semi .)
-    ,               reduce using rule 5 (stmt -> ID = exp semi .)
+    ;               shift and go to state 42
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
+    ELSE            reduce using rule 44 (empty -> .)
 
+    opt_semi                       shift and go to state 80
+    empty                          shift and go to state 43
 
 state 67
 
-    (14) tuple_list -> ( opt_tuple ) . tuple_list
-    (15) tuple_list -> ( opt_tuple ) .
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (22) actual_args -> exp , . actual_args
+    (22) actual_args -> . exp , actual_args
+    (23) actual_args -> . exp
+    (30) exp -> . exp PLUS exp
+    (31) exp -> . exp MINUS exp
+    (32) exp -> . exp TIMES exp
+    (33) exp -> . exp DIVIDE exp
+    (34) exp -> . exp EQ exp
+    (35) exp -> . exp LE exp
+    (36) exp -> . INTEGER
+    (37) exp -> . FLOAT
+    (38) exp -> . STRING
+    (39) exp -> . ID
+    (40) exp -> . ID ( opt_actual_args )
+    (41) exp -> . ( exp )
+    (42) exp -> . MINUS exp
+    (43) exp -> . NOT exp
 
-  ! shift/reduce conflict for ( resolved as shift
-    ;               reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    DECLARE         reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    ID              reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    GET             reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    PUT             reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    RETURN          reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    WHILE           reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    IF              reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    {               reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    $end            reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    }               reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    ELSE            reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    PLUS            reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    MINUS           reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    TIMES           reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    DIVIDE          reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    EQ              reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    LE              reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    )               reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    ,               reduce using rule 15 (tuple_list -> ( opt_tuple ) .)
-    (               shift and go to state 18
+    INTEGER         shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    ID              shift and go to state 23
+    (               shift and go to state 24
+    MINUS           shift and go to state 19
+    NOT             shift and go to state 25
 
-  ! (               [ reduce using rule 15 (tuple_list -> ( opt_tuple ) .) ]
-
-    tuple_list                     shift and go to state 83
+    exp                            shift and go to state 40
+    actual_args                    shift and go to state 81
 
 state 68
 
-    (18) tuple -> exp , . tuple
-    (18) tuple -> . exp , tuple
-    (19) tuple -> . exp
-    (32) exp -> . exp PLUS exp
-    (33) exp -> . exp MINUS exp
-    (34) exp -> . exp TIMES exp
-    (35) exp -> . exp DIVIDE exp
-    (36) exp -> . exp EQ exp
-    (37) exp -> . exp LE exp
-    (38) exp -> . INTEGER
-    (39) exp -> . function_value
-    (40) exp -> . exp tuple_list
-    (41) exp -> . ID
-    (42) exp -> . ( exp )
-    (43) exp -> . MINUS exp
-    (44) exp -> . NOT exp
-    (45) function_value -> . FUNCTION ( opt_formal_args ) stmt
+    (30) exp -> exp PLUS exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    INTEGER         shift and go to state 22
-    ID              shift and go to state 24
-    (               shift and go to state 25
-    MINUS           shift and go to state 21
-    NOT             shift and go to state 26
-    FUNCTION        shift and go to state 27
+    PLUS            reduce using rule 30 (exp -> exp PLUS exp .)
+    MINUS           reduce using rule 30 (exp -> exp PLUS exp .)
+    EQ              reduce using rule 30 (exp -> exp PLUS exp .)
+    LE              reduce using rule 30 (exp -> exp PLUS exp .)
+    ;               reduce using rule 30 (exp -> exp PLUS exp .)
+    DECLARE         reduce using rule 30 (exp -> exp PLUS exp .)
+    ID              reduce using rule 30 (exp -> exp PLUS exp .)
+    GET             reduce using rule 30 (exp -> exp PLUS exp .)
+    PUT             reduce using rule 30 (exp -> exp PLUS exp .)
+    RETURN          reduce using rule 30 (exp -> exp PLUS exp .)
+    WHILE           reduce using rule 30 (exp -> exp PLUS exp .)
+    IF              reduce using rule 30 (exp -> exp PLUS exp .)
+    {               reduce using rule 30 (exp -> exp PLUS exp .)
+    $end            reduce using rule 30 (exp -> exp PLUS exp .)
+    }               reduce using rule 30 (exp -> exp PLUS exp .)
+    ELSE            reduce using rule 30 (exp -> exp PLUS exp .)
+    ,               reduce using rule 30 (exp -> exp PLUS exp .)
+    )               reduce using rule 30 (exp -> exp PLUS exp .)
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
 
-    exp                            shift and go to state 45
-    tuple                          shift and go to state 84
-    function_value                 shift and go to state 23
+  ! TIMES           [ reduce using rule 30 (exp -> exp PLUS exp .) ]
+  ! DIVIDE          [ reduce using rule 30 (exp -> exp PLUS exp .) ]
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
+
 
 state 69
 
-    (32) exp -> exp PLUS exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (31) exp -> exp MINUS exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 32 (exp -> exp PLUS exp .)
-    ID              reduce using rule 32 (exp -> exp PLUS exp .)
-    GET             reduce using rule 32 (exp -> exp PLUS exp .)
-    PUT             reduce using rule 32 (exp -> exp PLUS exp .)
-    (               reduce using rule 32 (exp -> exp PLUS exp .)
-    RETURN          reduce using rule 32 (exp -> exp PLUS exp .)
-    WHILE           reduce using rule 32 (exp -> exp PLUS exp .)
-    IF              reduce using rule 32 (exp -> exp PLUS exp .)
-    {               reduce using rule 32 (exp -> exp PLUS exp .)
-    $end            reduce using rule 32 (exp -> exp PLUS exp .)
-    }               reduce using rule 32 (exp -> exp PLUS exp .)
-    ELSE            reduce using rule 32 (exp -> exp PLUS exp .)
-    PLUS            reduce using rule 32 (exp -> exp PLUS exp .)
-    MINUS           reduce using rule 32 (exp -> exp PLUS exp .)
-    EQ              reduce using rule 32 (exp -> exp PLUS exp .)
-    LE              reduce using rule 32 (exp -> exp PLUS exp .)
-    ;               reduce using rule 32 (exp -> exp PLUS exp .)
-    )               reduce using rule 32 (exp -> exp PLUS exp .)
-    ,               reduce using rule 32 (exp -> exp PLUS exp .)
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
+    PLUS            reduce using rule 31 (exp -> exp MINUS exp .)
+    MINUS           reduce using rule 31 (exp -> exp MINUS exp .)
+    EQ              reduce using rule 31 (exp -> exp MINUS exp .)
+    LE              reduce using rule 31 (exp -> exp MINUS exp .)
+    ;               reduce using rule 31 (exp -> exp MINUS exp .)
+    DECLARE         reduce using rule 31 (exp -> exp MINUS exp .)
+    ID              reduce using rule 31 (exp -> exp MINUS exp .)
+    GET             reduce using rule 31 (exp -> exp MINUS exp .)
+    PUT             reduce using rule 31 (exp -> exp MINUS exp .)
+    RETURN          reduce using rule 31 (exp -> exp MINUS exp .)
+    WHILE           reduce using rule 31 (exp -> exp MINUS exp .)
+    IF              reduce using rule 31 (exp -> exp MINUS exp .)
+    {               reduce using rule 31 (exp -> exp MINUS exp .)
+    $end            reduce using rule 31 (exp -> exp MINUS exp .)
+    }               reduce using rule 31 (exp -> exp MINUS exp .)
+    ELSE            reduce using rule 31 (exp -> exp MINUS exp .)
+    ,               reduce using rule 31 (exp -> exp MINUS exp .)
+    )               reduce using rule 31 (exp -> exp MINUS exp .)
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
 
-  ! TIMES           [ reduce using rule 32 (exp -> exp PLUS exp .) ]
-  ! DIVIDE          [ reduce using rule 32 (exp -> exp PLUS exp .) ]
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
+  ! TIMES           [ reduce using rule 31 (exp -> exp MINUS exp .) ]
+  ! DIVIDE          [ reduce using rule 31 (exp -> exp MINUS exp .) ]
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
-    tuple_list                     shift and go to state 54
 
 state 70
 
-    (33) exp -> exp MINUS exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (32) exp -> exp TIMES exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 33 (exp -> exp MINUS exp .)
-    ID              reduce using rule 33 (exp -> exp MINUS exp .)
-    GET             reduce using rule 33 (exp -> exp MINUS exp .)
-    PUT             reduce using rule 33 (exp -> exp MINUS exp .)
-    (               reduce using rule 33 (exp -> exp MINUS exp .)
-    RETURN          reduce using rule 33 (exp -> exp MINUS exp .)
-    WHILE           reduce using rule 33 (exp -> exp MINUS exp .)
-    IF              reduce using rule 33 (exp -> exp MINUS exp .)
-    {               reduce using rule 33 (exp -> exp MINUS exp .)
-    $end            reduce using rule 33 (exp -> exp MINUS exp .)
-    }               reduce using rule 33 (exp -> exp MINUS exp .)
-    ELSE            reduce using rule 33 (exp -> exp MINUS exp .)
-    PLUS            reduce using rule 33 (exp -> exp MINUS exp .)
-    MINUS           reduce using rule 33 (exp -> exp MINUS exp .)
-    EQ              reduce using rule 33 (exp -> exp MINUS exp .)
-    LE              reduce using rule 33 (exp -> exp MINUS exp .)
-    ;               reduce using rule 33 (exp -> exp MINUS exp .)
-    )               reduce using rule 33 (exp -> exp MINUS exp .)
-    ,               reduce using rule 33 (exp -> exp MINUS exp .)
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
+    PLUS            reduce using rule 32 (exp -> exp TIMES exp .)
+    MINUS           reduce using rule 32 (exp -> exp TIMES exp .)
+    TIMES           reduce using rule 32 (exp -> exp TIMES exp .)
+    DIVIDE          reduce using rule 32 (exp -> exp TIMES exp .)
+    EQ              reduce using rule 32 (exp -> exp TIMES exp .)
+    LE              reduce using rule 32 (exp -> exp TIMES exp .)
+    ;               reduce using rule 32 (exp -> exp TIMES exp .)
+    DECLARE         reduce using rule 32 (exp -> exp TIMES exp .)
+    ID              reduce using rule 32 (exp -> exp TIMES exp .)
+    GET             reduce using rule 32 (exp -> exp TIMES exp .)
+    PUT             reduce using rule 32 (exp -> exp TIMES exp .)
+    RETURN          reduce using rule 32 (exp -> exp TIMES exp .)
+    WHILE           reduce using rule 32 (exp -> exp TIMES exp .)
+    IF              reduce using rule 32 (exp -> exp TIMES exp .)
+    {               reduce using rule 32 (exp -> exp TIMES exp .)
+    $end            reduce using rule 32 (exp -> exp TIMES exp .)
+    }               reduce using rule 32 (exp -> exp TIMES exp .)
+    ELSE            reduce using rule 32 (exp -> exp TIMES exp .)
+    ,               reduce using rule 32 (exp -> exp TIMES exp .)
+    )               reduce using rule 32 (exp -> exp TIMES exp .)
 
-  ! TIMES           [ reduce using rule 33 (exp -> exp MINUS exp .) ]
-  ! DIVIDE          [ reduce using rule 33 (exp -> exp MINUS exp .) ]
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! TIMES           [ shift and go to state 47 ]
+  ! DIVIDE          [ shift and go to state 48 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
-    tuple_list                     shift and go to state 54
 
 state 71
 
-    (34) exp -> exp TIMES exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (33) exp -> exp DIVIDE exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 34 (exp -> exp TIMES exp .)
-    ID              reduce using rule 34 (exp -> exp TIMES exp .)
-    GET             reduce using rule 34 (exp -> exp TIMES exp .)
-    PUT             reduce using rule 34 (exp -> exp TIMES exp .)
-    (               reduce using rule 34 (exp -> exp TIMES exp .)
-    RETURN          reduce using rule 34 (exp -> exp TIMES exp .)
-    WHILE           reduce using rule 34 (exp -> exp TIMES exp .)
-    IF              reduce using rule 34 (exp -> exp TIMES exp .)
-    {               reduce using rule 34 (exp -> exp TIMES exp .)
-    $end            reduce using rule 34 (exp -> exp TIMES exp .)
-    }               reduce using rule 34 (exp -> exp TIMES exp .)
-    ELSE            reduce using rule 34 (exp -> exp TIMES exp .)
-    PLUS            reduce using rule 34 (exp -> exp TIMES exp .)
-    MINUS           reduce using rule 34 (exp -> exp TIMES exp .)
-    TIMES           reduce using rule 34 (exp -> exp TIMES exp .)
-    DIVIDE          reduce using rule 34 (exp -> exp TIMES exp .)
-    EQ              reduce using rule 34 (exp -> exp TIMES exp .)
-    LE              reduce using rule 34 (exp -> exp TIMES exp .)
-    ;               reduce using rule 34 (exp -> exp TIMES exp .)
-    )               reduce using rule 34 (exp -> exp TIMES exp .)
-    ,               reduce using rule 34 (exp -> exp TIMES exp .)
+    PLUS            reduce using rule 33 (exp -> exp DIVIDE exp .)
+    MINUS           reduce using rule 33 (exp -> exp DIVIDE exp .)
+    TIMES           reduce using rule 33 (exp -> exp DIVIDE exp .)
+    DIVIDE          reduce using rule 33 (exp -> exp DIVIDE exp .)
+    EQ              reduce using rule 33 (exp -> exp DIVIDE exp .)
+    LE              reduce using rule 33 (exp -> exp DIVIDE exp .)
+    ;               reduce using rule 33 (exp -> exp DIVIDE exp .)
+    DECLARE         reduce using rule 33 (exp -> exp DIVIDE exp .)
+    ID              reduce using rule 33 (exp -> exp DIVIDE exp .)
+    GET             reduce using rule 33 (exp -> exp DIVIDE exp .)
+    PUT             reduce using rule 33 (exp -> exp DIVIDE exp .)
+    RETURN          reduce using rule 33 (exp -> exp DIVIDE exp .)
+    WHILE           reduce using rule 33 (exp -> exp DIVIDE exp .)
+    IF              reduce using rule 33 (exp -> exp DIVIDE exp .)
+    {               reduce using rule 33 (exp -> exp DIVIDE exp .)
+    $end            reduce using rule 33 (exp -> exp DIVIDE exp .)
+    }               reduce using rule 33 (exp -> exp DIVIDE exp .)
+    ELSE            reduce using rule 33 (exp -> exp DIVIDE exp .)
+    ,               reduce using rule 33 (exp -> exp DIVIDE exp .)
+    )               reduce using rule 33 (exp -> exp DIVIDE exp .)
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! TIMES           [ shift and go to state 50 ]
-  ! DIVIDE          [ shift and go to state 51 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
+  ! PLUS            [ shift and go to state 45 ]
+  ! MINUS           [ shift and go to state 46 ]
+  ! TIMES           [ shift and go to state 47 ]
+  ! DIVIDE          [ shift and go to state 48 ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
-    tuple_list                     shift and go to state 54
 
 state 72
 
-    (35) exp -> exp DIVIDE exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (34) exp -> exp EQ exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 35 (exp -> exp DIVIDE exp .)
-    ID              reduce using rule 35 (exp -> exp DIVIDE exp .)
-    GET             reduce using rule 35 (exp -> exp DIVIDE exp .)
-    PUT             reduce using rule 35 (exp -> exp DIVIDE exp .)
-    (               reduce using rule 35 (exp -> exp DIVIDE exp .)
-    RETURN          reduce using rule 35 (exp -> exp DIVIDE exp .)
-    WHILE           reduce using rule 35 (exp -> exp DIVIDE exp .)
-    IF              reduce using rule 35 (exp -> exp DIVIDE exp .)
-    {               reduce using rule 35 (exp -> exp DIVIDE exp .)
-    $end            reduce using rule 35 (exp -> exp DIVIDE exp .)
-    }               reduce using rule 35 (exp -> exp DIVIDE exp .)
-    ELSE            reduce using rule 35 (exp -> exp DIVIDE exp .)
-    PLUS            reduce using rule 35 (exp -> exp DIVIDE exp .)
-    MINUS           reduce using rule 35 (exp -> exp DIVIDE exp .)
-    TIMES           reduce using rule 35 (exp -> exp DIVIDE exp .)
-    DIVIDE          reduce using rule 35 (exp -> exp DIVIDE exp .)
-    EQ              reduce using rule 35 (exp -> exp DIVIDE exp .)
-    LE              reduce using rule 35 (exp -> exp DIVIDE exp .)
-    ;               reduce using rule 35 (exp -> exp DIVIDE exp .)
-    )               reduce using rule 35 (exp -> exp DIVIDE exp .)
-    ,               reduce using rule 35 (exp -> exp DIVIDE exp .)
+    EQ              reduce using rule 34 (exp -> exp EQ exp .)
+    LE              reduce using rule 34 (exp -> exp EQ exp .)
+    ;               reduce using rule 34 (exp -> exp EQ exp .)
+    DECLARE         reduce using rule 34 (exp -> exp EQ exp .)
+    ID              reduce using rule 34 (exp -> exp EQ exp .)
+    GET             reduce using rule 34 (exp -> exp EQ exp .)
+    PUT             reduce using rule 34 (exp -> exp EQ exp .)
+    RETURN          reduce using rule 34 (exp -> exp EQ exp .)
+    WHILE           reduce using rule 34 (exp -> exp EQ exp .)
+    IF              reduce using rule 34 (exp -> exp EQ exp .)
+    {               reduce using rule 34 (exp -> exp EQ exp .)
+    $end            reduce using rule 34 (exp -> exp EQ exp .)
+    }               reduce using rule 34 (exp -> exp EQ exp .)
+    ELSE            reduce using rule 34 (exp -> exp EQ exp .)
+    ,               reduce using rule 34 (exp -> exp EQ exp .)
+    )               reduce using rule 34 (exp -> exp EQ exp .)
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
 
-  ! PLUS            [ shift and go to state 48 ]
-  ! MINUS           [ shift and go to state 49 ]
-  ! TIMES           [ shift and go to state 50 ]
-  ! DIVIDE          [ shift and go to state 51 ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
+  ! PLUS            [ reduce using rule 34 (exp -> exp EQ exp .) ]
+  ! MINUS           [ reduce using rule 34 (exp -> exp EQ exp .) ]
+  ! TIMES           [ reduce using rule 34 (exp -> exp EQ exp .) ]
+  ! DIVIDE          [ reduce using rule 34 (exp -> exp EQ exp .) ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
-    tuple_list                     shift and go to state 54
 
 state 73
 
-    (36) exp -> exp EQ exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (35) exp -> exp LE exp .
+    (30) exp -> exp . PLUS exp
+    (31) exp -> exp . MINUS exp
+    (32) exp -> exp . TIMES exp
+    (33) exp -> exp . DIVIDE exp
+    (34) exp -> exp . EQ exp
+    (35) exp -> exp . LE exp
 
-    DECLARE         reduce using rule 36 (exp -> exp EQ exp .)
-    ID              reduce using rule 36 (exp -> exp EQ exp .)
-    GET             reduce using rule 36 (exp -> exp EQ exp .)
-    PUT             reduce using rule 36 (exp -> exp EQ exp .)
-    (               reduce using rule 36 (exp -> exp EQ exp .)
-    RETURN          reduce using rule 36 (exp -> exp EQ exp .)
-    WHILE           reduce using rule 36 (exp -> exp EQ exp .)
-    IF              reduce using rule 36 (exp -> exp EQ exp .)
-    {               reduce using rule 36 (exp -> exp EQ exp .)
-    $end            reduce using rule 36 (exp -> exp EQ exp .)
-    }               reduce using rule 36 (exp -> exp EQ exp .)
-    ELSE            reduce using rule 36 (exp -> exp EQ exp .)
-    EQ              reduce using rule 36 (exp -> exp EQ exp .)
-    LE              reduce using rule 36 (exp -> exp EQ exp .)
-    ;               reduce using rule 36 (exp -> exp EQ exp .)
-    )               reduce using rule 36 (exp -> exp EQ exp .)
-    ,               reduce using rule 36 (exp -> exp EQ exp .)
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
+    EQ              reduce using rule 35 (exp -> exp LE exp .)
+    LE              reduce using rule 35 (exp -> exp LE exp .)
+    ;               reduce using rule 35 (exp -> exp LE exp .)
+    DECLARE         reduce using rule 35 (exp -> exp LE exp .)
+    ID              reduce using rule 35 (exp -> exp LE exp .)
+    GET             reduce using rule 35 (exp -> exp LE exp .)
+    PUT             reduce using rule 35 (exp -> exp LE exp .)
+    RETURN          reduce using rule 35 (exp -> exp LE exp .)
+    WHILE           reduce using rule 35 (exp -> exp LE exp .)
+    IF              reduce using rule 35 (exp -> exp LE exp .)
+    {               reduce using rule 35 (exp -> exp LE exp .)
+    $end            reduce using rule 35 (exp -> exp LE exp .)
+    }               reduce using rule 35 (exp -> exp LE exp .)
+    ELSE            reduce using rule 35 (exp -> exp LE exp .)
+    ,               reduce using rule 35 (exp -> exp LE exp .)
+    )               reduce using rule 35 (exp -> exp LE exp .)
+    PLUS            shift and go to state 45
+    MINUS           shift and go to state 46
+    TIMES           shift and go to state 47
+    DIVIDE          shift and go to state 48
 
-  ! PLUS            [ reduce using rule 36 (exp -> exp EQ exp .) ]
-  ! MINUS           [ reduce using rule 36 (exp -> exp EQ exp .) ]
-  ! TIMES           [ reduce using rule 36 (exp -> exp EQ exp .) ]
-  ! DIVIDE          [ reduce using rule 36 (exp -> exp EQ exp .) ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
+  ! PLUS            [ reduce using rule 35 (exp -> exp LE exp .) ]
+  ! MINUS           [ reduce using rule 35 (exp -> exp LE exp .) ]
+  ! TIMES           [ reduce using rule 35 (exp -> exp LE exp .) ]
+  ! DIVIDE          [ reduce using rule 35 (exp -> exp LE exp .) ]
+  ! EQ              [ shift and go to state 49 ]
+  ! LE              [ shift and go to state 50 ]
 
-    tuple_list                     shift and go to state 54
 
 state 74
 
-    (37) exp -> exp LE exp .
-    (32) exp -> exp . PLUS exp
-    (33) exp -> exp . MINUS exp
-    (34) exp -> exp . TIMES exp
-    (35) exp -> exp . DIVIDE exp
-    (36) exp -> exp . EQ exp
-    (37) exp -> exp . LE exp
-    (40) exp -> exp . tuple_list
-    (14) tuple_list -> . ( opt_tuple ) tuple_list
-    (15) tuple_list -> . ( opt_tuple )
+    (40) exp -> ID ( opt_actual_args . )
 
-    DECLARE         reduce using rule 37 (exp -> exp LE exp .)
-    ID              reduce using rule 37 (exp -> exp LE exp .)
-    GET             reduce using rule 37 (exp -> exp LE exp .)
-    PUT             reduce using rule 37 (exp -> exp LE exp .)
-    (               reduce using rule 37 (exp -> exp LE exp .)
-    RETURN          reduce using rule 37 (exp -> exp LE exp .)
-    WHILE           reduce using rule 37 (exp -> exp LE exp .)
-    IF              reduce using rule 37 (exp -> exp LE exp .)
-    {               reduce using rule 37 (exp -> exp LE exp .)
-    $end            reduce using rule 37 (exp -> exp LE exp .)
-    }               reduce using rule 37 (exp -> exp LE exp .)
-    ELSE            reduce using rule 37 (exp -> exp LE exp .)
-    EQ              reduce using rule 37 (exp -> exp LE exp .)
-    LE              reduce using rule 37 (exp -> exp LE exp .)
-    ;               reduce using rule 37 (exp -> exp LE exp .)
-    )               reduce using rule 37 (exp -> exp LE exp .)
-    ,               reduce using rule 37 (exp -> exp LE exp .)
-    PLUS            shift and go to state 48
-    MINUS           shift and go to state 49
-    TIMES           shift and go to state 50
-    DIVIDE          shift and go to state 51
+    )               shift and go to state 82
 
-  ! PLUS            [ reduce using rule 37 (exp -> exp LE exp .) ]
-  ! MINUS           [ reduce using rule 37 (exp -> exp LE exp .) ]
-  ! TIMES           [ reduce using rule 37 (exp -> exp LE exp .) ]
-  ! DIVIDE          [ reduce using rule 37 (exp -> exp LE exp .) ]
-  ! EQ              [ shift and go to state 52 ]
-  ! LE              [ shift and go to state 53 ]
-  ! (               [ shift and go to state 18 ]
-
-    tuple_list                     shift and go to state 54
 
 state 75
 
-    (42) exp -> ( exp ) .
+    (41) exp -> ( exp ) .
 
-    DECLARE         reduce using rule 42 (exp -> ( exp ) .)
-    ID              reduce using rule 42 (exp -> ( exp ) .)
-    GET             reduce using rule 42 (exp -> ( exp ) .)
-    PUT             reduce using rule 42 (exp -> ( exp ) .)
-    (               reduce using rule 42 (exp -> ( exp ) .)
-    RETURN          reduce using rule 42 (exp -> ( exp ) .)
-    WHILE           reduce using rule 42 (exp -> ( exp ) .)
-    IF              reduce using rule 42 (exp -> ( exp ) .)
-    {               reduce using rule 42 (exp -> ( exp ) .)
-    $end            reduce using rule 42 (exp -> ( exp ) .)
-    }               reduce using rule 42 (exp -> ( exp ) .)
-    ELSE            reduce using rule 42 (exp -> ( exp ) .)
-    PLUS            reduce using rule 42 (exp -> ( exp ) .)
-    MINUS           reduce using rule 42 (exp -> ( exp ) .)
-    TIMES           reduce using rule 42 (exp -> ( exp ) .)
-    DIVIDE          reduce using rule 42 (exp -> ( exp ) .)
-    EQ              reduce using rule 42 (exp -> ( exp ) .)
-    LE              reduce using rule 42 (exp -> ( exp ) .)
-    ;               reduce using rule 42 (exp -> ( exp ) .)
-    )               reduce using rule 42 (exp -> ( exp ) .)
-    ,               reduce using rule 42 (exp -> ( exp ) .)
+    PLUS            reduce using rule 41 (exp -> ( exp ) .)
+    MINUS           reduce using rule 41 (exp -> ( exp ) .)
+    TIMES           reduce using rule 41 (exp -> ( exp ) .)
+    DIVIDE          reduce using rule 41 (exp -> ( exp ) .)
+    EQ              reduce using rule 41 (exp -> ( exp ) .)
+    LE              reduce using rule 41 (exp -> ( exp ) .)
+    ;               reduce using rule 41 (exp -> ( exp ) .)
+    DECLARE         reduce using rule 41 (exp -> ( exp ) .)
+    ID              reduce using rule 41 (exp -> ( exp ) .)
+    GET             reduce using rule 41 (exp -> ( exp ) .)
+    PUT             reduce using rule 41 (exp -> ( exp ) .)
+    RETURN          reduce using rule 41 (exp -> ( exp ) .)
+    WHILE           reduce using rule 41 (exp -> ( exp ) .)
+    IF              reduce using rule 41 (exp -> ( exp ) .)
+    {               reduce using rule 41 (exp -> ( exp ) .)
+    $end            reduce using rule 41 (exp -> ( exp ) .)
+    }               reduce using rule 41 (exp -> ( exp ) .)
+    ELSE            reduce using rule 41 (exp -> ( exp ) .)
+    ,               reduce using rule 41 (exp -> ( exp ) .)
+    )               reduce using rule 41 (exp -> ( exp ) .)
 
 
 state 76
 
-    (45) function_value -> FUNCTION ( opt_formal_args . ) stmt
+    (11) stmt -> WHILE ( exp ) . stmt
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
+    (11) stmt -> . WHILE ( exp ) stmt
+    (12) stmt -> . IF ( exp ) stmt opt_else
+    (13) stmt -> . { stmt_list }
 
-    )               shift and go to state 85
+    DECLARE         shift and go to state 5
+    ID              shift and go to state 6
+    GET             shift and go to state 7
+    PUT             shift and go to state 8
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
 
+    stmt                           shift and go to state 83
 
 state 77
 
-    (20) opt_formal_args -> formal_args .
+    (12) stmt -> IF ( exp ) . stmt opt_else
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
+    (11) stmt -> . WHILE ( exp ) stmt
+    (12) stmt -> . IF ( exp ) stmt opt_else
+    (13) stmt -> . { stmt_list }
 
-    )               reduce using rule 20 (opt_formal_args -> formal_args .)
+    DECLARE         shift and go to state 5
+    ID              shift and go to state 6
+    GET             shift and go to state 7
+    PUT             shift and go to state 8
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
 
+    stmt                           shift and go to state 84
 
 state 78
 
-    (21) opt_formal_args -> empty .
+    (16) formal_args -> ID , . formal_args
+    (16) formal_args -> . ID , formal_args
+    (17) formal_args -> . ID
 
-    )               reduce using rule 21 (opt_formal_args -> empty .)
+    ID              shift and go to state 59
 
+    formal_args                    shift and go to state 85
 
 state 79
 
-    (22) formal_args -> ID . , formal_args
-    (23) formal_args -> ID .
+    (4) stmt -> DECLARE ID ( opt_formal_args ) . stmt
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
+    (11) stmt -> . WHILE ( exp ) stmt
+    (12) stmt -> . IF ( exp ) stmt opt_else
+    (13) stmt -> . { stmt_list }
 
-    ,               shift and go to state 86
-    )               reduce using rule 23 (formal_args -> ID .)
+    DECLARE         shift and go to state 5
+    ID              shift and go to state 6
+    GET             shift and go to state 7
+    PUT             shift and go to state 8
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
 
+    stmt                           shift and go to state 86
 
 state 80
 
-    (8) stmt -> ( function_value ) tuple_list . semi
-    (30) semi -> . ;
-    (31) semi -> . empty
-    (46) empty -> .
+    (9) stmt -> ID ( opt_actual_args ) opt_semi .
 
-  ! shift/reduce conflict for ; resolved as shift
-    ;               shift and go to state 40
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    ELSE            reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    DECLARE         reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    ID              reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    GET             reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    PUT             reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    RETURN          reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    WHILE           reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    IF              reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    {               reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    $end            reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    }               reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
+    ELSE            reduce using rule 9 (stmt -> ID ( opt_actual_args ) opt_semi .)
 
-  ! ;               [ reduce using rule 46 (empty -> .) ]
-
-    semi                           shift and go to state 87
-    empty                          shift and go to state 41
 
 state 81
 
-    (11) stmt -> WHILE ( exp ) . stmt
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
-    (11) stmt -> . WHILE ( exp ) stmt
-    (12) stmt -> . IF ( exp ) stmt opt_else
-    (13) stmt -> . { stmt_list }
+    (22) actual_args -> exp , actual_args .
 
-    DECLARE         shift and go to state 5
-    ID              shift and go to state 6
-    GET             shift and go to state 7
-    PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
+    )               reduce using rule 22 (actual_args -> exp , actual_args .)
 
-    stmt                           shift and go to state 88
 
 state 82
 
-    (12) stmt -> IF ( exp ) . stmt opt_else
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
-    (11) stmt -> . WHILE ( exp ) stmt
-    (12) stmt -> . IF ( exp ) stmt opt_else
-    (13) stmt -> . { stmt_list }
+    (40) exp -> ID ( opt_actual_args ) .
 
-    DECLARE         shift and go to state 5
-    ID              shift and go to state 6
-    GET             shift and go to state 7
-    PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
+    PLUS            reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    MINUS           reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    TIMES           reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    DIVIDE          reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    EQ              reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    LE              reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    ;               reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    DECLARE         reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    ID              reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    GET             reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    PUT             reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    RETURN          reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    WHILE           reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    IF              reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    {               reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    $end            reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    }               reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    ELSE            reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    ,               reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
+    )               reduce using rule 40 (exp -> ID ( opt_actual_args ) .)
 
-    stmt                           shift and go to state 89
 
 state 83
-
-    (14) tuple_list -> ( opt_tuple ) tuple_list .
-
-    ;               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    DECLARE         reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    ID              reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    GET             reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    PUT             reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    (               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    RETURN          reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    WHILE           reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    IF              reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    {               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    $end            reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    }               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    ELSE            reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    PLUS            reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    MINUS           reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    TIMES           reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    DIVIDE          reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    EQ              reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    LE              reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    )               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-    ,               reduce using rule 14 (tuple_list -> ( opt_tuple ) tuple_list .)
-
-
-state 84
-
-    (18) tuple -> exp , tuple .
-
-    )               reduce using rule 18 (tuple -> exp , tuple .)
-
-
-state 85
-
-    (45) function_value -> FUNCTION ( opt_formal_args ) . stmt
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
-    (11) stmt -> . WHILE ( exp ) stmt
-    (12) stmt -> . IF ( exp ) stmt opt_else
-    (13) stmt -> . { stmt_list }
-
-    DECLARE         shift and go to state 5
-    ID              shift and go to state 6
-    GET             shift and go to state 7
-    PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
-
-    stmt                           shift and go to state 90
-
-state 86
-
-    (22) formal_args -> ID , . formal_args
-    (22) formal_args -> . ID , formal_args
-    (23) formal_args -> . ID
-
-    ID              shift and go to state 79
-
-    formal_args                    shift and go to state 91
-
-state 87
-
-    (8) stmt -> ( function_value ) tuple_list semi .
-
-    DECLARE         reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    ID              reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    GET             reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    PUT             reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    (               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    RETURN          reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    WHILE           reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    IF              reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    {               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    $end            reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    }               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    ELSE            reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    PLUS            reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    MINUS           reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    TIMES           reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    DIVIDE          reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    EQ              reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    LE              reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    ;               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    )               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-    ,               reduce using rule 8 (stmt -> ( function_value ) tuple_list semi .)
-
-
-state 88
 
     (11) stmt -> WHILE ( exp ) stmt .
 
@@ -2404,7 +1968,6 @@ state 88
     ID              reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     GET             reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     PUT             reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    (               reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     RETURN          reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     WHILE           reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     IF              reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
@@ -2412,87 +1975,58 @@ state 88
     $end            reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     }               reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
     ELSE            reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    PLUS            reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    MINUS           reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    TIMES           reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    DIVIDE          reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    EQ              reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    LE              reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    ;               reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    )               reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
-    ,               reduce using rule 11 (stmt -> WHILE ( exp ) stmt .)
 
 
-state 89
+state 84
 
     (12) stmt -> IF ( exp ) stmt . opt_else
-    (28) opt_else -> . ELSE stmt
-    (29) opt_else -> . empty
-    (46) empty -> .
+    (26) opt_else -> . ELSE stmt
+    (27) opt_else -> . empty
+    (44) empty -> .
 
   ! shift/reduce conflict for ELSE resolved as shift
-    ELSE            shift and go to state 93
-    DECLARE         reduce using rule 46 (empty -> .)
-    ID              reduce using rule 46 (empty -> .)
-    GET             reduce using rule 46 (empty -> .)
-    PUT             reduce using rule 46 (empty -> .)
-    (               reduce using rule 46 (empty -> .)
-    RETURN          reduce using rule 46 (empty -> .)
-    WHILE           reduce using rule 46 (empty -> .)
-    IF              reduce using rule 46 (empty -> .)
-    {               reduce using rule 46 (empty -> .)
-    $end            reduce using rule 46 (empty -> .)
-    }               reduce using rule 46 (empty -> .)
-    PLUS            reduce using rule 46 (empty -> .)
-    MINUS           reduce using rule 46 (empty -> .)
-    TIMES           reduce using rule 46 (empty -> .)
-    DIVIDE          reduce using rule 46 (empty -> .)
-    EQ              reduce using rule 46 (empty -> .)
-    LE              reduce using rule 46 (empty -> .)
-    ;               reduce using rule 46 (empty -> .)
-    )               reduce using rule 46 (empty -> .)
-    ,               reduce using rule 46 (empty -> .)
+    ELSE            shift and go to state 88
+    DECLARE         reduce using rule 44 (empty -> .)
+    ID              reduce using rule 44 (empty -> .)
+    GET             reduce using rule 44 (empty -> .)
+    PUT             reduce using rule 44 (empty -> .)
+    RETURN          reduce using rule 44 (empty -> .)
+    WHILE           reduce using rule 44 (empty -> .)
+    IF              reduce using rule 44 (empty -> .)
+    {               reduce using rule 44 (empty -> .)
+    $end            reduce using rule 44 (empty -> .)
+    }               reduce using rule 44 (empty -> .)
 
-  ! ELSE            [ reduce using rule 46 (empty -> .) ]
+  ! ELSE            [ reduce using rule 44 (empty -> .) ]
 
-    opt_else                       shift and go to state 92
-    empty                          shift and go to state 94
+    opt_else                       shift and go to state 87
+    empty                          shift and go to state 89
 
-state 90
+state 85
 
-    (45) function_value -> FUNCTION ( opt_formal_args ) stmt .
+    (16) formal_args -> ID , formal_args .
 
-    DECLARE         reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    ID              reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    GET             reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    PUT             reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    (               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    RETURN          reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    WHILE           reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    IF              reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    {               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    $end            reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    }               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    ELSE            reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    PLUS            reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    MINUS           reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    TIMES           reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    DIVIDE          reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    EQ              reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    LE              reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    ;               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    )               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
-    ,               reduce using rule 45 (function_value -> FUNCTION ( opt_formal_args ) stmt .)
+    )               reduce using rule 16 (formal_args -> ID , formal_args .)
 
 
-state 91
+state 86
 
-    (22) formal_args -> ID , formal_args .
+    (4) stmt -> DECLARE ID ( opt_formal_args ) stmt .
 
-    )               reduce using rule 22 (formal_args -> ID , formal_args .)
+    DECLARE         reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    ID              reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    GET             reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    PUT             reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    RETURN          reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    WHILE           reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    IF              reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    {               reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    $end            reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    }               reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
+    ELSE            reduce using rule 4 (stmt -> DECLARE ID ( opt_formal_args ) stmt .)
 
 
-state 92
+state 87
 
     (12) stmt -> IF ( exp ) stmt opt_else .
 
@@ -2500,7 +2034,6 @@ state 92
     ID              reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     GET             reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     PUT             reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    (               reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     RETURN          reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     WHILE           reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     IF              reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
@@ -2508,27 +2041,18 @@ state 92
     $end            reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     }               reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
     ELSE            reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    PLUS            reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    MINUS           reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    TIMES           reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    DIVIDE          reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    EQ              reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    LE              reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    ;               reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    )               reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
-    ,               reduce using rule 12 (stmt -> IF ( exp ) stmt opt_else .)
 
 
-state 93
+state 88
 
-    (28) opt_else -> ELSE . stmt
-    (4) stmt -> . DECLARE ID opt_init semi
-    (5) stmt -> . ID = exp semi
-    (6) stmt -> . GET ID semi
-    (7) stmt -> . PUT exp semi
-    (8) stmt -> . ( function_value ) tuple_list semi
-    (9) stmt -> . ID tuple_list semi
-    (10) stmt -> . RETURN opt_exp semi
+    (26) opt_else -> ELSE . stmt
+    (4) stmt -> . DECLARE ID ( opt_formal_args ) stmt
+    (5) stmt -> . DECLARE ID opt_init opt_semi
+    (6) stmt -> . ID = exp opt_semi
+    (7) stmt -> . GET ID opt_semi
+    (8) stmt -> . PUT exp opt_semi
+    (9) stmt -> . ID ( opt_actual_args ) opt_semi
+    (10) stmt -> . RETURN opt_exp opt_semi
     (11) stmt -> . WHILE ( exp ) stmt
     (12) stmt -> . IF ( exp ) stmt opt_else
     (13) stmt -> . { stmt_list }
@@ -2537,107 +2061,48 @@ state 93
     ID              shift and go to state 6
     GET             shift and go to state 7
     PUT             shift and go to state 8
-    (               shift and go to state 9
-    RETURN          shift and go to state 10
-    WHILE           shift and go to state 11
-    IF              shift and go to state 12
-    {               shift and go to state 13
+    RETURN          shift and go to state 9
+    WHILE           shift and go to state 10
+    IF              shift and go to state 11
+    {               shift and go to state 12
 
-    stmt                           shift and go to state 95
+    stmt                           shift and go to state 90
 
-state 94
+state 89
 
-    (29) opt_else -> empty .
+    (27) opt_else -> empty .
 
-    DECLARE         reduce using rule 29 (opt_else -> empty .)
-    ID              reduce using rule 29 (opt_else -> empty .)
-    GET             reduce using rule 29 (opt_else -> empty .)
-    PUT             reduce using rule 29 (opt_else -> empty .)
-    (               reduce using rule 29 (opt_else -> empty .)
-    RETURN          reduce using rule 29 (opt_else -> empty .)
-    WHILE           reduce using rule 29 (opt_else -> empty .)
-    IF              reduce using rule 29 (opt_else -> empty .)
-    {               reduce using rule 29 (opt_else -> empty .)
-    $end            reduce using rule 29 (opt_else -> empty .)
-    }               reduce using rule 29 (opt_else -> empty .)
-    ELSE            reduce using rule 29 (opt_else -> empty .)
-    PLUS            reduce using rule 29 (opt_else -> empty .)
-    MINUS           reduce using rule 29 (opt_else -> empty .)
-    TIMES           reduce using rule 29 (opt_else -> empty .)
-    DIVIDE          reduce using rule 29 (opt_else -> empty .)
-    EQ              reduce using rule 29 (opt_else -> empty .)
-    LE              reduce using rule 29 (opt_else -> empty .)
-    ;               reduce using rule 29 (opt_else -> empty .)
-    )               reduce using rule 29 (opt_else -> empty .)
-    ,               reduce using rule 29 (opt_else -> empty .)
+    DECLARE         reduce using rule 27 (opt_else -> empty .)
+    ID              reduce using rule 27 (opt_else -> empty .)
+    GET             reduce using rule 27 (opt_else -> empty .)
+    PUT             reduce using rule 27 (opt_else -> empty .)
+    RETURN          reduce using rule 27 (opt_else -> empty .)
+    WHILE           reduce using rule 27 (opt_else -> empty .)
+    IF              reduce using rule 27 (opt_else -> empty .)
+    {               reduce using rule 27 (opt_else -> empty .)
+    $end            reduce using rule 27 (opt_else -> empty .)
+    }               reduce using rule 27 (opt_else -> empty .)
+    ELSE            reduce using rule 27 (opt_else -> empty .)
 
 
-state 95
+state 90
 
-    (28) opt_else -> ELSE stmt .
+    (26) opt_else -> ELSE stmt .
 
-    DECLARE         reduce using rule 28 (opt_else -> ELSE stmt .)
-    ID              reduce using rule 28 (opt_else -> ELSE stmt .)
-    GET             reduce using rule 28 (opt_else -> ELSE stmt .)
-    PUT             reduce using rule 28 (opt_else -> ELSE stmt .)
-    (               reduce using rule 28 (opt_else -> ELSE stmt .)
-    RETURN          reduce using rule 28 (opt_else -> ELSE stmt .)
-    WHILE           reduce using rule 28 (opt_else -> ELSE stmt .)
-    IF              reduce using rule 28 (opt_else -> ELSE stmt .)
-    {               reduce using rule 28 (opt_else -> ELSE stmt .)
-    $end            reduce using rule 28 (opt_else -> ELSE stmt .)
-    }               reduce using rule 28 (opt_else -> ELSE stmt .)
-    ELSE            reduce using rule 28 (opt_else -> ELSE stmt .)
-    PLUS            reduce using rule 28 (opt_else -> ELSE stmt .)
-    MINUS           reduce using rule 28 (opt_else -> ELSE stmt .)
-    TIMES           reduce using rule 28 (opt_else -> ELSE stmt .)
-    DIVIDE          reduce using rule 28 (opt_else -> ELSE stmt .)
-    EQ              reduce using rule 28 (opt_else -> ELSE stmt .)
-    LE              reduce using rule 28 (opt_else -> ELSE stmt .)
-    ;               reduce using rule 28 (opt_else -> ELSE stmt .)
-    )               reduce using rule 28 (opt_else -> ELSE stmt .)
-    ,               reduce using rule 28 (opt_else -> ELSE stmt .)
+    DECLARE         reduce using rule 26 (opt_else -> ELSE stmt .)
+    ID              reduce using rule 26 (opt_else -> ELSE stmt .)
+    GET             reduce using rule 26 (opt_else -> ELSE stmt .)
+    PUT             reduce using rule 26 (opt_else -> ELSE stmt .)
+    RETURN          reduce using rule 26 (opt_else -> ELSE stmt .)
+    WHILE           reduce using rule 26 (opt_else -> ELSE stmt .)
+    IF              reduce using rule 26 (opt_else -> ELSE stmt .)
+    {               reduce using rule 26 (opt_else -> ELSE stmt .)
+    $end            reduce using rule 26 (opt_else -> ELSE stmt .)
+    }               reduce using rule 26 (opt_else -> ELSE stmt .)
+    ELSE            reduce using rule 26 (opt_else -> ELSE stmt .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ID in state 10 resolved as shift
-WARNING: shift/reduce conflict for ( in state 10 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 10 resolved as shift
-WARNING: shift/reduce conflict for ; in state 17 resolved as shift
-WARNING: shift/reduce conflict for ; in state 19 resolved as shift
-WARNING: shift/reduce conflict for ( in state 20 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 20 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 20 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 20 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 20 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 20 resolved as shift
-WARNING: shift/reduce conflict for LE in state 20 resolved as shift
-WARNING: shift/reduce conflict for ; in state 20 resolved as shift
-WARNING: shift/reduce conflict for ; in state 29 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 30 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 30 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 30 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 30 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 30 resolved as shift
-WARNING: shift/reduce conflict for LE in state 30 resolved as shift
-WARNING: shift/reduce conflict for ( in state 30 resolved as shift
-WARNING: shift/reduce conflict for ; in state 35 resolved as shift
-WARNING: shift/reduce conflict for ( in state 38 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 38 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 38 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 38 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 38 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 38 resolved as shift
-WARNING: shift/reduce conflict for LE in state 38 resolved as shift
-WARNING: shift/reduce conflict for ; in state 38 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 65 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 65 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 65 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 65 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 65 resolved as shift
-WARNING: shift/reduce conflict for LE in state 65 resolved as shift
-WARNING: shift/reduce conflict for ( in state 65 resolved as shift
-WARNING: shift/reduce conflict for ( in state 67 resolved as shift
-WARNING: shift/reduce conflict for ; in state 80 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 89 resolved as shift
+WARNING: shift/reduce conflict for ID in state 9 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 84 resolved as shift
