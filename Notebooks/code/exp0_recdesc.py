@@ -2,7 +2,7 @@
 Recursive descent grammar for Exp0:
 
     prog : stmt prog
-         | empty
+         | ""
               
     stmt : 'p' exp ';'
          | 's' var exp ';'
@@ -38,20 +38,23 @@ def set_stream(input_stream):
     I = input_stream
 
 def prog():
-    while not I.end_of_file():
+    if I.end_of_file():
+        pass
+    else:
         stmt()
+        prog()
 
 def stmt():
     sym = I.pointer()
     if sym == 'p':
         I.next()
         exp()
-        I.next() # match the ';'
+        I.match(';')
     elif sym == 's':
         I.next()
         var()
         exp()
-        I.next() # match the ';'
+        I.match(';') # match the ';'
     else:
         raise SyntaxError('unexpected symbol {} while parsing'.format(sym))
     
@@ -65,6 +68,10 @@ def exp():
         I.next()
         exp()
         exp()
+    elif sym == '(':
+        I.next()
+        exp()
+        I.match(')')
     elif sym in ['x', 'y', 'z']:
         var()
     elif sym in ['0', '1', '2', '3', '4', '5', '6','7', '8', '9']:

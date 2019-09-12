@@ -136,6 +136,14 @@ class InputStream:
         self.stream_ix += 1
         return self.stream[self.stream_ix]
 
+    def match(self, sym):
+        if sym == self.stream[self.stream_ix]:
+            self.stream_ix += 1
+        else:
+            raise SyntaxError('unexpected symbol {} while parsing, expected {}'
+                              .format(self.stream[self.stream_ix], sym))
+        return self.stream[self.stream_ix]
+
     def end_of_file(self):
         if self.stream[self.stream_ix] == 'eof':
             return True
