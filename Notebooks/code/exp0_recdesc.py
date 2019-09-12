@@ -38,11 +38,14 @@ def set_stream(input_stream):
     I = input_stream
 
 def prog():
-    if I.end_of_file():
-        pass
-    else:
+    sym = I.pointer()
+    if sym in ['p','s']:
         stmt()
         prog()
+    elif sym == "":
+        pass
+    else:
+        raise SyntaxError('unexpected symbol {} while parsing'.format(sym))
 
 def stmt():
     sym = I.pointer()
@@ -57,7 +60,7 @@ def stmt():
         I.match(';') # match the ';'
     else:
         raise SyntaxError('unexpected symbol {} while parsing'.format(sym))
-    
+
 def exp():
     sym = I.pointer()
     if sym == '+':

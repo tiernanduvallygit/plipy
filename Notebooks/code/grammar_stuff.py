@@ -130,19 +130,25 @@ class InputStream:
         self.stream_ix = 0
 
     def pointer(self):
-        return self.stream[self.stream_ix]
+        if self.end_of_file():
+            return ""
+        else:
+            return self.stream[self.stream_ix]
 
     def next(self):
         self.stream_ix += 1
-        return self.stream[self.stream_ix]
+        if self.end_of_file():
+            return ""
+        else:
+            return self.pointer()
 
     def match(self, sym):
         if sym == self.stream[self.stream_ix]:
-            self.stream_ix += 1
+            self.next()
         else:
             raise SyntaxError('unexpected symbol {} while parsing, expected {}'
                               .format(self.stream[self.stream_ix], sym))
-        return self.stream[self.stream_ix]
+        return self.pointer()
 
     def end_of_file(self):
         if self.stream[self.stream_ix] == 'eof':
