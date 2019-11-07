@@ -22,7 +22,7 @@ t_LE = '<='
 t_ignore = ' \t'
 
 def t_NAME(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    r'[a-zA-Z_$][a-zA-Z_$0-9]*'
     t.type = reserved.get(t.value,'NAME')    # Check for reserved words
     return t
 

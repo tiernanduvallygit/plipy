@@ -1,5 +1,5 @@
 '''
-Recursive descent grammar for Exp0:
+sLL(1) grammar for Exp0:
 
     prog : stmt prog
          | ""

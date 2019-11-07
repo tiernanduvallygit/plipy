@@ -65,13 +65,6 @@ class SymTab:
         # not found
         raise ValueError("{} was not declared".format(sym))
 
-    #-------
-    def update_sym(self, sym):
-        # for the compiler version updating is the same as looking up
-        # in order to check if sym is updateable.
-        self.lookup_sym(sym)
-        return
-
 #########################################################################
 
 

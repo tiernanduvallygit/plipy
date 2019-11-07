@@ -3,7 +3,7 @@
 
 from argparse import ArgumentParser
 from cuppa2_lex import lexer
-from cuppa2_frontend_gram import parser
+from cuppa2_frontend import parser
 from cuppa2_state import state
 from cuppa2_interp_walk import walk
 
