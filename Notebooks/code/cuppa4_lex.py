@@ -1,4 +1,4 @@
-# Lexer for Cuppa3
+# Lexer for Cuppa4
 
 import re
 from ply import lex
@@ -10,15 +10,18 @@ reserved = {
     'else'    : 'ELSE',
     'while'   : 'WHILE',
     'not'     : 'NOT',
-    'declare' : 'DECLARE',
-    'return'  : 'RETURN'
+    'return'  : 'RETURN',
+    'int'     : 'INTEGER_TYPE',
+    'float'   : 'FLOAT_TYPE',
+    'string'  : 'STRING_TYPE',
+    'void'    : 'VOID_TYPE'
 }
 
 literals = [',',';','=','(',')','{','}']
 
 tokens = [
           'PLUS','MINUS','TIMES','DIVIDE',
-          'EQ','LE', 
+          'EQ','LE',
           'INTEGER', 'FLOAT', 'STRING', 'ID',
           ] + list(reserved.values())
 
@@ -35,16 +38,6 @@ def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
     return t
-
-def is_ID(s):
-    m = re.match(r'[a-zA-Z_][a-zA-Z_0-9]*', s)
-    
-    if s in list(reserved.keys()):
-        return False
-    elif m and len(m.group(0)) == len(s):
-        return True
-    else:
-        return False
 
 def t_NUMBER(t):
     r'([0-9]*[.])?[0-9]+'
@@ -70,4 +63,3 @@ def t_error(t):
 
 # build the lexer
 lexer = lex.lex(debug=0)
-

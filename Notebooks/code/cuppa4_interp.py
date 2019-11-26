@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# Cuppa3 interpreter
+# Cuppa4 interpreter
 
 from argparse import ArgumentParser
-from cuppa3_lex import lexer
-from cuppa3_frontend_gram import parser
-from cuppa3_state import state
-from cuppa3_interp_walk import walk
+from cuppa4_lex import lexer
+from cuppa4_frontend import parser
+from cuppa4_state import state
+from cuppa4_interp_walk import walk
 from grammar_stuff import dump_AST
 
 def interp(input_stream):

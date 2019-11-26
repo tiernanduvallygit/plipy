@@ -40,19 +40,19 @@ def p_grammar(_):
 
     opt_init : '=' exp
              | empty
-             
+
     opt_actual_args : actual_args
                     | empty
-    
+
     actual_args : exp ',' actual_args
                 | exp
-                
+
     opt_exp : exp
             | empty
 
     opt_else : ELSE stmt
              | empty
-             
+
     opt_semi : ';'
              | empty
 
@@ -80,17 +80,3 @@ def p_error(t):
 
 ### build the parser
 parser = yacc.yacc()
-
-
-
-
-       
-   
-  
-            
-
-
-
-
-
-

@@ -3,7 +3,7 @@
 
 from argparse import ArgumentParser
 from cuppa3_lex import lexer
-from cuppa3_cc_frontend_gram import parser
+from cuppa3_cc_frontend import parser
 from cuppa3_cc_state import state
 from cuppa3_cc_tree_rewrite import walk as rewrite
 from cuppa3_cc_codegen import walk as codegen
@@ -16,7 +16,7 @@ def cc(input_stream):
 
     # build the AST
     parser.parse(input_stream, lexer=lexer)
-    
+
     # rewrite the AST - lower the abstraction level
     state.AST = rewrite(state.AST)
 
@@ -33,13 +33,13 @@ if __name__ == "__main__":
     aparser = ArgumentParser()
     aparser.add_argument('input', metavar='input_file', help='cuppa1 input file')
     aparser.add_argument('-o', metavar='output_file', help='exp1bytecode output file')
-    
+
     args = vars(aparser.parse_args())
-    
+
     f = open(args['input'], 'r')
     input_stream = f.read()
     f.close()
-    
+
     # run the compiler
     bytecode = cc(input_stream=input_stream)
 

@@ -1,8 +1,8 @@
-# Specification of the Cuppa3 Frontend
+# Specification of the Cuppa4 Frontend
 
 from ply import yacc
-from cuppa3_lex import tokens, lexer, is_ID
-from cuppa3_state import state
+from cuppa4_lex import tokens, lexer
+from cuppa4_state import state
 
 #########################################################################
 # set precedence and associativity
@@ -32,45 +32,109 @@ def p_stmt_list(p):
     '''
     if (len(p) == 3):
         p[0] = ('seq', p[1], p[2])
-    elif (len(p) == 2):
+    else:
         p[0] = p[1]
 
 #########################################################################
-def p_stmt(p):
+#    stmt : VOID_TYPE ID '(' opt_formal_args ')' stmt
+#         | data_type ID '(' opt_formal_args ')' stmt
+#         | data_type ID opt_init opt_semi
+#         | ID '=' exp opt_semi
+#         | GET ID opt_semi
+#         | PUT exp opt_semi
+#         | ID '(' opt_actual_args ')' opt_semi
+#         | RETURN opt_exp opt_semi
+#         | WHILE '(' exp ')' stmt
+#         | IF '(' exp ')' stmt opt_else
+#         | '{' stmt_list '}'
+
+def p_stmt_1(p):
     '''
-    stmt : DECLARE ID '(' opt_formal_args ')' stmt
-         | DECLARE ID opt_init opt_semi
-         | ID '=' exp opt_semi
-         | GET ID opt_semi
-         | PUT exp opt_semi
-         | ID '(' opt_actual_args ')' opt_semi
-         | RETURN opt_exp opt_semi
-         | WHILE '(' exp ')' stmt
-         | IF '(' exp ')' stmt opt_else
-         | '{' stmt_list '}'
+    stmt : VOID_TYPE ID '(' opt_formal_args ')' stmt
     '''
-    if p[1] == 'declare' and p[3] == '(':
-        p[0] = ('fundecl', p[2], p[4], p[6])
-    elif p[1] == 'declare':
-        p[0] = ('declare', p[2], p[3])
-    elif is_ID(p[1]) and p[2] == '=':
-        p[0] = ('assign', p[1], p[3])
-    elif p[1] == 'get':
-        p[0] = ('get', p[2])
-    elif p[1] == 'put':
-        p[0] = ('put', p[2])
-    elif is_ID(p[1]) and p[2] == '(':
-        p[0] = ('callstmt', p[1], p[3])
-    elif p[1] == 'return':
-        p[0] = ('return', p[2])
-    elif p[1] == 'while':
-        p[0] = ('while', p[3], p[5])
-    elif p[1] == 'if':
-        p[0] = ('if', p[3], p[5], p[6])
-    elif p[1] == '{':
-        p[0] = ('block', p[2])
-    else:
-        raise ValueError("unexpected symbol {}".format(p[1]))
+    p[0] = ('fundecl', p[1], p[2], p[4], p[6])
+
+def p_stmt_2(p):
+    '''
+    stmt : data_type ID '(' opt_formal_args ')' stmt
+    '''
+    p[0] = ('fundecl', p[1], p[2], p[4], p[6])
+
+def p_stmt_3(p):
+    '''
+    stmt : data_type ID opt_init opt_semi
+    '''
+    p[0] = ('scalardecl', p[1], p[2], p[3])
+
+def p_stmt_4(p):
+    '''
+    stmt : ID '=' exp opt_semi
+    '''
+    p[0] = ('assign', p[1], p[3])
+
+def p_stmt_5(p):
+    '''
+    stmt : GET ID opt_semi
+    '''
+    p[0] = ('get', p[2])
+
+def p_stmt_6(p):
+    '''
+    stmt : PUT exp opt_semi
+    '''
+    p[0] = ('put', p[2])
+
+def p_stmt_7(p):
+    '''
+    stmt : ID '(' opt_actual_args ')' opt_semi
+    '''
+    p[0] = ('callstmt', p[1], p[3])
+
+def p_stmt_8(p):
+    '''
+    stmt : RETURN opt_exp opt_semi
+    '''
+    p[0] = ('return', p[2])
+
+def p_stmt_9(p):
+    '''
+    stmt : WHILE '(' exp ')' stmt
+    '''
+    p[0] = ('while', p[3], p[5])
+
+def p_stmt_10(p):
+    '''
+    stmt : IF '(' exp ')' stmt opt_else
+    '''
+    p[0] = ('if', p[3], p[5], p[6])
+
+def p_stmt_11(p):
+    '''
+    stmt : '{' stmt_list '}'
+    '''
+    p[0] = ('block', p[2])
+
+#########################################################################
+#    data_type : INTEGER_TYPE
+#              | FLOAT_TYPE
+#              | STRING_TYPE
+def p_data_type_1(p):
+    '''
+    data_type : INTEGER_TYPE
+    '''
+    p[0] = 'integer'
+
+def p_data_type_2(p):
+    '''
+    data_type : FLOAT_TYPE
+    '''
+    p[0] = 'float'
+
+def p_data_type_3(p):
+    '''
+    data_type :  STRING_TYPE
+    '''
+    p[0] = 'string'
 
 #########################################################################
 def p_opt_formal_args(p):
@@ -81,15 +145,20 @@ def p_opt_formal_args(p):
     p[0] = p[1]
 
 #########################################################################
-def p_formal_args(p):
+#    formal_args : data_type ID ',' formal_args
+#                | data_type ID
+
+def p_formal_args_1(p):
     '''
-    formal_args : ID ',' formal_args
-                | ID
+    formal_args : data_type ID ',' formal_args
     '''
-    if (len(p) == 4):
-        p[0] = ('seq', ('id', p[1]), p[3])
-    elif (len(p) == 2):
-        p[0] = ('seq', ('id', p[1]), ('nil',))
+    p[0] = ('seq', ('formalarg', p[1], p[2]), p[4])
+
+def p_formal_args_2(p):
+    '''
+    formal_args : data_type ID
+    '''
+    p[0] = ('seq', ('formalarg', p[1], p[2]), ('nil',))
 
 #########################################################################
 def p_opt_init(p):
@@ -101,7 +170,7 @@ def p_opt_init(p):
         p[0] = p[2]
     else:
         p[0] = p[1]
-    
+
 #########################################################################
 def p_opt_actual_args(p):
     '''
@@ -118,7 +187,7 @@ def p_actual_args(p):
     '''
     if (len(p) == 4):
         p[0] = ('seq', p[1], p[3])
-    elif (len(p) == 2):
+    else:
         p[0] = ('seq', p[1], ('nil',))
 
 #########################################################################
@@ -139,9 +208,24 @@ def p_opt_else(p):
         p[0] = p[2]
     else:
         p[0] = p[1]
-    
+
 #########################################################################
-def p_binop_exp(p):
+#    exp : exp PLUS exp
+#        | exp MINUS exp
+#        | exp TIMES exp
+#        | exp DIVIDE exp
+#        | exp EQ exp
+#        | exp LE exp
+#        | INTEGER
+#        | FLOAT
+#        | STRING
+#        | ID
+#        | ID '(' opt_actual_args ')'
+#        | '(' exp ')'
+#        | MINUS exp %prec UMINUS
+#        | NOT exp
+
+def p_exp_1(p):
     '''
     exp : exp PLUS exp
         | exp MINUS exp
@@ -151,58 +235,50 @@ def p_binop_exp(p):
         | exp LE exp
     '''
     p[0] = (p[2], p[1], p[3])
- 
-#########################################################################
-def p_integer_exp(p):
+
+def p_exp_2(p):
     '''
     exp : INTEGER
     '''
     p[0] = ('integer', int(p[1]))
 
-#########################################################################
-def p_float_exp(p):
+def p_exp_3(p):
     '''
     exp : FLOAT
     '''
-    p[0] = ('float', int(p[1]))
+    p[0] = ('float', float(p[1]))
 
-#########################################################################
-def p_string_exp(p):
+def p_exp_4(p):
     '''
     exp : STRING
     '''
-    p[0] = ('string', int(p[1]))
+    p[0] = ('string', p[1])
 
-#########################################################################
-def p_id_exp(p):
+def p_exp_5(p):
     '''
     exp : ID
     '''
     p[0] = ('id', p[1])
 
-#########################################################################
-def p_call_exp(p):
+def p_exp_6(p):
     '''
     exp : ID '(' opt_actual_args ')'
     '''
     p[0] = ('callexp', p[1], p[3])
 
-#########################################################################
-def p_paren_exp(p):
+def p_exp_7(p):
     '''
     exp : '(' exp ')'
     '''
-    p[0] = ('paren', p[2])
-    
-#########################################################################
-def p_uminus_exp(p):
+    p[0] = p[2]
+
+def p_exp_8(p):
     '''
     exp : MINUS exp %prec UMINUS
     '''
     p[0] = ('uminus', p[2])
 
-#########################################################################
-def p_not_exp(p):
+def p_exp_9(p):
     '''
     exp : NOT exp
     '''
@@ -230,5 +306,4 @@ def p_error(t):
 #########################################################################
 # build the parser
 #########################################################################
-parser = yacc.yacc(debug=False,tabmodule='cuppa3parsetab')
-
+parser = yacc.yacc(debug=False,tabmodule='cuppa4parsetab')

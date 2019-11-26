@@ -14,10 +14,8 @@ seqsum = \
 declare seqsum(n) 
 {
     
-    declare add(a,b) 
-    {
-        return a+b;
-    }
+    declare add(a,b) return a+b;
+    declare inc(x) return x+1;
         
     declare i = 1;
     declare sum = 0;
@@ -25,13 +23,13 @@ declare seqsum(n)
     while (i <= n) 
     {
         sum = add(sum,i);
-        i = i + 1;
+        i = inc(i);
     }
         
-    put sum;
+    return sum;
 }
 
-seqsum(10);
+put seqsum(10);
 '''
 
 and_prog = \
@@ -75,16 +73,13 @@ factrec = \
 // recursive implementation of factorial
 declare fact(x) 
 {
-     declare y;
      if (x <= 1)
         return 1;
      else 
-     {
-        y = x*fact(x-1);
-        return y;
-      }
+        return x * fact(x-1);
 }
 
+// ask the user for input
 declare v;
 get v;
 put fact(v);

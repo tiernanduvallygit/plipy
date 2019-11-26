@@ -9,7 +9,6 @@ CURR_SCOPE = 0
 
 class SymTab:
 
-    #-------
     def __init__(self):
         # global scope dictionary must always be present
         self.scoped_symtab = [{}]
@@ -20,36 +19,37 @@ class SymTab:
         # counter to compute the frameoffset of function local variables
         self.offset_cnt = 0
 
-    #-------
-    def make_target_name(self):
+    #####################################################################
+    # frame functions
+
+    def _make_target_name(self):
         # in functions all function local variables are on the runtime stack
         if self.in_function:
-            name = "%tsx[0]" if self.offset_cnt == 0 else "%tsx[" + str(- self.offset_cnt) + "]"
+            name = "%tsx[0]" if self.offset_cnt == 0 \
+                             else "%tsx[" + str(- self.offset_cnt) + "]"
             self.offset_cnt += 1
         else:
             name = "t$" + str(self.temp_cnt)
             self.temp_cnt += 1
         return name
 
-    #-------
     def get_frame_size(self):
         return self.offset_cnt
-    
-    #-------
+
+    #####################################################################
+    # scope manipulation functions
+
     def get_config(self):
         # we make a shallow copy of the symbol table
         return list(self.scoped_symtab)
-    
-    #-------
+
     def set_config(self, c):
         self.scoped_symtab = c
-        
-    #-------
+
     def push_scope(self):
         # push a new dictionary onto the stack - stack grows to the left
         self.scoped_symtab.insert(CURR_SCOPE,{})
 
-    #-------
     def pop_scope(self):
         # pop the left most dictionary off the stack
         if len(self.scoped_symtab) == 1:
@@ -57,7 +57,6 @@ class SymTab:
         else:
             self.scoped_symtab.pop(CURR_SCOPE)
 
-    #-------
     def enter_function(self):
         # if we are in a function declaration we are not allowed to start another one
         if self.in_function:
@@ -67,38 +66,38 @@ class SymTab:
         self.push_scope()
         self.offset_cnt = 0
 
-    #-------
     def exit_function(self):
         self.in_function = False
         self.pop_scope()
 
-    #-------
-    def declare_sym(self, sym):
-        # declare the scalar in the current scope: dict @ position 0
-        
+    #####################################################################
+    # symbol declaration functions
+
+    def declare_scalar(self, sym):
+        # declare the scalar in the current scope
         # first we need to check whether the symbol was already declared
         # at this scope
         if sym in self.scoped_symtab[CURR_SCOPE]:
             raise ValueError("symbol {} already declared".format(sym))
-        
+
         # enter the symbol in the current scope
-        scope_dict = self.scoped_symtab[CURR_SCOPE]
-        scope_dict[sym] = ('scalar', self.make_target_name())
+        self.scoped_symtab[CURR_SCOPE] \
+            .update({sym : ('scalar', self._make_target_name())})
 
-    #-------
     def declare_fun(self, sym, init):
-        # declare a function in the current scope: dict @ position 0
-        
+        # declare a function in the current scope
         # first we need to check whether the symbol was already declared
         # at this scope
         if sym in self.scoped_symtab[CURR_SCOPE]:
             raise ValueError("symbol {} already declared".format(sym))
-        
-        # enter the function in the current scope
-        scope_dict = self.scoped_symtab[CURR_SCOPE]
-        scope_dict[sym] = ('function', init)
 
-    #-------
+        # enter the function in the current scope
+        self.scoped_symtab[CURR_SCOPE] \
+            .update({sym : ('function', init)})
+
+    #####################################################################
+    # msic. functions
+
     def lookup_sym(self, sym):
         # find the first occurence of sym in the symtab stack
         # and return the associated value
@@ -113,7 +112,6 @@ class SymTab:
         # not found
         raise ValueError("{} was not declared".format(sym))
 
-    #-------
     def get_target_name(self, sym):
         (type, name) = self.lookup_sym(sym)
         if type != 'scalar':
@@ -121,5 +119,3 @@ class SymTab:
         return name
 
 #########################################################################
-
-

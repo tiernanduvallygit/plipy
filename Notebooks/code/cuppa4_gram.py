@@ -13,6 +13,8 @@ precedence = (
               ('right', 'UMINUS', 'NOT')
              )
 
+#          | data_type ID opt_init opt_semi
+
 
 def p_grammar(_):
     '''
@@ -21,8 +23,9 @@ def p_grammar(_):
     stmt_list : stmt stmt_list
               | empty
 
-    stmt : DECLARE ID '(' opt_formal_args ')' stmt
-         | DECLARE ID opt_init opt_semi
+    stmt : VOID_TYPE ID '(' opt_formal_args ')' stmt
+         | data_type ID '(' opt_formal_args ')' stmt
+         | data_type ID opt_init opt_semi
          | ID '=' exp opt_semi
          | GET ID opt_semi
          | PUT exp opt_semi
@@ -32,27 +35,31 @@ def p_grammar(_):
          | IF '(' exp ')' stmt opt_else
          | '{' stmt_list '}'
 
+    data_type : INTEGER_TYPE
+              | FLOAT_TYPE
+              | STRING_TYPE
+
     opt_formal_args : formal_args
                     | empty
 
-    formal_args : ID ',' formal_args
-                | ID
+    formal_args : data_type ID ',' formal_args
+                | data_type ID
 
     opt_init : '=' exp
              | empty
-             
+
     opt_actual_args : actual_args
                     | empty
-    
+
     actual_args : exp ',' actual_args
                 | exp
-                
+
     opt_exp : exp
             | empty
 
     opt_else : ELSE stmt
              | empty
-             
+
     opt_semi : ';'
              | empty
 
@@ -81,18 +88,4 @@ def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
 ### build the parser
-parser = yacc.yacc()
-
-
-
-
-       
-   
-  
-            
-
-
-
-
-
-
+parser = yacc.yacc(debug=True,tabmodule='cuppa4parsetab')
