@@ -21,21 +21,21 @@ class ReturnValue(Exception):
 #             integer < float < string
 #             void
 
-promote_table = {
+_promote_table = {
   'string' : {'string': 'string', 'float': 'string', 'integer': 'string',  'void': 'void'},
   'float'  : {'string': 'string', 'float': 'float',  'integer': 'float',   'void': 'void'},
   'integer': {'string': 'string', 'float': 'float',  'integer': 'integer', 'void': 'void'},
   'void'   : {'string': 'void',   'float': 'void',   'integer': 'void',    'void': 'void'},
 }
 
-conversion_table = {
+_conversion_table = {
   'string' : {'string': str,  'float': str,   'integer': str,   'void': None},
   'float'  : {'string': str,  'float': float, 'integer': float, 'void': None},
   'integer': {'string': str,  'float': float, 'integer': int,   'void': None},
   'void'   : {'string': None, 'float': None,  'integer': None,  'void': None},
 }
 
-safe_assign_table = {
+_safe_assign_table = {
   'string' : {'string': True,  'float': True,  'integer': True,  'void': False},
   'float'  : {'string': False, 'float': True,  'integer': True,  'void': False},
   'integer': {'string': False, 'float': False, 'integer': True,  'void': False},
@@ -43,13 +43,13 @@ safe_assign_table = {
 }
 
 def promote(type1, type2):
-    return promote_table.get(type1).get(type2)
+    return _promote_table.get(type1).get(type2)
 
 def conversion_fun(ltype, rtype):
-    return conversion_table.get(ltype).get(rtype)
+    return _conversion_table.get(ltype).get(rtype)
 
 def safe_assign(ltype, rtype):
-        return safe_assign_table.get(ltype).get(rtype)
+        return _safe_assign_table.get(ltype).get(rtype)
 
 #########################################################################
 def len_seq(seq_list):
@@ -98,9 +98,10 @@ def declare_formal_args(formal_args, actual_val_args):
 
     # declare the variable
     if not safe_assign(formal_type, actual_type):
-        raise ValueError("cannot assign a value of type {} to formal argument {} of type {}".format(actual_type, formal_arg, formal_type))
+        raise ValueError("cannot assign a value of type {} to formal argument {} of type {}"\
+                         .format(actual_type, formal_arg, formal_type))
 
-    value = (formal_type, conversion_fun(formal_type, actual_type)(actual_arg))
+    value = conversion_fun(formal_type, actual_type)(actual_arg)
     state.symbol_table.declare_scalar(formal_arg, formal_type, value)
 
     declare_formal_args(p1, p2)
@@ -108,16 +109,18 @@ def declare_formal_args(formal_args, actual_val_args):
 #########################################################################
 def handle_call(name, actual_arglist):
 
-    (sym_type, data_type, val) = state.symbol_table.lookup_sym(name)
+    val = state.symbol_table.lookup_sym(name)
 
-    if sym_type != 'function':
+    if val[0] != 'function-val':
         raise ValueError("{} is not a function".format(name))
 
     # unpack the funval tuple
-    (FUNVAL, return_data_type, formal_arglist, body, context) = val
+    (FUNVAL, return_data_type, lambda_val) = val
+    (LAMBDA, formal_arglist, body, context) = lambda_val
 
     if len_seq(formal_arglist) != len_seq(actual_arglist):
-        raise ValueError("function {} expects {} arguments".format(name, len_seq(formal_arglist)))
+        raise ValueError("function {} expects {} arguments"\
+                         .format(name, len_seq(formal_arglist)))
 
     # set up the environment for static scoping and then execute the function
     actual_val_args = eval_actual_args(actual_arglist)   # evaluate actuals in current symtab
@@ -173,29 +176,11 @@ def nil(node):
 #########################################################################
 def fundecl_stmt(node):
 
-    try: # try the fundecl pattern without arglist
-        (FUNDECL, return_data_type, name, (NIL,), body) = node
-        assert_match(FUNDECL, 'fundecl')
-        assert_match(NIL, 'nil')
+    (FUNDECL, return_data_type, name, arglist, body) = node
+    assert_match(FUNDECL, 'fundecl')
 
-    except ValueError: # try fundecl with arglist
-        (FUNDECL, return_data_type, name, arglist, body) = node
-        assert_match(FUNDECL, 'fundecl')
-
-        context = state.symbol_table.get_config()
-        funval = ('funval', return_data_type, arglist, body, context)
-        state.symbol_table.declare_function(name,
-                                            return_data_type,
-                                            funval)
-
-    else: # fundecl pattern matched
-        # no arglist is present
-        context = state.symbol_table.get_config()
-        funval = ('funval', return_data_type, ('nil',), body, context)
-        state.symbol_table.declare_function(name,
-                                            return_data_type,
-                                            funval)
-
+    context = state.symbol_table.get_config()
+    state.symbol_table.declare_fun(name, return_data_type, arglist, body, context)
 
 #########################################################################
 def scalardecl_stmt(node):
@@ -212,15 +197,17 @@ def scalardecl_stmt(node):
         (t, v) = walk(init_val)
 
         if not safe_assign(data_type, t):
-            raise ValueError("a value of type {} cannot be assigned to the variable {} of type {}".format(t,name,data_type))
+            raise ValueError(\
+              "a value of type {} cannot be assigned to the variable {} of type {}"\
+              .format(t,name,data_type))
 
-        value = (data_type, conversion_fun(data_type,t)(v))
-        state.symbol_table.declare_scalar(name, data_type, value)
+        state.symbol_table \
+             .declare_scalar(name, data_type, conversion_fun(data_type,t)(v))
 
     else: # declare pattern matched
         # when no initializer is present we init with the value 0
-        value = (data_type, conversion_fun(data_type,'integer')(0))
-        state.symbol_table.declare_scalar(name, data_type, value)
+        state.symbol_table \
+             .declare_scalar(name, data_type, conversion_fun(data_type,'integer')(0))
 
 #########################################################################
 def assign_stmt(node):
@@ -228,18 +215,21 @@ def assign_stmt(node):
     (ASSIGN, name, exp) = node
     assert_match(ASSIGN, 'assign')
 
-    (sym_type, data_type, _) = state.symbol_table.lookup_sym(name)
+    (sym_type, data_type, *_) = state.symbol_table.lookup_sym(name)
 
-    if sym_type == 'function':
-        raise ValueError("Cannot assign a value to the function name {}".format(name))
+    if sym_type != 'scalar-val':
+        raise ValueError("Cannot assign a value to the name {}"\
+                         .format(name))
 
     (t, v) = walk(exp)
 
     if not safe_assign(data_type, t):
-        raise ValueError("a value of type {} cannot be assigned to the variable {} of type {}".format(t,name,data_type))
+        raise ValueError(\
+          "a value of type {} cannot be assigned to the variable {} of type {}"\
+          .format(t,name,data_type))
 
-    value = (data_type, conversion_fun(data_type,t)(v))
-    state.symbol_table.update_sym(name, (sym_type, data_type, value))
+    value = (sym_type, data_type, conversion_fun(data_type,t)(v))
+    state.symbol_table.update_sym(name, value)
 
 #########################################################################
 def get_stmt(node):
@@ -247,26 +237,32 @@ def get_stmt(node):
     (GET, name) = node
     assert_match(GET, 'get')
 
-    (sym_type, data_type, _) = state.symbol_table.lookup_sym(name)
+    (sym_type, data_type, *_) = state.symbol_table.lookup_sym(name)
 
-    if sym_type == 'function':
-        raise ValueError("Cannot assign a value to the function name {} in a get".format(name))
+    if sym_type != 'scalar-val':
+        raise ValueError(\
+            "Cannot assign a value to the name {} in a get"\
+            .format(name))
 
     s = input("Value for " + name + '? ')
 
     try:
         if data_type == 'integer':
-            value = ('integer', int(s))
+            value = ('scalar-val', 'integer', int(s))
         elif data_type == 'float':
-            value = ('float', float(s))
+            value = ('scalar-val', 'float', float(s))
         elif data_type == 'string':
-            value = ('string', s)
+            value = ('scalar-val', 'string', s)
     except ValueError:
-        raise ValueError("unexpected value for variable {} of type {}".format(name, data_type))
+        raise ValueError(\
+            "unexpected value for variable {} of type {}"\
+            .format(name, data_type))
     else:
-        raise ValueError("variable {} of type {} and not supported in get statement".format(name, data_type))
+        raise ValueError(\
+            "variable {} of type {} and not supported in get statement"\
+            .format(name, data_type))
 
-    state.symbol_table.update_sym(name, (sym_type, data_type, value))
+    state.symbol_table.update_sym(name, sym_type, value)
 
 #########################################################################
 def put_stmt(node):
@@ -457,12 +453,14 @@ def id_exp(node):
     (ID, name) = node
     assert_match(ID, 'id')
 
-    (sym_type, _, val) = state.symbol_table.lookup_sym(name)
+    val = state.symbol_table.lookup_sym(name)
 
-    if sym_type != 'scalar':
+    if val[0] != 'scalar-val':
         raise ValueError("{} is not a scalar in expression".format(name))
 
-    return val # val is type/value pair
+    (SCALAR_VAL, data_type, v) = val
+
+    return (data_type, v)
 
 #########################################################################
 def call_exp(node):

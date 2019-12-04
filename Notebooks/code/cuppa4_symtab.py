@@ -47,44 +47,41 @@ class SymTab:
             self.scoped_symtab.pop(CURR_SCOPE)
 
     #####################################################################
-    # symbol declaration functions - the basic idea is that a
-    # declaration creates a property tuple associated with a symbol.
-    # that property tuple holds such things as the type of symbol,
-    # the data type of the symbol and its value.
+    # symbol functions
+    # types of symbol values:
+    #     ('scalar-val', type, val)
+    #     ('function-val', return_data_type, arglist, body, context)
 
-    def declare_scalar(self, sym, data_type, value):
+    def declare_scalar(self, sym, data_type, init_val):
         '''
-        declare a scalar symbol in the current scope.
-        '''
-        # first we need to check whether the symbol was already declared
-        # at this scope
-        if sym in self.scoped_symtab[CURR_SCOPE]:
-            raise ValueError("symbol {} already declared".format(sym))
-
-        # enter the symbol with its property tuple in the current scope
-        property_tuple = ('scalar', data_type, value)
-        self.scoped_symtab[CURR_SCOPE].update({sym : property_tuple})
-
-    def declare_function(self, sym, return_data_type, funval):
-        '''
-        declare a function symbol in the current scope.
+        declare a symbol in the current scope.
         '''
         # first we need to check whether the symbol was already declared
         # at this scope
         if sym in self.scoped_symtab[CURR_SCOPE]:
             raise ValueError("symbol {} already declared".format(sym))
 
-        # enter the symbol with its property tuple in the current scope
-        property_tuple = ('function', return_data_type, funval)
-        self.scoped_symtab[CURR_SCOPE].update({sym : property_tuple})
+        # enter the symbol with its value in the current scope
+        value = ('scalar-val', data_type, init_val)
+        self.scoped_symtab[CURR_SCOPE].update({sym : value})
 
-    #####################################################################
-    # Misc. functions
+    def declare_fun(self, sym, return_data_type, arglist, body, context):
+        '''
+        declare a symbol in the current scope.
+        '''
+        # first we need to check whether the symbol was already declared
+        # at this scope
+        if sym in self.scoped_symtab[CURR_SCOPE]:
+            raise ValueError("symbol {} already declared".format(sym))
+
+        # enter the symbol with its value in the current scope
+        value = ('function-val', return_data_type, ('lambda', arglist, body, context))
+        self.scoped_symtab[CURR_SCOPE].update({sym : value})
 
     def lookup_sym(self, sym):
         '''
         find the first occurence of sym in the symtab stack
-        and return the associated property tuple
+        and return the associated value
         '''
         n_scopes = len(self.scoped_symtab)
 
