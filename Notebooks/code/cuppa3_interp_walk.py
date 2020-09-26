@@ -60,7 +60,7 @@ def declare_formal_args(formal_args, actual_val_args):
     (SEQ, val, p2) = actual_val_args
 
     # declare the variable
-    state.symbol_table.declare_sym(sym, val)
+    state.symbol_table.declare_scalar(sym, val)
 
     declare_formal_args(p1, p2)
 
@@ -153,11 +153,11 @@ def declare_stmt(node):
         assert_match(DECLARE, 'declare')
 
         value = walk(init_val)
-        state.symbol_table.declare_sym(name, value)
+        state.symbol_table.declare_scalar(name, value)
 
     else: # declare pattern matched
         # when no initializer is present we init with the value 0
-        state.symbol_table.declare_sym(name, 0)
+        state.symbol_table.declare_scalar(name, 0)
 
 #########################################################################
 def assign_stmt(node):

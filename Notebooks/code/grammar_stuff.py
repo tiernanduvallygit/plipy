@@ -125,7 +125,7 @@ class Stack:
 ##################################################################
 class InputStream:
     def __init__(self, stream):
-        self.stream = stream # has to be a non-empty list of characters
+        self.stream = stream # stream has to be a list of characters
         self.stream.append('eof')
         self.stream_ix = 0
 

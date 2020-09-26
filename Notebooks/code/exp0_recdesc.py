@@ -3,29 +3,29 @@ sLL(1) grammar for Exp0:
 
     prog : stmt prog
          | ""
-              
+
     stmt : 'p' exp ';'
          | 's' var exp ';'
-         
+
     exp : '+' exp exp
         | '-' exp exp
         | '(' exp ')'
         | var
         | num
-        
-    var : 'x' 
-        | 'y' 
+
+    var : 'x'
+        | 'y'
         | 'z'
-        
-    num : '0' 
-        | '1' 
-        | '2' 
-        | '3' 
-        | '4' 
-        | '5' 
-        | '6' 
-        | '7' 
-        | '8' 
+
+    num : '0'
+        | '1'
+        | '2'
+        | '3'
+        | '4'
+        | '5'
+        | '6'
+        | '7'
+        | '8'
         | '9'
 '''
 
@@ -99,7 +99,7 @@ def num():
         I.next()
     else:
         raise SyntaxError('unexpected symbol {} while parsing'.format(sym))
-    
+
 # example test case
 
 #I = InputStream(['s', 'x', '1', ';','p', '+', 'x', '1',';'])
