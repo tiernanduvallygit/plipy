@@ -1,4 +1,4 @@
-##### Lexer for Exp0
+##### Lexer for Wsfn
 
 from ply import lex
 
