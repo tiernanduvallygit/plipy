@@ -56,7 +56,7 @@ def p_error(t):
     print("Syntax error at '%s'" % t.value)
 
 ### build the parser
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)
 
 
 
